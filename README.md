@@ -1,14 +1,28 @@
-# LX Music · 青瓷 (Ceru Jade) UI Patch
+# LX Music · 青瓷 (Ceru Jade)
 
-基于 [lyswhut/lx-music-desktop](https://github.com/lyswhut/lx-music-desktop) **v2.12.6** 的非官方 UI 改版补丁，新增「青瓷」主题与桌面端界面重构。
+基于 [lyswhut/lx-music-desktop](https://github.com/lyswhut/lx-music-desktop) **v2.12.6** 与 [lyswhut/lx-music-mobile](https://github.com/lyswhut/lx-music-mobile) **v1.9.1** 的非官方 UI 改版。
 
 ![主界面](screenshots/主界面.png)
 
-## 为什么是补丁而不是完整源码
+## 下载
 
-Mimosa 的 Git 安全门禁在提交前扫描到上游源码中的 12 个既有高危项（音乐源加密、同步路径处理等），按规则阻止了完整源码提交。本仓库只包含本次 UI 改动，避免重新分发上游的高风险代码；上游项目仍采用 Apache-2.0 许可。
+**Release：** https://github.com/baipiao5555/lx-music-ceru-jade/releases/tag/v2.12.6-ceru.1
 
-## 包含的改动
+| 平台 | 文件 | 说明 |
+| --- | --- | --- |
+| Windows x64 | `lx-music-desktop-v2.12.6-x64-Setup.exe` | NSIS 安装包，116 MB，未做商业签名 |
+| Android arm64 | `lx-music-mobile-v1.9.1-ceru-universal.apk` | 28 MB，推荐，arm64 |
+| Android arm64 | `lx-music-mobile-v1.9.1-ceru-arm64.apk` | 14 MB，体积更小，arm64 |
+
+SHA-256：
+
+- Windows：`02dbbf8d25c2fbef626927739808c5730dd87e818b042f7d40e8943d3fe0ab14`
+- Android universal：`943c951b3ea1b1dea781569dd41a28b81a47369907a3c765fabb5d4d80402569`
+- Android arm64：`c2845cd43a89a1cf1ece80ec456b220f22b6224a7b8e3cda267dfa5491996ca1`
+
+## 本次改动
+
+### 桌面端（完整 UI 改版）
 
 - 新增「青瓷」主题：青绿主色、浅色玻璃主面板、柔和渐变背景，并设为默认主题。
 - 侧栏：品牌、图标 + 文字导航、我的歌单、底部主题卡片。
@@ -18,17 +32,26 @@ Mimosa 的 Git 安全门禁在提交前扫描到上游源码中的 12 个既有�
 - 播放详情页：黑胶唱片 + 唱臂 + 玻璃歌词面板样式。
 - 主题名称的中/繁/英/韩翻译。
 
-## 应用方式
+### 移动端（青瓷主题版）
+
+- 新增「青瓷」主题并设为默认：青绿主色、浅色主背景。
+- 移动端完整布局改版尚未做，界面仍是洛雪移动版的原布局；APK 是主题版。
+
+## 为什么是补丁仓库
+
+Mimosa 的 Git 安全门禁在提交前扫描到上游源码中的 12 个既有高危项（音乐源加密、同步路径处理等），按规则阻止了完整源码提交。本仓库只包含本次 UI/主题改动，避免重新分发上游高风险代码；上游项目仍采用 Apache-2.0 许可。
+
+## 应用补丁
+
+### 桌面端
 
 ```bash
 git clone --depth 1 --branch v2.12.6 https://github.com/lyswhut/lx-music-desktop.git
 cd lx-music-desktop
-git apply /path/to/0001-feat-ui-ceru-jade.patch
+git apply /path/to/patches/0001-feat-ui-ceru-jade.patch
 ```
 
-然后按上游 README 安装依赖并构建。
-
-Windows 上如果 `better-sqlite3` 因缺少 Visual Studio C++ 工具链编译失败，可以用：
+Windows 构建参考：
 
 ```bash
 npm install --ignore-scripts --registry=https://registry.npmmirror.com
@@ -39,12 +62,32 @@ npm run build
 .\node_modules\electron\dist\electron.exe dist\main.js
 ```
 
+### 移动端
+
+```bash
+git clone --depth 1 --branch v1.9.1 https://github.com/lyswhut/lx-music-mobile.git
+cd lx-music-mobile
+git apply /path/to/patches/0002-feat-ui-ceru-mobile-theme.patch
+npm run build:theme
+npm install --legacy-peer-deps --registry=https://registry.npmmirror.com
+```
+
+Android 构建环境：JDK 17、Android SDK Platform 36、Build-Tools 35.0.0、NDK 26.1.10909125、Node 18、Gradle 8.8。生成 arm64 release APK：
+
+```bash
+cd android
+gradlew.bat assembleRelease -PreactNativeArchitectures=arm64-v8a --no-daemon
+```
+
+需要在 `android/keystore.properties` 配置自己的 keystore；不要使用仓库外泄的签名文件。
+
 ## 说明
 
 - 播放详情页的黑胶样式已编译通过，但当前环境没有可用播放源，未实际播放验证。
-- 移动端（React Native）不在本补丁范围内；需要 JDK 17 + Android SDK 单独改造。
-- 应用补丁后如果仍显示旧主题，到「设置 → 主题 → 更多主题 → 青瓷」选择一次；新配置默认就是青瓷。
+- Windows 安装包和 Android APK 都是自签名，系统可能提示未知发布者/未知来源。
+- 移动端 APK 是 arm64-v8a，要求 Android 5.0+；如已安装其它签名的洛雪，需要先卸载。
+- 应用补丁后如果仍显示旧主题，到「设置 → 主题」选择「青瓷」；新配置默认就是青瓷。
 
 ## 许可
 
-补丁基于上游 v2.12.6，遵循 **Apache-2.0**。原项目版权归 lyswhut 及贡献者所有。本仓库为非官方改版，与上游无隶属关系。
+补丁基于上游 v2.12.6 / v1.9.1，遵循 **Apache-2.0**。原项目版权归 lyswhut 及贡献者所有。本仓库为非官方改版，与上游无隶属关系。
