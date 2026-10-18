@@ -12,9 +12,18 @@ index aeff42c..ee29a4d 100644
    <a href="https://github.com/lyswhut/lx-music-desktop/releases"><img src="https://img.shields.io/github/release/lyswhut/lx-music-desktop" alt="Release version"></a>
    <a href="https://github.com/lyswhut/lx-music-desktop/actions/workflows/release.yml"><img src="https://github.com/lyswhut/lx-music-desktop/workflows/Build/badge.svg" alt="Build status"></a>
 diff --git a/src/common/defaultSetting.ts b/src/common/defaultSetting.ts
-index e4ce730..bcd295e 100644
+index e4ce730..52da268 100644
 --- a/src/common/defaultSetting.ts
 +++ b/src/common/defaultSetting.ts
+@@ -21,7 +21,7 @@ const defaultSetting: LX.AppSetting = {
+   'common.playBarProgressStyle': 'mini',
+   'common.transparentWindow': !isMac,
+   'common.tryAutoUpdate': true,
+-  'common.showChangeLog': true,
++  'common.showChangeLog': false,
+ 
+   'player.startupAutoPlay': false,
+   'player.togglePlayMethod': 'listLoop',
 @@ -150,8 +150,8 @@ const defaultSetting: LX.AppSetting = {
    'openAPI.bindLan': false,
  
@@ -1033,6 +1042,19 @@ index 2cef384..bf34d16 100644
      },
      list: {
        type: Array,
+diff --git a/src/renderer/router.ts b/src/renderer/router.ts
+index ec04c7d..0603f4f 100644
+--- a/src/renderer/router.ts
++++ b/src/renderer/router.ts
+@@ -62,7 +62,7 @@ const router = createRouter({
+         name: 'Setting',
+       },
+     },
+-    { path: '/:pathMatch(.*)*', redirect: '/search' },
++    { path: '/:pathMatch(.*)*', redirect: '/songList/list' },
+   ],
+   linkActiveClass: 'active-link',
+   linkExactActiveClass: 'exact-active-link',
 diff --git a/src/renderer/store/index.ts b/src/renderer/store/index.ts
 index 585c834..f5136cc 100644
 --- a/src/renderer/store/index.ts
