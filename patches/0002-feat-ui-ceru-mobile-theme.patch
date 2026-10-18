@@ -1,0 +1,65 @@
+diff --git a/src/config/defaultSetting.ts b/src/config/defaultSetting.ts
+index 238de11..33eb368 100644
+--- a/src/config/defaultSetting.ts
++++ b/src/config/defaultSetting.ts
+@@ -73,8 +73,8 @@ const defaultSetting: LX.AppSetting = {
+   'sync.enable': false,
+ 
+   // 'theme.id': 'blue_plus',
+-  'theme.id': 'green',
+-  'theme.lightId': 'green',
++  'theme.id': 'ceru',
++  'theme.lightId': 'ceru',
+   'theme.darkId': 'black',
+   'theme.hideBgDark': false,
+   'theme.dynamicBg': false,
+@@ -84,7 +84,6 @@ const defaultSetting: LX.AppSetting = {
+ 
+ // 使用新年皮肤
+ if (new Date().getMonth() < 2) {
+-  defaultSetting['theme.id'] = 'happy_new_year'
+   defaultSetting['desktopLyric.style.lyricPlayedColor'] = 'rgba(255, 18, 34, 1)'
+ }
+ 
+diff --git a/src/theme/themes/createThemes.js b/src/theme/themes/createThemes.js
+index 4ca4f5f..2563cdb 100644
+--- a/src/theme/themes/createThemes.js
++++ b/src/theme/themes/createThemes.js
+@@ -295,6 +295,24 @@ const defaultThemes = [
+       'c-badge-tertiary': 'var(c-primary-light-100)',
+     },
+   },
++  {
++    id: 'ceru',
++    name: '青瓷',
++    isDark: false,
++    config: {
++      primary: 'rgb(22, 184, 155)',
++      font: 'rgb(20, 35, 31)',
++      'c-app-background': 'var(c-primary-light-600-alpha-700)',
++      'c-main-background': 'rgba(255, 255, 255, 0.92)',
++      'bg-image': '',
++      'bg-image-position': 'center',
++      'bg-image-size': 'cover',
++
++      'c-badge-primary': 'var(c-primary)',
++      'c-badge-secondary': '#5cbf9b',
++      'c-badge-tertiary': '#8b7cff',
++    },
++  },
+ ]
+ 
+ const themes = defaultThemes.map(({ config: { primary, font, ...extInfo }, ...themeInfo }) => {
+diff --git a/src/theme/themes/index.ts b/src/theme/themes/index.ts
+index d53103b..9343405 100644
+--- a/src/theme/themes/index.ts
++++ b/src/theme/themes/index.ts
+@@ -128,7 +128,7 @@ export const getTheme = async() => {
+     userThemes = await getUserTheme()
+     theme = userThemes.find(theme => theme.id == themeId)
+     if (!theme) {
+-      themeId = settingState.setting['theme.id'] == 'auto' && shouldUseDarkColors ? 'black' : 'green'
++      themeId = settingState.setting['theme.id'] == 'auto' && shouldUseDarkColors ? 'black' : 'ceru'
+       theme = themes.find(theme => theme.id == themeId) as LX.Theme
+     }
+   }
