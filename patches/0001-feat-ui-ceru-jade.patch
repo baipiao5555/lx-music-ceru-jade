@@ -1,0 +1,1384 @@
+diff --git a/README.md b/README.md
+index aeff42c..ee29a4d 100644
+--- a/README.md
++++ b/README.md
+@@ -2,6 +2,8 @@
+ 
+ <h1 align="center">LX Music 桌面版</h1>
+ 
++> **本仓库说明**：这是基于 [lyswhut/lx-music-desktop](https://github.com/lyswhut/lx-music-desktop) v2.12.6 的非官方 UI 改版仓库，新增「青瓷」主题与桌面端界面重构。原项目采用 Apache-2.0 许可，本仓库保留原版权与许可声明，非官方版本。
++
+ <p align="center">
+   <a href="https://github.com/lyswhut/lx-music-desktop/releases"><img src="https://img.shields.io/github/release/lyswhut/lx-music-desktop" alt="Release version"></a>
+   <a href="https://github.com/lyswhut/lx-music-desktop/actions/workflows/release.yml"><img src="https://github.com/lyswhut/lx-music-desktop/workflows/Build/badge.svg" alt="Build status"></a>
+diff --git a/src/common/defaultSetting.ts b/src/common/defaultSetting.ts
+index e4ce730..bcd295e 100644
+--- a/src/common/defaultSetting.ts
++++ b/src/common/defaultSetting.ts
+@@ -150,8 +150,8 @@ const defaultSetting: LX.AppSetting = {
+   'openAPI.bindLan': false,
+ 
+   // 'theme.id': 'blue_plus',
+-  'theme.id': 'green',
+-  'theme.lightId': 'green',
++  'theme.id': 'ceru',
++  'theme.lightId': 'ceru',
+   'theme.darkId': 'black',
+ 
+   'odc.isAutoClearSearchInput': false,
+@@ -162,7 +162,6 @@ const defaultSetting: LX.AppSetting = {
+ 
+ // 使用新年皮肤
+ if (new Date().getMonth() < 2) {
+-  defaultSetting['theme.id'] = 'happy_new_year'
+   defaultSetting['desktopLyric.style.lyricPlayedColor'] = 'rgba(255, 57, 71, 1)'
+ }
+ 
+diff --git a/src/common/theme/createThemes.js b/src/common/theme/createThemes.js
+index 30e5564..d1406a4 100644
+--- a/src/common/theme/createThemes.js
++++ b/src/common/theme/createThemes.js
+@@ -367,6 +367,30 @@ const defaultThemes = [
+       '--color-badge-tertiary': 'var(--color-primary-light-100)',
+     },
+   },
++  {
++    id: 'ceru',
++    name: '青瓷',
++    isDark: false,
++    isDarkFont: false,
++    config: {
++      primary: 'rgb(22, 184, 155)',
++      font: 'rgb(20, 35, 31)',
++      '--color-app-background': 'transparent',
++      '--color-main-background': 'rgba(255, 255, 255, 0.72)',
++      '--color-nav-font': 'var(--color-primary)',
++      '--background-image': 'none',
++      '--background-image-position': 'center',
++      '--background-image-size': 'cover',
++
++      '--color-btn-hide': '#3bc2b2',
++      '--color-btn-min': '#85c43b',
++      '--color-btn-close': '#fab4a0',
++
++      '--color-badge-primary': 'var(--color-primary)',
++      '--color-badge-secondary': '#5cbf9b',
++      '--color-badge-tertiary': '#8b7cff',
++    },
++  },
+ ]
+ 
+ const themes = defaultThemes.map(({ config: { primary, font, ...extInfo }, ...themeInfo }) => {
+diff --git a/src/common/theme/index.json b/src/common/theme/index.json
+index 5c30e05..04222d5 100644
+--- a/src/common/theme/index.json
++++ b/src/common/theme/index.json
+@@ -3853,5 +3853,262 @@
+         "--color-badge-tertiary": "var(--color-primary-light-100)"
+       }
+     }
++  },
++  {
++    "id": "ceru",
++    "name": "青瓷",
++    "isDark": false,
++    "isDarkFont": false,
++    "isCustom": false,
++    "config": {
++      "themeColors": {
++        "--color-primary": "rgb(22, 184, 155)",
++        "--color-primary-dark-100": "rgb(20,166,140)",
++        "--color-primary-dark-100-alpha-100": "rgba(20, 166, 140, 0.90)",
++        "--color-primary-alpha-100": "rgba(22, 184, 155, 0.90)",
++        "--color-primary-dark-100-alpha-200": "rgba(20, 166, 140, 0.80)",
++        "--color-primary-alpha-200": "rgba(22, 184, 155, 0.80)",
++        "--color-primary-dark-100-alpha-300": "rgba(20, 166, 140, 0.70)",
++        "--color-primary-alpha-300": "rgba(22, 184, 155, 0.70)",
++        "--color-primary-dark-100-alpha-400": "rgba(20, 166, 140, 0.60)",
++        "--color-primary-alpha-400": "rgba(22, 184, 155, 0.60)",
++        "--color-primary-dark-100-alpha-500": "rgba(20, 166, 140, 0.50)",
++        "--color-primary-alpha-500": "rgba(22, 184, 155, 0.50)",
++        "--color-primary-dark-100-alpha-600": "rgba(20, 166, 140, 0.40)",
++        "--color-primary-alpha-600": "rgba(22, 184, 155, 0.40)",
++        "--color-primary-dark-100-alpha-700": "rgba(20, 166, 140, 0.30)",
++        "--color-primary-alpha-700": "rgba(22, 184, 155, 0.30)",
++        "--color-primary-dark-100-alpha-800": "rgba(20, 166, 140, 0.20)",
++        "--color-primary-alpha-800": "rgba(22, 184, 155, 0.20)",
++        "--color-primary-dark-100-alpha-900": "rgba(20, 166, 140, 0.10)",
++        "--color-primary-alpha-900": "rgba(22, 184, 155, 0.10)",
++        "--color-primary-dark-200": "rgb(18,149,126)",
++        "--color-primary-dark-200-alpha-100": "rgba(18, 149, 126, 0.90)",
++        "--color-primary-dark-200-alpha-200": "rgba(18, 149, 126, 0.80)",
++        "--color-primary-dark-200-alpha-300": "rgba(18, 149, 126, 0.70)",
++        "--color-primary-dark-200-alpha-400": "rgba(18, 149, 126, 0.60)",
++        "--color-primary-dark-200-alpha-500": "rgba(18, 149, 126, 0.50)",
++        "--color-primary-dark-200-alpha-600": "rgba(18, 149, 126, 0.40)",
++        "--color-primary-dark-200-alpha-700": "rgba(18, 149, 126, 0.30)",
++        "--color-primary-dark-200-alpha-800": "rgba(18, 149, 126, 0.20)",
++        "--color-primary-dark-200-alpha-900": "rgba(18, 149, 126, 0.10)",
++        "--color-primary-dark-300": "rgb(16,134,113)",
++        "--color-primary-dark-300-alpha-100": "rgba(16, 134, 113, 0.90)",
++        "--color-primary-dark-300-alpha-200": "rgba(16, 134, 113, 0.80)",
++        "--color-primary-dark-300-alpha-300": "rgba(16, 134, 113, 0.70)",
++        "--color-primary-dark-300-alpha-400": "rgba(16, 134, 113, 0.60)",
++        "--color-primary-dark-300-alpha-500": "rgba(16, 134, 113, 0.50)",
++        "--color-primary-dark-300-alpha-600": "rgba(16, 134, 113, 0.40)",
++        "--color-primary-dark-300-alpha-700": "rgba(16, 134, 113, 0.30)",
++        "--color-primary-dark-300-alpha-800": "rgba(16, 134, 113, 0.20)",
++        "--color-primary-dark-300-alpha-900": "rgba(16, 134, 113, 0.10)",
++        "--color-primary-dark-400": "rgb(14,121,102)",
++        "--color-primary-dark-400-alpha-100": "rgba(14, 121, 102, 0.90)",
++        "--color-primary-dark-400-alpha-200": "rgba(14, 121, 102, 0.80)",
++        "--color-primary-dark-400-alpha-300": "rgba(14, 121, 102, 0.70)",
++        "--color-primary-dark-400-alpha-400": "rgba(14, 121, 102, 0.60)",
++        "--color-primary-dark-400-alpha-500": "rgba(14, 121, 102, 0.50)",
++        "--color-primary-dark-400-alpha-600": "rgba(14, 121, 102, 0.40)",
++        "--color-primary-dark-400-alpha-700": "rgba(14, 121, 102, 0.30)",
++        "--color-primary-dark-400-alpha-800": "rgba(14, 121, 102, 0.20)",
++        "--color-primary-dark-400-alpha-900": "rgba(14, 121, 102, 0.10)",
++        "--color-primary-dark-500": "rgb(13,109,92)",
++        "--color-primary-dark-500-alpha-100": "rgba(13, 109, 92, 0.90)",
++        "--color-primary-dark-500-alpha-200": "rgba(13, 109, 92, 0.80)",
++        "--color-primary-dark-500-alpha-300": "rgba(13, 109, 92, 0.70)",
++        "--color-primary-dark-500-alpha-400": "rgba(13, 109, 92, 0.60)",
++        "--color-primary-dark-500-alpha-500": "rgba(13, 109, 92, 0.50)",
++        "--color-primary-dark-500-alpha-600": "rgba(13, 109, 92, 0.40)",
++        "--color-primary-dark-500-alpha-700": "rgba(13, 109, 92, 0.30)",
++        "--color-primary-dark-500-alpha-800": "rgba(13, 109, 92, 0.20)",
++        "--color-primary-dark-500-alpha-900": "rgba(13, 109, 92, 0.10)",
++        "--color-primary-dark-600": "rgb(12,98,83)",
++        "--color-primary-dark-600-alpha-100": "rgba(12, 98, 83, 0.90)",
++        "--color-primary-dark-600-alpha-200": "rgba(12, 98, 83, 0.80)",
++        "--color-primary-dark-600-alpha-300": "rgba(12, 98, 83, 0.70)",
++        "--color-primary-dark-600-alpha-400": "rgba(12, 98, 83, 0.60)",
++        "--color-primary-dark-600-alpha-500": "rgba(12, 98, 83, 0.50)",
++        "--color-primary-dark-600-alpha-600": "rgba(12, 98, 83, 0.40)",
++        "--color-primary-dark-600-alpha-700": "rgba(12, 98, 83, 0.30)",
++        "--color-primary-dark-600-alpha-800": "rgba(12, 98, 83, 0.20)",
++        "--color-primary-dark-600-alpha-900": "rgba(12, 98, 83, 0.10)",
++        "--color-primary-dark-700": "rgb(11,88,75)",
++        "--color-primary-dark-700-alpha-100": "rgba(11, 88, 75, 0.90)",
++        "--color-primary-dark-700-alpha-200": "rgba(11, 88, 75, 0.80)",
++        "--color-primary-dark-700-alpha-300": "rgba(11, 88, 75, 0.70)",
++        "--color-primary-dark-700-alpha-400": "rgba(11, 88, 75, 0.60)",
++        "--color-primary-dark-700-alpha-500": "rgba(11, 88, 75, 0.50)",
++        "--color-primary-dark-700-alpha-600": "rgba(11, 88, 75, 0.40)",
++        "--color-primary-dark-700-alpha-700": "rgba(11, 88, 75, 0.30)",
++        "--color-primary-dark-700-alpha-800": "rgba(11, 88, 75, 0.20)",
++        "--color-primary-dark-700-alpha-900": "rgba(11, 88, 75, 0.10)",
++        "--color-primary-dark-800": "rgb(10,79,68)",
++        "--color-primary-dark-800-alpha-100": "rgba(10, 79, 68, 0.90)",
++        "--color-primary-dark-800-alpha-200": "rgba(10, 79, 68, 0.80)",
++        "--color-primary-dark-800-alpha-300": "rgba(10, 79, 68, 0.70)",
++        "--color-primary-dark-800-alpha-400": "rgba(10, 79, 68, 0.60)",
++        "--color-primary-dark-800-alpha-500": "rgba(10, 79, 68, 0.50)",
++        "--color-primary-dark-800-alpha-600": "rgba(10, 79, 68, 0.40)",
++        "--color-primary-dark-800-alpha-700": "rgba(10, 79, 68, 0.30)",
++        "--color-primary-dark-800-alpha-800": "rgba(10, 79, 68, 0.20)",
++        "--color-primary-dark-800-alpha-900": "rgba(10, 79, 68, 0.10)",
++        "--color-primary-dark-900": "rgb(9,71,61)",
++        "--color-primary-dark-900-alpha-100": "rgba(9, 71, 61, 0.90)",
++        "--color-primary-dark-900-alpha-200": "rgba(9, 71, 61, 0.80)",
++        "--color-primary-dark-900-alpha-300": "rgba(9, 71, 61, 0.70)",
++        "--color-primary-dark-900-alpha-400": "rgba(9, 71, 61, 0.60)",
++        "--color-primary-dark-900-alpha-500": "rgba(9, 71, 61, 0.50)",
++        "--color-primary-dark-900-alpha-600": "rgba(9, 71, 61, 0.40)",
++        "--color-primary-dark-900-alpha-700": "rgba(9, 71, 61, 0.30)",
++        "--color-primary-dark-900-alpha-800": "rgba(9, 71, 61, 0.20)",
++        "--color-primary-dark-900-alpha-900": "rgba(9, 71, 61, 0.10)",
++        "--color-primary-dark-1000": "rgb(8,64,55)",
++        "--color-primary-dark-1000-alpha-100": "rgba(8, 64, 55, 0.90)",
++        "--color-primary-dark-1000-alpha-200": "rgba(8, 64, 55, 0.80)",
++        "--color-primary-dark-1000-alpha-300": "rgba(8, 64, 55, 0.70)",
++        "--color-primary-dark-1000-alpha-400": "rgba(8, 64, 55, 0.60)",
++        "--color-primary-dark-1000-alpha-500": "rgba(8, 64, 55, 0.50)",
++        "--color-primary-dark-1000-alpha-600": "rgba(8, 64, 55, 0.40)",
++        "--color-primary-dark-1000-alpha-700": "rgba(8, 64, 55, 0.30)",
++        "--color-primary-dark-1000-alpha-800": "rgba(8, 64, 55, 0.20)",
++        "--color-primary-dark-1000-alpha-900": "rgba(8, 64, 55, 0.10)",
++        "--color-primary-light-100": "rgb(69,198,175)",
++        "--color-primary-light-100-alpha-100": "rgba(69, 198, 175, 0.90)",
++        "--color-primary-light-100-alpha-200": "rgba(69, 198, 175, 0.80)",
++        "--color-primary-light-100-alpha-300": "rgba(69, 198, 175, 0.70)",
++        "--color-primary-light-100-alpha-400": "rgba(69, 198, 175, 0.60)",
++        "--color-primary-light-100-alpha-500": "rgba(69, 198, 175, 0.50)",
++        "--color-primary-light-100-alpha-600": "rgba(69, 198, 175, 0.40)",
++        "--color-primary-light-100-alpha-700": "rgba(69, 198, 175, 0.30)",
++        "--color-primary-light-100-alpha-800": "rgba(69, 198, 175, 0.20)",
++        "--color-primary-light-100-alpha-900": "rgba(69, 198, 175, 0.10)",
++        "--color-primary-light-200": "rgb(106,209,191)",
++        "--color-primary-light-200-alpha-100": "rgba(106, 209, 191, 0.90)",
++        "--color-primary-light-200-alpha-200": "rgba(106, 209, 191, 0.80)",
++        "--color-primary-light-200-alpha-300": "rgba(106, 209, 191, 0.70)",
++        "--color-primary-light-200-alpha-400": "rgba(106, 209, 191, 0.60)",
++        "--color-primary-light-200-alpha-500": "rgba(106, 209, 191, 0.50)",
++        "--color-primary-light-200-alpha-600": "rgba(106, 209, 191, 0.40)",
++        "--color-primary-light-200-alpha-700": "rgba(106, 209, 191, 0.30)",
++        "--color-primary-light-200-alpha-800": "rgba(106, 209, 191, 0.20)",
++        "--color-primary-light-200-alpha-900": "rgba(106, 209, 191, 0.10)",
++        "--color-primary-light-300": "rgb(136,218,204)",
++        "--color-primary-light-300-alpha-100": "rgba(136, 218, 204, 0.90)",
++        "--color-primary-light-300-alpha-200": "rgba(136, 218, 204, 0.80)",
++        "--color-primary-light-300-alpha-300": "rgba(136, 218, 204, 0.70)",
++        "--color-primary-light-300-alpha-400": "rgba(136, 218, 204, 0.60)",
++        "--color-primary-light-300-alpha-500": "rgba(136, 218, 204, 0.50)",
++        "--color-primary-light-300-alpha-600": "rgba(136, 218, 204, 0.40)",
++        "--color-primary-light-300-alpha-700": "rgba(136, 218, 204, 0.30)",
++        "--color-primary-light-300-alpha-800": "rgba(136, 218, 204, 0.20)",
++        "--color-primary-light-300-alpha-900": "rgba(136, 218, 204, 0.10)",
++        "--color-primary-light-400": "rgb(160,225,214)",
++        "--color-primary-light-400-alpha-100": "rgba(160, 225, 214, 0.90)",
++        "--color-primary-light-400-alpha-200": "rgba(160, 225, 214, 0.80)",
++        "--color-primary-light-400-alpha-300": "rgba(160, 225, 214, 0.70)",
++        "--color-primary-light-400-alpha-400": "rgba(160, 225, 214, 0.60)",
++        "--color-primary-light-400-alpha-500": "rgba(160, 225, 214, 0.50)",
++        "--color-primary-light-400-alpha-600": "rgba(160, 225, 214, 0.40)",
++        "--color-primary-light-400-alpha-700": "rgba(160, 225, 214, 0.30)",
++        "--color-primary-light-400-alpha-800": "rgba(160, 225, 214, 0.20)",
++        "--color-primary-light-400-alpha-900": "rgba(160, 225, 214, 0.10)",
++        "--color-primary-light-500": "rgb(179,231,222)",
++        "--color-primary-light-500-alpha-100": "rgba(179, 231, 222, 0.90)",
++        "--color-primary-light-500-alpha-200": "rgba(179, 231, 222, 0.80)",
++        "--color-primary-light-500-alpha-300": "rgba(179, 231, 222, 0.70)",
++        "--color-primary-light-500-alpha-400": "rgba(179, 231, 222, 0.60)",
++        "--color-primary-light-500-alpha-500": "rgba(179, 231, 222, 0.50)",
++        "--color-primary-light-500-alpha-600": "rgba(179, 231, 222, 0.40)",
++        "--color-primary-light-500-alpha-700": "rgba(179, 231, 222, 0.30)",
++        "--color-primary-light-500-alpha-800": "rgba(179, 231, 222, 0.20)",
++        "--color-primary-light-500-alpha-900": "rgba(179, 231, 222, 0.10)",
++        "--color-primary-light-600": "rgb(194,236,229)",
++        "--color-primary-light-600-alpha-100": "rgba(194, 236, 229, 0.90)",
++        "--color-primary-light-600-alpha-200": "rgba(194, 236, 229, 0.80)",
++        "--color-primary-light-600-alpha-300": "rgba(194, 236, 229, 0.70)",
++        "--color-primary-light-600-alpha-400": "rgba(194, 236, 229, 0.60)",
++        "--color-primary-light-600-alpha-500": "rgba(194, 236, 229, 0.50)",
++        "--color-primary-light-600-alpha-600": "rgba(194, 236, 229, 0.40)",
++        "--color-primary-light-600-alpha-700": "rgba(194, 236, 229, 0.30)",
++        "--color-primary-light-600-alpha-800": "rgba(194, 236, 229, 0.20)",
++        "--color-primary-light-600-alpha-900": "rgba(194, 236, 229, 0.10)",
++        "--color-primary-light-700": "rgb(206,240,234)",
++        "--color-primary-light-700-alpha-100": "rgba(206, 240, 234, 0.90)",
++        "--color-primary-light-700-alpha-200": "rgba(206, 240, 234, 0.80)",
++        "--color-primary-light-700-alpha-300": "rgba(206, 240, 234, 0.70)",
++        "--color-primary-light-700-alpha-400": "rgba(206, 240, 234, 0.60)",
++        "--color-primary-light-700-alpha-500": "rgba(206, 240, 234, 0.50)",
++        "--color-primary-light-700-alpha-600": "rgba(206, 240, 234, 0.40)",
++        "--color-primary-light-700-alpha-700": "rgba(206, 240, 234, 0.30)",
++        "--color-primary-light-700-alpha-800": "rgba(206, 240, 234, 0.20)",
++        "--color-primary-light-700-alpha-900": "rgba(206, 240, 234, 0.10)",
++        "--color-primary-light-800": "rgb(216,243,238)",
++        "--color-primary-light-800-alpha-100": "rgba(216, 243, 238, 0.90)",
++        "--color-primary-light-800-alpha-200": "rgba(216, 243, 238, 0.80)",
++        "--color-primary-light-800-alpha-300": "rgba(216, 243, 238, 0.70)",
++        "--color-primary-light-800-alpha-400": "rgba(216, 243, 238, 0.60)",
++        "--color-primary-light-800-alpha-500": "rgba(216, 243, 238, 0.50)",
++        "--color-primary-light-800-alpha-600": "rgba(216, 243, 238, 0.40)",
++        "--color-primary-light-800-alpha-700": "rgba(216, 243, 238, 0.30)",
++        "--color-primary-light-800-alpha-800": "rgba(216, 243, 238, 0.20)",
++        "--color-primary-light-800-alpha-900": "rgba(216, 243, 238, 0.10)",
++        "--color-primary-light-900": "rgb(224,245,241)",
++        "--color-primary-light-900-alpha-100": "rgba(224, 245, 241, 0.90)",
++        "--color-primary-light-900-alpha-200": "rgba(224, 245, 241, 0.80)",
++        "--color-primary-light-900-alpha-300": "rgba(224, 245, 241, 0.70)",
++        "--color-primary-light-900-alpha-400": "rgba(224, 245, 241, 0.60)",
++        "--color-primary-light-900-alpha-500": "rgba(224, 245, 241, 0.50)",
++        "--color-primary-light-900-alpha-600": "rgba(224, 245, 241, 0.40)",
++        "--color-primary-light-900-alpha-700": "rgba(224, 245, 241, 0.30)",
++        "--color-primary-light-900-alpha-800": "rgba(224, 245, 241, 0.20)",
++        "--color-primary-light-900-alpha-900": "rgba(224, 245, 241, 0.10)",
++        "--color-primary-light-1000": "rgb(255,255,255)",
++        "--color-primary-light-1000-alpha-100": "rgba(255, 255, 255, 0.90)",
++        "--color-primary-light-1000-alpha-200": "rgba(255, 255, 255, 0.80)",
++        "--color-primary-light-1000-alpha-300": "rgba(255, 255, 255, 0.70)",
++        "--color-primary-light-1000-alpha-400": "rgba(255, 255, 255, 0.60)",
++        "--color-primary-light-1000-alpha-500": "rgba(255, 255, 255, 0.50)",
++        "--color-primary-light-1000-alpha-600": "rgba(255, 255, 255, 0.40)",
++        "--color-primary-light-1000-alpha-700": "rgba(255, 255, 255, 0.30)",
++        "--color-primary-light-1000-alpha-800": "rgba(255, 255, 255, 0.20)",
++        "--color-primary-light-1000-alpha-900": "rgba(255, 255, 255, 0.10)",
++        "--color-theme": "rgb(22, 184, 155)",
++        "--color-1000": "rgb(20, 35, 31)",
++        "--color-950": "rgb(32,46,42)",
++        "--color-900": "rgb(44,57,53)",
++        "--color-850": "rgb(55,68,65)",
++        "--color-800": "rgb(67,79,76)",
++        "--color-750": "rgb(79,90,87)",
++        "--color-700": "rgb(91,101,98)",
++        "--color-650": "rgb(102,112,109)",
++        "--color-600": "rgb(114,123,121)",
++        "--color-550": "rgb(126,134,132)",
++        "--color-500": "rgb(138,145,143)",
++        "--color-450": "rgb(149,156,154)",
++        "--color-400": "rgb(161,167,165)",
++        "--color-350": "rgb(173,178,177)",
++        "--color-300": "rgb(185,189,188)",
++        "--color-250": "rgb(196,200,199)",
++        "--color-200": "rgb(208,211,210)",
++        "--color-150": "rgb(220,222,221)",
++        "--color-100": "rgb(232,233,233)",
++        "--color-050": "rgb(243,244,244)",
++        "--color-000": "rgb(255,255,255)"
++      },
++      "extInfo": {
++        "--color-app-background": "transparent",
++        "--color-main-background": "rgba(255, 255, 255, 0.72)",
++        "--color-nav-font": "var(--color-primary)",
++        "--background-image": "none",
++        "--background-image-position": "center",
++        "--background-image-size": "cover",
++        "--color-btn-hide": "#3bc2b2",
++        "--color-btn-min": "#85c43b",
++        "--color-btn-close": "#fab4a0",
++        "--color-badge-primary": "var(--color-primary)",
++        "--color-badge-secondary": "#5cbf9b",
++        "--color-badge-tertiary": "#8b7cff"
++      }
++    }
+   }
+ ]
+\ No newline at end of file
+diff --git a/src/lang/en-us.json b/src/lang/en-us.json
+index bf9484a..b37298c 100644
+--- a/src/lang/en-us.json
++++ b/src/lang/en-us.json
+@@ -699,6 +699,7 @@
+   "theme_edit_modal__select_bg_file": "Choose a background image",
+   "theme_edit_modal__title_add": "Add Theme",
+   "theme_edit_modal__title_edit": "Edit Theme",
++  "theme_ceru": "Ceru Jade",
+   "theme_green": "Green",
+   "theme_grey": "Grey",
+   "theme_happy_new_year": "New Year",
+diff --git a/src/lang/ko-kr.json b/src/lang/ko-kr.json
+index eb6b6ae..85e8826 100644
+--- a/src/lang/ko-kr.json
++++ b/src/lang/ko-kr.json
+@@ -699,6 +699,7 @@
+   "theme_edit_modal__select_bg_file": "배경 이미지를 선택하세요",
+   "theme_edit_modal__title_add": "테마 추가",
+   "theme_edit_modal__title_edit": "테마 편집",
++  "theme_ceru": "청자",
+   "theme_green": "그린",
+   "theme_grey": "그레이",
+   "theme_happy_new_year": "새해",
+diff --git a/src/lang/zh-cn.json b/src/lang/zh-cn.json
+index cc98c60..d37f4c5 100644
+--- a/src/lang/zh-cn.json
++++ b/src/lang/zh-cn.json
+@@ -699,6 +699,7 @@
+   "theme_edit_modal__select_bg_file": "选择背景图片",
+   "theme_edit_modal__title_add": "添加主题",
+   "theme_edit_modal__title_edit": "编辑主题",
++  "theme_ceru": "青瓷",
+   "theme_green": "绿意盎然",
+   "theme_grey": "灰常美丽",
+   "theme_happy_new_year": "新年快乐",
+diff --git a/src/lang/zh-tw.json b/src/lang/zh-tw.json
+index 7fdbcd9..2adb11b 100644
+--- a/src/lang/zh-tw.json
++++ b/src/lang/zh-tw.json
+@@ -699,6 +699,7 @@
+   "theme_edit_modal__select_bg_file": "選取背景圖片",
+   "theme_edit_modal__title_add": "新增主題",
+   "theme_edit_modal__title_edit": "編輯主題",
++  "theme_ceru": "青瓷",
+   "theme_green": "綠意盎然",
+   "theme_grey": "灰常美麗",
+   "theme_happy_new_year": "新年快樂",
+diff --git a/src/main/utils/index.ts b/src/main/utils/index.ts
+index 71670b9..a3e44b0 100644
+--- a/src/main/utils/index.ts
++++ b/src/main/utils/index.ts
+@@ -266,7 +266,7 @@ export const getTheme = () => {
+             : `url(${encodePath(joinPath(global.lxDataPath, 'theme_images', theme.config.extInfo['--background-image']))})`
+       }
+     } else {
+-      themeId = global.lx.appSetting['theme.id'] == 'auto' && shouldUseDarkColors ? 'black' : 'green'
++      themeId = global.lx.appSetting['theme.id'] == 'auto' && shouldUseDarkColors ? 'black' : 'ceru'
+       theme = themes.find(theme => theme.id == themeId) as LX.Theme
+     }
+   }
+diff --git a/src/renderer/App.vue b/src/renderer/App.vue
+index 99ac2b9..a18fd17 100644
+--- a/src/renderer/App.vue
++++ b/src/renderer/App.vue
+@@ -44,6 +44,7 @@ onMounted(() => {
+ <style lang="less">
+ @import './assets/styles/index.less';
+ @import './assets/styles/layout.less';
++@import './assets/styles/ceru.less';
+ 
+ html {
+   height: 100vh;
+diff --git a/src/renderer/assets/styles/ceru.less b/src/renderer/assets/styles/ceru.less
+new file mode 100644
+index 0000000..97c0489
+--- /dev/null
++++ b/src/renderer/assets/styles/ceru.less
+@@ -0,0 +1,248 @@
++@import './layout.less';
++
++/* 青瓷：浅色毛玻璃外壳 */
++html,
++body {
++  background: #dfeee8;
++}
++
++#root {
++  background: transparent !important;
++}
++
++#container {
++  background:
++    radial-gradient(90% 70% at 0% 0%, #b8f5dd 0%, rgba(184, 245, 221, 0) 55%),
++    radial-gradient(70% 60% at 100% 0%, #ffd6e0 0%, rgba(255, 214, 224, 0) 52%),
++    radial-gradient(80% 70% at 50% 110%, #d8d0ff 0%, rgba(216, 208, 255, 0) 62%),
++    linear-gradient(135deg, #eef9f4 0%, #f8f3ff 55%, #eef9f4 100%) !important;
++  padding: 0 !important;
++}
++
++#left {
++  width: 184px !important;
++  padding: 18px 10px 12px !important;
++  box-sizing: border-box !important;
++  background: transparent !important;
++}
++
++#right {
++  margin: 0 8px 8px 0 !important;
++  border-radius: 18px !important;
++  background: rgba(255, 255, 255, 0.72) !important;
++  backdrop-filter: blur(22px) !important;
++  border: 1px solid rgba(255, 255, 255, 0.72) !important;
++  box-shadow: 0 12px 40px rgba(40, 90, 70, 0.12) !important;
++  overflow: hidden !important;
++}
++
++#toolbar {
++  height: 64px !important;
++  padding: 0 16px 0 22px !important;
++  background: transparent !important;
++  border-bottom: 1px solid rgba(20, 35, 31, 0.06) !important;
++}
++
++#toolbar input {
++  width: 320px !important;
++  height: 36px !important;
++  border-radius: 99px !important;
++  background: rgba(255, 255, 255, 0.6) !important;
++  border: 1px solid rgba(255, 255, 255, 0.82) !important;
++  padding: 0 16px !important;
++  font-size: 12px !important;
++  color: #14231f !important;
++  box-shadow: 0 4px 14px rgba(40, 90, 70, 0.06) !important;
++}
++
++#view {
++  padding: 12px 20px 0 !important;
++}
++
++/* 悬浮玻璃播放条 */
++#player {
++  margin: 0 12px 12px !important;
++  height: 64px !important;
++  border-radius: 16px !important;
++  background: rgba(255, 255, 255, 0.66) !important;
++  border: 1px solid rgba(255, 255, 255, 0.86) !important;
++  box-shadow: 0 12px 30px rgba(40, 90, 70, 0.12) !important;
++  backdrop-filter: blur(18px) !important;
++}
++
++#player::before {
++  display: none !important;
++}
++
++#player > div:first-child > div {
++  border-radius: 10px !important;
++  background: linear-gradient(135deg, #71f0cf, #16b89b) !important;
++  color: #06251f !important;
++  font-weight: 800 !important;
++}
++
++#player img {
++  border-radius: 10px !important;
++}
++
++#player [aria-label="播放"],
++#player [aria-label="暂停"] {
++  width: 34px !important;
++  height: 34px !important;
++  border-radius: 50% !important;
++  background: #16b89b !important;
++  color: #fff !important;
++  padding: 8px !important;
++  box-shadow: 0 6px 16px rgba(22, 184, 155, 0.28) !important;
++}
++
++/* 顶部内容里的来源/类型 tab 统一成胶囊 */
++#view ul[role="tablist"] {
++  gap: 8px !important;
++  align-items: center !important;
++}
++
++#view li[role="tab"] {
++  border-radius: 99px !important;
++  padding: 0 12px !important;
++  height: 30px !important;
++  background: rgba(255, 255, 255, 0.6) !important;
++  border: 1px solid rgba(20, 35, 31, 0.06) !important;
++}
++
++#view li[role="tab"][aria-selected="true"] {
++  background: #16b89b !important;
++  color: #fff !important;
++  border-color: transparent !important;
++}
++
++#view li[role="tab"] span {
++  font-size: 12px !important;
++}
++
++/* 侧栏导航兜底样式（组件内也会同步改） */
++#left a[role="tab"] {
++  border-radius: 10px !important;
++  color: #5f726b !important;
++}
++
++#left a[aria-selected="true"] {
++  background: #16b89b !important;
++  color: #fff !important;
++  box-shadow: 0 8px 18px rgba(22, 184, 155, 0.24) !important;
++}
++
++#left a[aria-selected="true"] svg {
++  color: #fff !important;
++}
++
++#toolbar input ~ button {
++  background: transparent !important;
++  border: 0 !important;
++  color: var(--color-font-label) !important;
++  box-shadow: none !important;
++}
++
++#toolbar input ~ button:hover {
++  color: var(--color-primary) !important;
++}
++
++/* 播放详情页：黑胶 + 玻璃歌词 */
++.ceru-play-detail {
++  background:
++    radial-gradient(80% 70% at 0% 0%, #b8f5dd 0%, rgba(184, 245, 221, 0) 55%),
++    radial-gradient(70% 60% at 100% 0%, #ffd6e0 0%, rgba(255, 214, 224, 0) 52%),
++    radial-gradient(80% 70% at 50% 110%, #d8d0ff 0%, rgba(216, 208, 255, 0) 62%),
++    linear-gradient(135deg, #eef9f4 0%, #f8f3ff 55%, #eef9f4 100%) !important;
++  border-radius: 18px !important;
++}
++
++.ceru-play-detail .bg {
++  display: none !important;
++}
++
++.ceru-play-left {
++  padding: 44px 20px 12px !important;
++}
++
++.ceru-play-left .info {
++  position: relative;
++  align-items: center;
++  max-width: 340px;
++  overflow: visible !important;
++}
++
++.ceru-play-left .info::before {
++  content: "";
++  position: absolute;
++  z-index: 0;
++  width: 320px;
++  height: 320px;
++  border-radius: 50%;
++  top: -35px;
++  left: 50%;
++  transform: translateX(-50%);
++  background: repeating-radial-gradient(circle at 50% 50%, #0b0b0b 0 2px, #1a1a1a 2px 4px);
++  box-shadow: 0 30px 60px rgba(0, 0, 0, .28), inset 0 0 0 1px rgba(255, 255, 255, .08);
++}
++
++.ceru-play-left .info::after {
++  content: "";
++  position: absolute;
++  z-index: 2;
++  width: 120px;
++  height: 6px;
++  border-radius: 99px;
++  top: 8px;
++  left: 58%;
++  transform-origin: right center;
++  transform: rotate(-28deg);
++  background: linear-gradient(90deg, #cfcfcf, #f6f6f6);
++  box-shadow: 0 4px 10px rgba(0, 0, 0, .25);
++}
++
++.ceru-play-left .img {
++  position: relative;
++  z-index: 1;
++  width: 250px !important;
++  height: 250px !important;
++  max-width: none !important;
++  max-height: none !important;
++  min-width: 0 !important;
++  object-fit: cover;
++  border-radius: 50% !important;
++  opacity: 1 !important;
++  box-shadow: 0 20px 50px rgba(0, 0, 0, .3) !important;
++}
++
++.ceru-play-left .description {
++  position: relative;
++  z-index: 1;
++  max-width: 340px;
++  margin-top: 46px;
++  text-align: center;
++  padding-bottom: 8px;
++}
++
++.ceru-play-left .description p {
++  font-size: 12px !important;
++  line-height: 1.6;
++  color: var(--color-font-label);
++}
++
++.ceru-play-left .description p:first-child {
++  font-size: 16px !important;
++  font-weight: 600;
++  color: var(--color-font);
++}
++
++.ceru-play-detail .right {
++  background: rgba(255, 255, 255, .55) !important;
++  border: 1px solid rgba(255, 255, 255, .75);
++  border-radius: 20px;
++  margin: 12px 6px 12px 0;
++  padding: 18px 16px;
++  backdrop-filter: blur(20px);
++  box-shadow: 0 12px 30px rgba(40, 90, 70, .08);
++  overflow: hidden;
++}
+diff --git a/src/renderer/assets/styles/variables.less b/src/renderer/assets/styles/variables.less
+index 7672a97..03d9d9e 100644
+--- a/src/renderer/assets/styles/variables.less
++++ b/src/renderer/assets/styles/variables.less
+@@ -2,11 +2,11 @@
+ 
+ 
+ // Width
+-@width-app-left: 6.6%;
++@width-app-left: 184px;
+ 
+ // Height
+-@height-toolbar: 54px;
+-@height-player: 66px;
++@height-toolbar: 64px;
++@height-player: 64px;
+ 
+ 
+ // Shadow
+@@ -15,7 +15,7 @@
+ 
+ // Radius
+ @radius-progress-border: 5px;
+-@radius-border: 4px;
++@radius-border: 8px;
+ 
+ @transition-slow: .6s ease;
+ @transition-normal: .4s ease;
+diff --git a/src/renderer/components/layout/Aside/NavBar.vue b/src/renderer/components/layout/Aside/NavBar.vue
+index c0f7826..ce8aae9 100644
+--- a/src/renderer/components/layout/Aside/NavBar.vue
++++ b/src/renderer/components/layout/Aside/NavBar.vue
+@@ -6,14 +6,23 @@
+           <svg version="1.1" xmlns="http://www.w3.org/2000/svg" xlink="http://www.w3.org/1999/xlink" :viewBox="item.iconSize" :height="item.size" :width="item.size" space="preserve">
+             <use :xlink:href="item.icon" />
+           </svg>
++          <span :class="$style.label">{{ item.tips }}</span>
+         </router-link>
+       </li>
+     </ul>
++    <div :class="$style.playlists">
++      <p :class="$style.playlistTitle">我的歌单</p>
++      <router-link :to="{ path: '/list', query: { id: LIST_IDS.DEFAULT } }" :class="$style.playlistLink">试听列表</router-link>
++      <router-link :to="{ path: '/list', query: { id: LIST_IDS.LOVE } }" :class="$style.playlistLink">我的收藏</router-link>
++      <router-link v-for="item in userLists.slice(0, 4)" :key="item.id" :to="{ path: '/list', query: { id: item.id } }" :class="$style.playlistLink">{{ item.name }}</router-link>
++    </div>
+   </div>
+ </template>
+ 
+ <script lang="ts">
+ import { appSetting } from '@renderer/store/setting'
++import { userLists } from '@renderer/store/list/state'
++import { LIST_IDS } from '@common/constants'
+ import { useI18n } from '@root/lang'
+ import { ref, computed } from '@common/utils/vueTools'
+ import { useIconSize } from '@renderer/utils/compositions/useIconSize'
+@@ -23,7 +32,7 @@ export default {
+   setup() {
+     const t = useI18n()
+     const dom_menu = ref<HTMLElement>()
+-    const iconSize = useIconSize(dom_menu, 0.32)
++    const iconSize = useIconSize(dom_menu, 0.1)
+ 
+     const menus = computed(() => {
+       const size = iconSize.value
+@@ -88,6 +97,8 @@ export default {
+       appSetting,
+       menus,
+       dom_menu,
++      userLists,
++      LIST_IDS,
+     }
+   },
+ }
+@@ -98,107 +109,97 @@ export default {
+ 
+ .menu {
+   flex: auto;
+-  // &.controlBtnLeft {
+-  //   display: flex;
+-  //   flex-flow: column nowrap;
+-  //   justify-content: center;
+-  //   padding-bottom: @control-btn-height;
+-  // }
+-  // padding: 5px;
++  overflow: hidden;
+ }
+ .list {
+   -webkit-app-region: no-drag;
+-  // margin-bottom: 15px;
+-  &:last-child {
+-    margin-bottom: 0;
+-  }
+-  // background-color: pink;
+-  // dt {
+-  //   padding-left: 5px;
+-  //   font-size: 11px;
+-  //   transition: @transition-normal;
+-  //   transition-property: color;
+-  //   color: @color-theme-font-label;
+-  //   .mixin-ellipsis-1();
+-  // }
++  display: flex;
++  flex-direction: column;
++  gap: 3px;
+ }
+ .navItem {
+   position: relative;
+-  &:before {
+-    content: '';
+-    display: block;
+-    width: 100%;
+-    padding-bottom: 84%;
+-  }
++  width: 100%;
++  height: 38px;
+ }
+ .link {
+-  position: absolute;
+-  left: 0%;
+-  top: 0%;
++  position: static;
+   width: 100%;
+-  height: 100%;
+-  // left: 15%;
+-  // top: 15%;
+-  // width: 70%;
+-  // height: 70%;
+-  // display: block;
++  height: 38px;
+   box-sizing: border-box;
+-  // text-decoration: none;
+-  // border-radius: 20%;
+-
+-  // padding: 18px 3px;
+-  // margin: 5px 0;
+-  // border-left: 5px solid transparent;
++  display: flex;
++  align-items: center;
++  justify-content: flex-start;
++  gap: 10px;
++  padding: 0 12px;
++  border-radius: 10px;
+   transition: @transition-fast;
+-  transition-property: background-color, opacity;
+-  color: var(--color-nav-font);
++  transition-property: background-color, opacity, color;
++  color: #5f726b;
++  font-size: 13px;
++  font-weight: 500;
+   cursor: pointer;
+-  // font-size: 11.5px;
+-  text-align: center;
+   outline: none;
+-  display: flex;
+-  align-items: center;
+-  justify-content: center;
+-
+-  // border-radius: @radius-border;
+   .mixin-ellipsis-1();
++
+   &:before {
+-    .mixin-after();
+-    left: 0;
+-    top: 0;
+-    width: 3px;
+-    height: 100%;
+-    background-color: var(--color-primary-dark-200-alpha-700);
+-    border-radius: 4px;
+-    transform: translateX(-100%);
+-    transition: transform @transition-fast;
++    display: none;
+   }
+ 
+   &.active {
+-    // border-left-color: @color-theme-active;
+-    background-color: var(--color-primary-light-300-alpha-700);
+-
+-    &:before {
+-      transform: translateX(0);
+-    }
++    background-color: #16b89b;
++    color: #fff;
++    box-shadow: 0 8px 18px rgba(22, 184, 155, .24);
+ 
+     &:hover {
+-      background-color: var(--color-primary-light-300-alpha-800);
++      background-color: #16b89b;
+     }
+   }
+ 
+-
+   &:hover {
+-    color: var(--color-nav-font);
++    color: var(--color-primary);
+ 
+     &:not(.active) {
+-      opacity: .8;
+-      background-color: var(--color-primary-light-400-alpha-700);
++      background-color: rgba(255, 255, 255, .48);
+     }
+   }
+   &:active:not(.active) {
+-    opacity: .6;
+-    background-color: var(--color-primary-light-300-alpha-600);
++    background-color: rgba(255, 255, 255, .7);
++  }
++}
++.label {
++  font-size: 13px;
++  font-weight: 500;
++  white-space: nowrap;
++}
++.playlists {
++  margin-top: 18px;
++  padding: 0 4px;
++  overflow: hidden;
++}
++.playlistTitle {
++  margin: 0 0 6px;
++  padding: 0 8px;
++  font-size: 10px;
++  letter-spacing: .12em;
++  color: var(--color-font-label);
++  text-transform: uppercase;
++}
++.playlistLink {
++  display: block;
++  padding: 6px 8px;
++  border-radius: 7px;
++  font-size: 12px;
++  color: #4a5b55;
++  white-space: nowrap;
++  overflow: hidden;
++  text-overflow: ellipsis;
++  transition: @transition-fast;
++  transition-property: background-color, color;
++
++  &:hover {
++    background-color: rgba(255, 255, 255, .5);
++    color: var(--color-primary);
+   }
+ }
+ 
+diff --git a/src/renderer/components/layout/Aside/index.vue b/src/renderer/components/layout/Aside/index.vue
+index 50f47c5..f2459ed 100644
+--- a/src/renderer/components/layout/Aside/index.vue
++++ b/src/renderer/components/layout/Aside/index.vue
+@@ -1,8 +1,16 @@
+ <template>
+   <div :class="[$style.aside, { [$style.fullscreen]: isFullscreen }]">
+     <ControlBtns v-if="appSetting['common.controlBtnPosition'] == 'left'" />
+-    <div v-else :class="$style.logo">L X</div>
++    <div v-else :class="$style.logo">
++      <span :class="$style.mark">LX</span>
++      <span :class="$style.name">Music</span>
++    </div>
+     <NavBar />
++    <div :class="$style.sideCard">
++      <p>青瓷主题</p>
++      <strong>每日精选</strong>
++      <span>发现好音乐</span>
++    </div>
+   </div>
+ </template>
+ 
+@@ -41,15 +49,63 @@ import NavBar from './NavBar.vue'
+ 
+ .logo {
+   box-sizing: border-box;
+-  padding: 0 13%;
+-  height: 50px;
+-  color: var(--color-nav-font);
+-  opacity: .8;
++  padding: 0 10px;
++  height: 38px;
++  margin-bottom: 18px;
++  color: var(--color-font);
++  opacity: 1;
+   flex: none;
+-  text-align: center;
+-  line-height: 50px;
++  display: flex;
++  align-items: center;
++  gap: 9px;
+   font-weight: bold;
+   // -webkit-app-region: no-drag;
+ }
++.mark {
++  width: 30px;
++  height: 30px;
++  border-radius: 9px;
++  background: linear-gradient(135deg, #71f0cf, #16b89b);
++  color: #06251f;
++  display: grid;
++  place-items: center;
++  font-size: 11px;
++  font-weight: 800;
++  letter-spacing: .02em;
++}
++.name {
++  font-size: 13px;
++  font-weight: 700;
++  letter-spacing: -.02em;
++}
++.sideCard {
++  flex: none;
++  margin: 12px 4px 0;
++  padding: 10px;
++  border-radius: 12px;
++  background: rgba(255, 255, 255, .5);
++  border: 1px solid rgba(255, 255, 255, .72);
++  box-shadow: 0 8px 22px rgba(40, 90, 70, .08);
++  p {
++    margin: 0;
++    font-size: 9px;
++    letter-spacing: .12em;
++    text-transform: uppercase;
++    color: var(--color-font-label);
++  }
++  strong {
++    display: block;
++    margin-top: 4px;
++    font-size: 14px;
++    letter-spacing: -.02em;
++    color: var(--color-font);
++  }
++  span {
++    display: block;
++    margin-top: 2px;
++    font-size: 10px;
++    color: var(--color-font-label);
++  }
++}
+ 
+ </style>
+diff --git a/src/renderer/components/layout/PlayDetail/index.vue b/src/renderer/components/layout/PlayDetail/index.vue
+index a6631c0..7a7f1b1 100644
+--- a/src/renderer/components/layout/PlayDetail/index.vue
++++ b/src/renderer/components/layout/PlayDetail/index.vue
+@@ -1,13 +1,13 @@
+ <template lang="pug">
+ transition(enter-active-class="animated slideInRight" leave-active-class="animated slideOutDown" @after-enter="handleAfterEnter" @after-leave="handleAfterLeave")
+-  div(v-if="isShowPlayerDetail" :class="[$style.container, { fullscreen: isFullscreen }]" @contextmenu="handleContextMenu")
++  div(v-if="isShowPlayerDetail" :class="[$style.container, { fullscreen: isFullscreen }, 'ceru-play-detail']" @contextmenu="handleContextMenu")
+     div(:class="$style.bg")
+     //- div(:class="$style.bg" :style="bgStyle")
+     //- div(:class="$style.bg2")
+     ControlBtnsLeftHeader(v-if="appSetting['common.controlBtnPosition'] == 'left'")
+     ControlBtnsRightHeader(v-else)
+     div(:class="[$style.main, {[$style.showComment]: isShowPlayComment}]")
+-      div.left(:class="$style.left")
++      div.left(:class="[$style.left, 'ceru-play-left']")
+         //- div(:class="$style.info")
+         div(:class="$style.info")
+           img(v-if="musicInfo.pic" :class="$style.img" :src="musicInfo.pic")
+diff --git a/src/renderer/components/material/SearchInput.vue b/src/renderer/components/material/SearchInput.vue
+index 2cef384..bf34d16 100644
+--- a/src/renderer/components/material/SearchInput.vue
++++ b/src/renderer/components/material/SearchInput.vue
+@@ -57,7 +57,7 @@ export default {
+   props: {
+     placeholder: {
+       type: String,
+-      default: 'Search for something...',
++      default: '搜索音乐、歌手',
+     },
+     list: {
+       type: Array,
+diff --git a/src/renderer/store/index.ts b/src/renderer/store/index.ts
+index 585c834..f5136cc 100644
+--- a/src/renderer/store/index.ts
++++ b/src/renderer/store/index.ts
+@@ -159,7 +159,7 @@ export const setQualityList = (_qualityList: LX.QualityList) => {
+   qualityList.value = _qualityList
+ }
+ 
+-export const themeId = ref('green')
++export const themeId = ref('ceru')
+ export const themeInfo: LX.ThemeInfo = {
+   themes: [],
+   userThemes: [],
+diff --git a/src/renderer/store/utils.ts b/src/renderer/store/utils.ts
+index 7a66853..4b00bd5 100644
+--- a/src/renderer/store/utils.ts
++++ b/src/renderer/store/utils.ts
+@@ -74,7 +74,7 @@ export const applyTheme = (id: string, lightId: string, darkId: string, dataPath
+ 
+     let theme = findTheme(themeInfo, themeId)
+     if (!theme) {
+-      themeId = id == 'auto' && themeShouldUseDarkColors.value ? 'black' : 'green'
++      themeId = id == 'auto' && themeShouldUseDarkColors.value ? 'black' : 'ceru'
+       theme = themeInfo.themes.find(theme => theme.id == themeId)!
+     }
+     window.setTheme(buildThemeColors(theme, dataPath))
+diff --git a/src/renderer/views/songList/List/components/SongList.vue b/src/renderer/views/songList/List/components/SongList.vue
+index 0295baa..7c8f8d4 100644
+--- a/src/renderer/views/songList/List/components/SongList.vue
++++ b/src/renderer/views/songList/List/components/SongList.vue
+@@ -19,7 +19,6 @@
+             </div>
+           </div>
+         </li>
+-        <li v-for="(i, index) in 6" :key="index" :class="$style.item" style="margin-bottom: 0;height: 0;" />
+       </ul>
+       <div :class="$style.pagination">
+         <material-pagination :count="props.listInfo.total" :limit="props.listInfo.limit" :page="props.listInfo.page" @btn-click="togglePage" />
+@@ -106,40 +105,43 @@ defineExpose({
+   flex-flow: column nowrap;
+   font-size: 14px;
+   box-sizing: border-box;
+-  padding: 15px 15px 0;
++  padding: 4px 4px 0;
+ 
+   ul {
+-    display: flex;
+-    flex-flow: row wrap;
+-    justify-content: space-between;
++    display: grid;
++    grid-template-columns: repeat(4, minmax(0, 1fr));
++    gap: 18px;
++    justify-content: stretch;
+   }
+ }
+ .item {
+-  max-width: 360px;
+-  width: 32%;
++  min-width: 0;
+   box-sizing: border-box;
+   display: flex;
+-  // flex-flow: column nowrap;
+-  // padding: 10px;
+-  margin-bottom: 20px;
++  flex-flow: column nowrap;
+   cursor: pointer;
+-  transition: opacity @transition-normal;
++  transition: transform .22s ease, opacity .22s ease;
++
+   &:hover {
+-    opacity: .7;
++    transform: translateY(-3px);
++
++    .image {
++      box-shadow: 0 14px 28px rgba(40, 90, 70, .18);
++    }
++    .desc h4 {
++      color: var(--color-primary);
++    }
+   }
+ }
+ .image {
+   flex: none;
+-  width: 40%;
++  width: 100%;
+   display: flex;
+-  background-position: center;
+-  background-size: cover;
+-  border-radius: 4px;
++  border-radius: 14px;
+   overflow: hidden;
+-  opacity: .9;
+   aspect-ratio: 1 / 1;
+-
+-  box-shadow: 0 0 2px 0 rgba(0,0,0,.2);
++  box-shadow: 0 8px 18px rgba(40, 90, 70, .1);
++  transition: box-shadow .22s ease;
+ }
+ .img {
+   width: 100%;
+@@ -149,49 +151,57 @@ defineExpose({
+ 
+ .desc {
+   flex: auto;
+-  padding: 2px 15px 2px 7px;
++  padding: 9px 2px 0;
+   overflow: hidden;
+   h4 {
+-    font-size: 14px;
+-    // height: 2.6em;
+-    text-align: justify;
+-    line-height: 1.3;
++    margin: 0;
++    font-size: 13px;
++    text-align: left;
++    line-height: 1.35;
++    font-weight: 600;
+     .mixin-ellipsis-2();
+   }
+ }
+ .songlist_info {
+   display: flex;
+   flex-flow: row nowrap;
+-  gap: 15px;
+-  margin-top: 8px;
+-  font-size: 12px;
++  gap: 10px;
++  margin-top: 5px;
++  font-size: 11px;
+   .mixin-ellipsis-1();
+-  text-align: justify;
+   line-height: 1.2;
+-  // text-indent: 24px;
+   color: var(--color-font-label);
+   svg {
+     margin-right: 2px;
++    width: 12px;
++    height: 12px;
+   }
+ }
+ .author {
+-  margin-top: 6px;
+-  font-size: 12px;
++  margin-top: 4px;
++  font-size: 11px;
+   .mixin-ellipsis-1();
+-  text-align: justify;
+   line-height: 1.3;
+-  // text-indent: 24px;
+   color: var(--color-font-label);
+ }
+ .time {
+   margin-top: 3px;
+-  font-size: 12px;
++  font-size: 11px;
+   .mixin-ellipsis-1();
+-  text-align: justify;
+   line-height: 1.3;
+-  // text-indent: 24px;
+   color: var(--color-font-label);
+ }
++@media (max-width: 980px) {
++  .listContent ul {
++    grid-template-columns: repeat(3, minmax(0, 1fr));
++    gap: 14px;
++  }
++}
++@media (max-width: 720px) {
++  .listContent ul {
++    grid-template-columns: repeat(2, minmax(0, 1fr));
++  }
++}
+ .pagination {
+   text-align: center;
+   padding: 15px 0;
+diff --git a/src/renderer/views/songList/List/components/TagList.vue b/src/renderer/views/songList/List/components/TagList.vue
+index 20c8f6b..250ee5c 100644
+--- a/src/renderer/views/songList/List/components/TagList.vue
++++ b/src/renderer/views/songList/List/components/TagList.vue
+@@ -140,9 +140,11 @@ onBeforeUnmount(() => {
+ }
+ 
+ .label {
+-  padding: 8px 15px;
+-  // background-color: var(--color-button-background);
+-  transition: color @transition-normal;
++  padding: 6px 12px;
++  border-radius: 99px;
++  background: rgba(255, 255, 255, .6);
++  border: 1px solid rgba(20, 35, 31, .07);
++  transition: background-color @transition-normal, color @transition-normal;
+   // border-top: 2px solid @color-tab-border-bottom;
+   // border-left: 2px solid @color-tab-border-bottom;
+   box-sizing: border-box;
+diff --git a/src/renderer/views/songList/List/index.vue b/src/renderer/views/songList/List/index.vue
+index 3a3663e..92790c5 100644
+--- a/src/renderer/views/songList/List/index.vue
++++ b/src/renderer/views/songList/List/index.vue
+@@ -1,5 +1,13 @@
+ <template>
+   <div :class="$style.container">
++    <header :class="$style.hero">
++      <div>
++        <p :class="$style.eyebrow">发现音乐</p>
++        <h2 :class="$style.title">探索最新最热的音乐内容</h2>
++        <p :class="$style.subtitle">精选歌单、排行榜与每日推荐，找到下一首循环。</p>
++      </div>
++      <div :class="$style.heroBadge">青瓷 · 每日精选</div>
++    </header>
+     <div :class="$style.header">
+       <div :class="$style.left">
+         <tag-list :source="source" :tag-id="tagId" :sort-id="sortId" />
+@@ -8,7 +16,11 @@
+       <base-btn :class="$style.btn" outline min @click="visibleOpenSongListModal = true">{{ $t('songlist__import_input_show_btn') }}</base-btn>
+       <base-selection :model-value="source" :class="$style.select" :list="sourceList" item-key="id" item-name="name" @update:model-value="handleToggleSource" />
+     </div>
+-    <list-view :source="source" :tag-id="tagId" :sort-id="sortId" :page="page" />
++    <div :class="$style.sectionHead">
++      <h3>热门歌单</h3>
++      <span>每天更新</span>
++    </div>
++    <list-view :class="$style.listWrap" :source="source" :tag-id="tagId" :sort-id="sortId" :page="page" />
+     <open-list-modal v-model="visibleOpenSongListModal" :source-list="sourceList" />
+   </div>
+ </template>
+@@ -125,15 +137,75 @@ export default {
+   flex-flow: column nowrap;
+   position: relative;
+ }
++.hero {
++  flex: none;
++  display: flex;
++  align-items: flex-end;
++  justify-content: space-between;
++  gap: 16px;
++  padding: 2px 4px 14px;
++}
++.eyebrow {
++  margin: 0 0 4px;
++  font-size: 10px;
++  letter-spacing: .18em;
++  text-transform: uppercase;
++  color: var(--color-primary);
++  font-weight: 600;
++}
++.title {
++  margin: 0;
++  font-size: 26px;
++  line-height: 1.1;
++  letter-spacing: -.04em;
++  font-weight: 600;
++  color: var(--color-font);
++}
++.subtitle {
++  margin: 6px 0 0;
++  font-size: 12px;
++  color: var(--color-font-label);
++}
++.heroBadge {
++  flex: none;
++  font-size: 10px;
++  color: var(--color-primary);
++  background: rgba(22, 184, 155, .1);
++  border: 1px solid rgba(22, 184, 155, .2);
++  padding: 6px 10px;
++  border-radius: 99px;
++  white-space: nowrap;
++}
+ .header {
+   flex: none;
+   width: 100%;
+   display: flex;
+   flex-flow: row nowrap;
+-  // padding-right: 5px;
+-  // box-sizing: border-box;
++  align-items: center;
++  gap: 10px;
+   padding-bottom: 5px;
+ }
++.sectionHead {
++  flex: none;
++  display: flex;
++  align-items: baseline;
++  justify-content: space-between;
++  padding: 12px 4px 8px;
++  h3 {
++    margin: 0;
++    font-size: 14px;
++    font-weight: 600;
++    letter-spacing: -.01em;
++  }
++  span {
++    font-size: 10px;
++    color: var(--color-font-label);
++  }
++}
++.listWrap {
++  flex: auto;
++  min-height: 0;
++}
+ .left {
+   flex: auto;
+   display: flex;
+@@ -141,11 +213,16 @@ export default {
+ }
+ 
+ .btn {
+-  color: var(--color-font);
+-  transition: color @transition-fast;
+-  background: none !important;
++  height: 30px;
++  padding: 0 12px;
++  border-radius: 99px;
++  background: rgba(255, 255, 255, .6) !important;
++  border: 1px solid rgba(20, 35, 31, .08);
++  color: var(--color-font) !important;
++  transition: background-color @transition-fast, color @transition-fast;
+   &:hover {
+-    color: var(--color-primary-font-hover);
++    background: rgba(255, 255, 255, .82) !important;
++    color: var(--color-primary) !important;
+   }
+ }
+ 
+@@ -165,15 +242,17 @@ export default {
+ 
+   :global {
+     .label-content {
+-      background-color: transparent !important;
+-      transition: color @transition-fast;
++      background-color: rgba(255, 255, 255, .6) !important;
++      transition: background-color @transition-fast, color @transition-fast;
+       color: var(--color-font);
+-      // line-height: 38px;
+-      // height: 38px;
+-      border-radius: 0;
++      height: 30px;
++      line-height: 30px;
++      border-radius: 99px;
++      padding: 0 12px;
++      border: 1px solid rgba(20, 35, 31, .08);
+       &:hover {
+-        // background: none !important;
+-        color: var(--color-primary-font-hover);
++        background-color: rgba(255, 255, 255, .82) !important;
++        color: var(--color-primary);
+         .icon {
+           opacity: 1;
+           // color: var(--color-primary-font-hover);
