@@ -2,11 +2,13 @@
 
 基于 [lyswhut/lx-music-desktop](https://github.com/lyswhut/lx-music-desktop) **v2.12.6** 与 [lyswhut/lx-music-mobile](https://github.com/lyswhut/lx-music-mobile) **v1.9.1** 的非官方 UI 改版。
 
+**当前版本：`v2.12.6-ceru.2`（青瓷改版 rev.2）**
+
 ![主界面](screenshots/主界面.png)
 
 ## 下载
 
-**Release：** https://github.com/baipiao5555/lx-music-ceru-jade/releases/tag/v2.12.6-ceru.1
+**Release：** https://github.com/baipiao5555/lx-music-ceru-jade/releases/tag/v2.12.6-ceru.2
 
 | 平台 | 文件 | 说明 |
 | --- | --- | --- |
@@ -19,6 +21,20 @@ SHA-256：
 - Windows：`f7135c3c006ab26a2d199d7011c4b372d51b6a062939f381bd65c4667fbf5be9`
 - Android universal：`943c951b3ea1b1dea781569dd41a28b81a47369907a3c765fabb5d4d80402569`
 - Android arm64：`c2845cd43a89a1cf1ece80ec456b220f22b6224a7b8e3cda267dfa5491996ca1`
+
+## 版本记录
+
+### rev.2（`v2.12.6-ceru.2`）
+
+- 桌面端启动默认进入「歌单」青瓷首页，不再先落在搜索页。
+- 首次启动不再弹出版本更新日志。
+- 重新打包 Windows 安装包，SHA-256 已更新。
+- 新增桌面端 + 手机端 UI 概念预览，见下方「设计预览」。
+- 移动端 APK 仍为主题版，完整布局改版待落地。
+
+### rev.1（`v2.12.6-ceru.1`）
+
+- 桌面端青瓷 UI 首版、Windows 安装包与 Android 主题版 APK。
 
 ## 本次改动
 
@@ -37,6 +53,21 @@ SHA-256：
 
 - 新增「青瓷」主题并设为默认：青绿主色、浅色主背景。
 - 移动端完整布局改版尚未做，界面仍是洛雪移动版的原布局；APK 是主题版。
+- rev.2 已补手机端 UI 概念稿（发现页 / 正在播放页），见下方「设计预览」。
+
+## 设计预览（rev.2）
+
+桌面端 + 手机端概念稿：
+
+![桌面 + 手机](design/preview.jpg)
+
+- 桌面端：真实封面、两行歌单、筛选胶囊、悬浮播放条。
+- 手机端 · 发现：每日精选大卡、横滑歌单、最近播放、迷你播放器。
+- 手机端 · 正在播放：黑胶 + 唱臂、歌词高亮、完整控制。
+
+手机端单独查看：[发现页](design/mobile-discover.jpg) · [正在播放页](design/mobile-player.jpg)
+
+在线预览（GitHub Pages）：https://baipiao5555.github.io/lx-music-ceru-jade/design/preview.html
 
 ## 为什么是补丁仓库
 
