@@ -2,13 +2,13 @@
 
 基于 [lyswhut/lx-music-desktop](https://github.com/lyswhut/lx-music-desktop) **v2.12.6** 与 [lyswhut/lx-music-mobile](https://github.com/lyswhut/lx-music-mobile) **v1.9.1** 的非官方 UI 改版。
 
-**当前版本：`v2.12.6-ceru.5`（青瓷改版 rev.5）**
+**当前版本：`v2.12.6-ceru.6`（青瓷改版 rev.6）**
 
 ![主界面](screenshots/主界面.png)
 
 ## 下载
 
-**Release：** https://github.com/baipiao5555/lx-music-ceru-jade/releases/tag/v2.12.6-ceru.5
+**Release：** https://github.com/baipiao5555/lx-music-ceru-jade/releases/tag/v2.12.6-ceru.6
 
 | 平台 | 文件 | 说明 |
 | --- | --- | --- |
@@ -18,11 +18,20 @@
 
 SHA-256：
 
-- Windows：`47210c14d2aec9d5b0607a2eda9ec294f0f60bae83ee0a0ba48b883bace4201c`
+- Windows：`2219d22cd1cdaf0257bef3aa08c4fcd641d55354d2ce12e2a3f043896eba0adc`
 - Android universal：`5d4b80904d45b7d65984009fe09b1798c7f812c8fb8366ed6cc7889c9a037dd2`
 - Android arm64：`55429d4ecc23d0ecedd54131bf22ccb2ae01744f4e414907766d056d0688052a`
 
 ## 版本记录
+
+### rev.6（`v2.12.6-ceru.6`）
+
+- 播放条改为左 / 中 / 右三段式：左侧封面与歌曲信息，中间上一首 / 播放 / 下一首，右侧时间与功能按钮。
+- 修复播放条歌曲信息区被误加渐变背景、出现绿色横线的问题，播放键组严格居中。
+- 收紧窗口关闭按钮右侧留白（工具栏右内边距 16px → 6px，窗口按钮宽度 46px → 38px）。
+- 工具栏改为三列栅格，窄窗口下搜索框自动收缩，不再与右侧按钮重叠。
+- 热门歌单恢复默认「最新」排序，避免部分音乐源「最热」接口加载失败。
+- 重新打包 Windows 安装包，SHA-256 已更新；移动端 APK 与 rev.3 相同。
 
 ### rev.5（`v2.12.6-ceru.5`）
 
@@ -71,8 +80,8 @@ SHA-256：
 - 启动固定进入「发现」页（原歌单页），不再恢复上次搜索页或详情页；首次启动不弹出版本更新日志。
 - 侧栏：Ceru Music 品牌（青瓷 · CERU JADE）、发现 / 本地 / 最近导航、我的歌单圆点。
 - 首页：`发现音乐` 大标题、热门歌单 Top36、四列白色歌单卡片（整块封面 + 精选歌单 + 播放量 + 曲目数）、悬停上浮。
-- 顶栏：返回/前进、自适应搜索框、排行榜/设置/窗口按钮。
-- 悬浮圆角播放条，青绿圆形播放按钮。
+- 顶栏：返回/前进、自适应搜索框、排行榜/设置/窗口按钮；窗口变窄时搜索框自动收缩。
+- 悬浮圆角播放条，青绿圆形播放按钮，播放键组居中，时间与功能按钮分列两侧。
 - 播放详情页：黑胶唱片 + 唱臂 + 玻璃歌词面板样式。
 - 主题名称的中/繁/英/韩翻译。
 
@@ -96,7 +105,7 @@ SHA-256：
 
 在线预览（GitHub Pages）：https://baipiao5555.github.io/lx-music-ceru-jade/design/preview.html
 
-> 说明：桌面端 rev.5 已按澜音 CeruMusic 界面重做发现页（白色歌单卡片、精选歌单、播放量与曲目数）；移动端 rev.3 为第一版抽屉式 UI，底部导航 / 黑胶播放页尚未全部实现。
+> 说明：桌面端 rev.6 已按澜音 CeruMusic 界面重做发现页，并将播放条改为居中三段式；移动端 rev.3 为第一版抽屉式 UI，底部导航 / 黑胶播放页尚未全部实现。
 
 ## 为什么是补丁仓库
 

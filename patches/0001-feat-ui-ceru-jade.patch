@@ -550,7 +550,7 @@ index 99ac2b9..3585fa0 100644
  .view-container {
 diff --git a/src/renderer/assets/styles/ceru.less b/src/renderer/assets/styles/ceru.less
 new file mode 100644
-index 0000000..108607f
+index 0000000..edb61ab
 --- /dev/null
 +++ b/src/renderer/assets/styles/ceru.less
 @@ -0,0 +1,249 @@
@@ -594,7 +594,7 @@ index 0000000..108607f
 +
 +#toolbar {
 +  height: 64px !important;
-+  padding: 0 16px 0 20px !important;
++  padding: 0 6px 0 20px !important;
 +  background: transparent !important;
 +  border-bottom: 1px solid rgba(20, 35, 31, 0.06) !important;
 +}
@@ -631,7 +631,7 @@ index 0000000..108607f
 +  display: none !important;
 +}
 +
-+#player > div:first-child > div {
++#player > div:first-child > div:first-child > div {
 +  border-radius: 10px !important;
 +  background: linear-gradient(135deg, #71f0cf, #16b89b) !important;
 +  color: #06251f !important;
@@ -1261,28 +1261,91 @@ index 50f47c5..f91b45b 100644
  
  </style>
 diff --git a/src/renderer/components/layout/PlayBar/MiniWidthProgress.vue b/src/renderer/components/layout/PlayBar/MiniWidthProgress.vue
-index 0a440db..c5fa93d 100644
+index 0a440db..a6cd715 100644
 --- a/src/renderer/components/layout/PlayBar/MiniWidthProgress.vue
 +++ b/src/renderer/components/layout/PlayBar/MiniWidthProgress.vue
-@@ -2,7 +2,7 @@
+@@ -1,47 +1,43 @@
+ <template>
    <div :class="$style.player">
-     <div :class="$style.picContent" :aria-label="$t('player__pic_tip')" @contextmenu="handleToMusicLocation" @click="showPlayerDetail">
-       <img v-if="musicInfo.pic" :src="musicInfo.pic" decoding="async" @error="imgError">
+-    <div :class="$style.picContent" :aria-label="$t('player__pic_tip')" @contextmenu="handleToMusicLocation" @click="showPlayerDetail">
+-      <img v-if="musicInfo.pic" :src="musicInfo.pic" decoding="async" @error="imgError">
 -      <div v-else :class="$style.emptyPic">L<span>X</span></div>
-+      <div v-else :class="$style.emptyPic">♪</div>
-     </div>
-     <div :class="$style.infoContent">
-       <div :class="$style.title" :aria-label="title + $t('copy_tip')" @click="handleCopy(title)">
-@@ -28,7 +28,7 @@
-           <use xlink:href="#icon-prevMusic" />
-         </svg>
+-    </div>
+-    <div :class="$style.infoContent">
+-      <div :class="$style.title" :aria-label="title + $t('copy_tip')" @click="handleCopy(title)">
+-        {{ title }}
++    <div :class="$style.left">
++      <div :class="$style.picContent" :aria-label="$t('player__pic_tip')" @contextmenu="handleToMusicLocation" @click="showPlayerDetail">
++        <img v-if="musicInfo.pic" :src="musicInfo.pic" decoding="async" @error="imgError">
++        <div v-else :class="$style.emptyPic">♪</div>
        </div>
+-      <div :class="$style.status">{{ statusText }}</div>
+-    </div>
+-    <!-- <div :class="$style.timeContainer">
+-      <div :class="$style.timeContent">
+-        <span>{{ nowPlayTimeStr }}</span>
+-        <span style="margin: 0 1px;">/</span>
+-        <span>{{ maxPlayTimeStr }}</span>
+-        <div :class="$style.progress">
+-          <common-progress-bar v-if="!isShowPlayerDetail" :class-name="$style.progressBar" :progress="progress" :handle-transition-end="handleTransitionEnd" :is-active-transition="isActiveTransition" />
++      <div :class="$style.infoContent">
++        <div :class="$style.title" :aria-label="title + $t('copy_tip')" @click="handleCopy(title)">
++          {{ title }}
+         </div>
++        <div :class="$style.status">{{ statusText }}</div>
+       </div>
+-    </div> -->
+-    <play-progress />
+-    <control-btns />
+-    <div :class="$style.playBtnContent">
+-      <div :class="$style.playBtn" :aria-label="$t('player__prev')" @click="playPrev()">
+-        <svg version="1.1" xmlns="http://www.w3.org/2000/svg" xlink="http://www.w3.org/1999/xlink" height="100%" viewBox="0 0 1024 1024" space="preserve">
+-          <use xlink:href="#icon-prevMusic" />
+-        </svg>
+-      </div>
 -      <div :class="$style.playBtn" :aria-label="isPlay ? $t('player__pause') : $t('player__play')" @click="togglePlay">
-+      <div :class="[$style.playBtn, $style.playBtnMain]" :aria-label="isPlay ? $t('player__pause') : $t('player__play')" @click="togglePlay">
-         <svg v-if="isPlay" version="1.1" xmlns="http://www.w3.org/2000/svg" xlink="http://www.w3.org/1999/xlink" height="100%" viewBox="0 0 1024 1024" space="preserve">
-           <use xlink:href="#icon-pause" />
-         </svg>
-@@ -153,15 +153,17 @@ export default {
+-        <svg v-if="isPlay" version="1.1" xmlns="http://www.w3.org/2000/svg" xlink="http://www.w3.org/1999/xlink" height="100%" viewBox="0 0 1024 1024" space="preserve">
+-          <use xlink:href="#icon-pause" />
+-        </svg>
+-        <svg v-else version="1.1" xmlns="http://www.w3.org/2000/svg" xlink="http://www.w3.org/1999/xlink" height="100%" viewBox="0 0 1024 1024" space="preserve">
+-          <use xlink:href="#icon-play" />
+-        </svg>
+-      </div>
+-      <div :class="$style.playBtn" :aria-label="$t('player__next')" @click="playNext()">
+-        <svg version="1.1" xmlns="http://www.w3.org/2000/svg" xlink="http://www.w3.org/1999/xlink" height="100%" viewBox="0 0 1024 1024" space="preserve">
+-          <use xlink:href="#icon-nextMusic" />
+-        </svg>
++    </div>
++    <div :class="$style.center">
++      <div :class="$style.playBtnContent">
++        <div :class="$style.playBtn" :aria-label="$t('player__prev')" @click="playPrev()">
++          <svg version="1.1" xmlns="http://www.w3.org/2000/svg" xlink="http://www.w3.org/1999/xlink" height="100%" viewBox="0 0 1024 1024" space="preserve">
++            <use xlink:href="#icon-prevMusic" />
++          </svg>
++        </div>
++        <div :class="[$style.playBtn, $style.playBtnMain]" :aria-label="isPlay ? $t('player__pause') : $t('player__play')" @click="togglePlay">
++          <svg v-if="isPlay" version="1.1" xmlns="http://www.w3.org/2000/svg" xlink="http://www.w3.org/1999/xlink" height="100%" viewBox="0 0 1024 1024" space="preserve">
++            <use xlink:href="#icon-pause" />
++          </svg>
++          <svg v-else version="1.1" xmlns="http://www.w3.org/2000/svg" xlink="http://www.w3.org/1999/xlink" height="100%" viewBox="0 0 1024 1024" space="preserve">
++            <use xlink:href="#icon-play" />
++          </svg>
++        </div>
++        <div :class="$style.playBtn" :aria-label="$t('player__next')" @click="playNext()">
++          <svg version="1.1" xmlns="http://www.w3.org/2000/svg" xlink="http://www.w3.org/1999/xlink" height="100%" viewBox="0 0 1024 1024" space="preserve">
++            <use xlink:href="#icon-nextMusic" />
++          </svg>
++        </div>
+       </div>
+     </div>
++    <div :class="$style.right">
++      <play-progress />
++      <control-btns />
++    </div>
+   </div>
+ </template>
+ 
+@@ -153,15 +149,17 @@ export default {
  .player {
    position: relative;
    height: @height-player;
@@ -1291,8 +1354,10 @@ index 0a440db..c5fa93d 100644
 +  border: 1px solid var(--color-primary-alpha-900);
 +  border-radius: 16px;
    box-sizing: border-box;
-   display: flex;
-   flex-flow: row nowrap;
+-  display: flex;
+-  flex-flow: row nowrap;
++  display: grid;
++  grid-template-columns: minmax(0, 1fr) auto minmax(0, 1fr);
    align-items: center;
 -  contain: strict;
 +  overflow: hidden;
@@ -1303,7 +1368,33 @@ index 0a440db..c5fa93d 100644
    * {
      box-sizing: border-box;
    }
-@@ -207,27 +209,21 @@ export default {
+@@ -178,6 +176,25 @@ export default {
+   }
+ }
+ 
++.left {
++  display: flex;
++  align-items: center;
++  min-width: 0;
++  height: 100%;
++}
++.center {
++  display: flex;
++  align-items: center;
++  justify-content: center;
++}
++.right {
++  display: flex;
++  align-items: center;
++  justify-content: flex-end;
++  min-width: 0;
++  height: 100%;
++}
++
+ .picContent {
+   height: 100%;
+   aspect-ratio: 1 / 1;
+@@ -207,27 +224,21 @@ export default {
      max-height: 100%;
      transition: @transition-normal;
      transition-property: border-color;
@@ -1336,7 +1427,7 @@ index 0a440db..c5fa93d 100644
    }
  }
  
-@@ -246,13 +242,15 @@ export default {
+@@ -246,13 +257,15 @@ export default {
  
  .title {
    max-width: 100%;
@@ -1356,9 +1447,19 @@ index 0a440db..c5fa93d 100644
    .mixin-ellipsis-1();
    max-width: 100%;
  }
-@@ -318,9 +316,8 @@ export default {
+@@ -310,17 +323,16 @@ export default {
+   display: flex;
+   flex-flow: row nowrap;
+   align-items: center;
+-  padding-left: 10px;
+-  padding-right: 15px;
++  padding: 0 10px;
+   gap: 18px;
+ }
+ 
  .playBtn {
    flex: none;
++  width: 24px;
    height: 52%;
 -  // margin-top: -2px;
    transition: @transition-fast;
@@ -1367,7 +1468,7 @@ index 0a440db..c5fa93d 100644
    color: var(--color-button-font);
    opacity: 1;
    cursor: pointer;
-@@ -336,5 +333,25 @@ export default {
+@@ -336,5 +348,25 @@ export default {
      opacity: 0.6;
    }
  }
@@ -1413,8 +1514,21 @@ index a6631c0..7a7f1b1 100644
          //- div(:class="$style.info")
          div(:class="$style.info")
            img(v-if="musicInfo.pic" :class="$style.img" :src="musicInfo.pic")
+diff --git a/src/renderer/components/layout/Toolbar/ControlBtns.vue b/src/renderer/components/layout/Toolbar/ControlBtns.vue
+index fe5dbfe..81ef2f2 100644
+--- a/src/renderer/components/layout/Toolbar/ControlBtns.vue
++++ b/src/renderer/components/layout/Toolbar/ControlBtns.vue
+@@ -71,7 +71,7 @@ onBeforeUnmount(() => {
+     align-items: center;
+     justify-content: center;
+     position: relative;
+-    width: 46px;
++    width: 38px;
+     height: 30px;
+     background: none;
+     border: none;
 diff --git a/src/renderer/components/layout/Toolbar/index.vue b/src/renderer/components/layout/Toolbar/index.vue
-index b9a9e04..da6f991 100644
+index b9a9e04..81873a5 100644
 --- a/src/renderer/components/layout/Toolbar/index.vue
 +++ b/src/renderer/components/layout/Toolbar/index.vue
 @@ -1,17 +1,43 @@
@@ -1467,14 +1581,20 @@ index b9a9e04..da6f991 100644
  </script>
  
  
-@@ -22,38 +48,73 @@ import SearchInput from './SearchInput.vue'
-   display: flex;
-   height: @height-toolbar;
+@@ -19,41 +45,78 @@ import SearchInput from './SearchInput.vue'
+ @import '@renderer/assets/styles/layout.less';
+ 
+ .toolbar {
+-  display: flex;
+-  height: @height-toolbar;
++  display: grid;
++  grid-template-columns: minmax(min-content, 1fr) minmax(0, 520px) minmax(min-content, 1fr);
    align-items: center;
 -  justify-content: space-between;
 -  padding-left: 15px;
-+  gap: 12px;
-+  padding: 0 16px 0 20px;
++  column-gap: 12px;
++  height: @height-toolbar;
++  padding: 0 6px 0 20px;
    -webkit-app-region: drag;
 -  z-index: 2;
 -
@@ -1487,6 +1607,7 @@ index b9a9e04..da6f991 100644
 +  z-index: 3;
 +}
 +.arrows {
++  justify-self: start;
 +  display: flex;
 +  gap: 6px;
 +  flex: none;
@@ -1527,12 +1648,12 @@ index b9a9e04..da6f991 100644
 -  height: @height-toolbar;
 -  color: var(--color-primary);
 +.searchWrap {
-+  flex: 1;
-+  max-width: 520px;
-+  margin: 0 auto;
++  width: 100%;
++  min-width: 0;
 +  -webkit-app-region: no-drag;
 +}
 +.actions {
++  justify-self: end;
 +  display: flex;
 +  align-items: center;
 +  gap: 2px;
@@ -1878,10 +1999,10 @@ index 20c8f6b..250ee5c 100644
    // border-left: 2px solid @color-tab-border-bottom;
    box-sizing: border-box;
 diff --git a/src/renderer/views/songList/List/index.vue b/src/renderer/views/songList/List/index.vue
-index 3a3663e..f89019d 100644
+index 3a3663e..1b0a976 100644
 --- a/src/renderer/views/songList/List/index.vue
 +++ b/src/renderer/views/songList/List/index.vue
-@@ -1,34 +1,36 @@
+@@ -1,34 +1,33 @@
  <template>
    <div :class="$style.container">
 -    <div :class="$style.header">
@@ -1917,10 +2038,7 @@ index 3a3663e..f89019d 100644
 -import { useRoute, useRouter } from '@common/utils/vueRouter'
 +import { listInfo, isVisibleListDetail, sortList } from '@renderer/store/songList/state'
 +
-+const getDefaultSortId = (source: LX.OnlineSource) => {
-+  const list = sortList[source] ?? []
-+  return (list.find(item => String(item.id) === 'hot' || item.name.includes('热')) ?? list[0])?.id ?? ''
-+}
++const getDefaultSortId = (source: LX.OnlineSource) => sortList[source]?.[0]?.id ?? ''
  
  const source = ref<LX.OnlineSource>('kw')
  const tagId = ref<string>('')
@@ -1935,7 +2053,7 @@ index 3a3663e..f89019d 100644
  
  interface Query {
    source?: string
-@@ -60,6 +62,9 @@ const verifyQueryParams = async function(this: any, to: { query: Query, path: st
+@@ -60,6 +59,9 @@ const verifyQueryParams = async function(this: any, to: { query: Query, path: st
        _page = '1'
      }
  
@@ -1945,7 +2063,7 @@ index 3a3663e..f89019d 100644
      next({
        path: to.path,
        query: { ...to.query, source: _source, tagId: _tagId, sortId: _sortId, page: _page },
-@@ -69,48 +74,24 @@ const verifyQueryParams = async function(this: any, to: { query: Query, path: st
+@@ -69,48 +71,24 @@ const verifyQueryParams = async function(this: any, to: { query: Query, path: st
    next()
    source.value = _source as LX.OnlineSource
    tagId.value = _tagId ?? ''
@@ -1996,7 +2114,7 @@ index 3a3663e..f89019d 100644
      }
    },
  }
-@@ -124,91 +105,41 @@ export default {
+@@ -124,91 +102,41 @@ export default {
    display: flex;
    flex-flow: column nowrap;
    position: relative;
@@ -2011,13 +2129,13 @@ index 3a3663e..f89019d 100644
 -  // padding-right: 5px;
 -  // box-sizing: border-box;
 -  padding-bottom: 5px;
-+  padding: 26px 6px 0;
- }
+-}
 -.left {
 -  flex: auto;
 -  display: flex;
 -  flex-flow: row nowrap;
--}
++  padding: 26px 6px 0;
+ }
 -
 -.btn {
 +.title {
