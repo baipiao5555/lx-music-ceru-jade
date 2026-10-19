@@ -11,6 +11,19 @@ index aeff42c..ee29a4d 100644
  <p align="center">
    <a href="https://github.com/lyswhut/lx-music-desktop/releases"><img src="https://img.shields.io/github/release/lyswhut/lx-music-desktop" alt="Release version"></a>
    <a href="https://github.com/lyswhut/lx-music-desktop/actions/workflows/release.yml"><img src="https://github.com/lyswhut/lx-music-desktop/workflows/Build/badge.svg" alt="Build status"></a>
+diff --git a/build-config/build-pack.js b/build-config/build-pack.js
+index 5cc09d4..e89ebcc 100644
+--- a/build-config/build-pack.js
++++ b/build-config/build-pack.js
+@@ -11,6 +11,8 @@ const afterPack = require('./build-after-pack')
+ const options = {
+   appId: 'cn.toside.music.desktop',
+   productName: 'lx-music-desktop',
++  npmRebuild: false,
++  electronDist: 'node_modules/electron/dist',
+   beforePack,
+   afterPack,
+   protocols: {
 diff --git a/src/common/defaultSetting.ts b/src/common/defaultSetting.ts
 index e4ce730..52da268 100644
 --- a/src/common/defaultSetting.ts
@@ -408,10 +421,29 @@ index 71670b9..a3e44b0 100644
      }
    }
 diff --git a/src/renderer/App.vue b/src/renderer/App.vue
-index 99ac2b9..a18fd17 100644
+index 99ac2b9..3585fa0 100644
 --- a/src/renderer/App.vue
 +++ b/src/renderer/App.vue
-@@ -44,6 +44,7 @@ onMounted(() => {
+@@ -1,11 +1,13 @@
+ <template>
+   <div id="container" class="view-container">
+-    <layout-aside id="left" />
+-    <div id="right">
+-      <layout-toolbar id="toolbar" />
+-      <layout-view id="view" />
+-      <layout-play-bar id="player" />
++    <div id="main">
++      <layout-aside id="left" />
++      <div id="right">
++        <layout-toolbar id="toolbar" />
++        <layout-view id="view" />
++      </div>
+     </div>
++    <layout-play-bar id="player" />
+     <layout-icons />
+     <layout-change-log-modal />
+     <layout-update-modal />
+@@ -44,6 +46,7 @@ onMounted(() => {
  <style lang="less">
  @import './assets/styles/index.less';
  @import './assets/styles/layout.less';
@@ -419,12 +451,109 @@ index 99ac2b9..a18fd17 100644
  
  html {
    height: 100vh;
+@@ -84,7 +87,7 @@ body {
+   //   top: @shadow-app;
+   //   bottom: @shadow-app;
+   // }
+-  #body {
++  #main {
+     border-radius: @radius-border;
+   }
+   #root {
+@@ -99,62 +102,63 @@ body {
+ .disableTransparent {
+   background-color: var(--color-content-background);
+ 
+-  &.linux #body {
++  &.linux #main {
+     border: 1px solid var(--color-primary-light-500);
+   }
+-  &.windows:not(.windows-11, .fullscreen) #body {
++  &.windows:not(.windows-11, .fullscreen) #main {
+     border-top: 1px solid #aaa;
+   }
+-
+-  #right {
+-    border-top-left-radius: 0;
+-    border-bottom-left-radius: 0;
+-  }
+-
+-  // #view { // 偏移5px距离解决非透明模式下右侧滚动条无法拖动的问题
+-  //   margin-right: 5Px;
+-  // }
+ }
+ .fullscreen {
+   background-color: var(--color-content-background);
+-
+-  #right {
+-    border-top-left-radius: 0;
+-    border-bottom-left-radius: 0;
+-  }
+ }
+ 
+ #container {
+   position: relative;
+   display: flex;
++  flex-direction: column;
+   height: 100%;
++  overflow: hidden;
+   background-color: var(--color-app-background);
+ }
+ 
++#main {
++  flex: auto;
++  display: flex;
++  flex-direction: row;
++  min-height: 0;
++  min-width: 0;
++}
+ #left {
+   flex: none;
+   width: @width-app-left;
+ }
+ #right {
+   flex: auto;
++  min-width: 0;
++  min-height: 0;
+   display: flex;
+   flex-flow: column nowrap;
+-  transition: background-color @transition-normal;
+-  background-color: var(--color-main-background);
+-
+-  border-top-left-radius: @radius-border;
+-  border-bottom-left-radius: @radius-border;
++  margin: 0 8px 0 0;
++  background: rgba(255, 255, 255, .78);
++  border: 1px solid rgba(255, 255, 255, .8);
++  border-radius: 18px;
+   overflow: hidden;
+-  box-shadow: 0px 0px 4px rgba(0, 0, 0, 0.1);
++  box-shadow: 0 12px 40px rgba(40, 90, 70, .12);
++}
++#toolbar {
++  flex: none;
++  z-index: 3;
+ }
+-#toolbar, #player {
++#player {
+   flex: none;
+ }
+ #view {
+   position: relative;
+   flex: auto;
+-  // display: flex;
++  min-width: 0;
+   min-height: 0;
++  overflow: hidden;
+ }
+ 
+ .view-container {
 diff --git a/src/renderer/assets/styles/ceru.less b/src/renderer/assets/styles/ceru.less
 new file mode 100644
-index 0000000..97c0489
+index 0000000..108607f
 --- /dev/null
 +++ b/src/renderer/assets/styles/ceru.less
-@@ -0,0 +1,248 @@
+@@ -0,0 +1,249 @@
 +@import './layout.less';
 +
 +/* 青瓷：浅色毛玻璃外壳 */
@@ -448,30 +577,30 @@ index 0000000..97c0489
 +
 +#left {
 +  width: 184px !important;
-+  padding: 18px 10px 12px !important;
++  padding: 16px 12px 10px !important;
 +  box-sizing: border-box !important;
 +  background: transparent !important;
 +}
 +
 +#right {
-+  margin: 0 8px 8px 0 !important;
++  margin: 0 8px 0 0 !important;
 +  border-radius: 18px !important;
-+  background: rgba(255, 255, 255, 0.72) !important;
++  background: rgba(255, 255, 255, 0.78) !important;
 +  backdrop-filter: blur(22px) !important;
-+  border: 1px solid rgba(255, 255, 255, 0.72) !important;
++  border: 1px solid rgba(255, 255, 255, 0.8) !important;
 +  box-shadow: 0 12px 40px rgba(40, 90, 70, 0.12) !important;
 +  overflow: hidden !important;
 +}
 +
 +#toolbar {
 +  height: 64px !important;
-+  padding: 0 16px 0 22px !important;
++  padding: 0 16px 0 20px !important;
 +  background: transparent !important;
 +  border-bottom: 1px solid rgba(20, 35, 31, 0.06) !important;
 +}
 +
 +#toolbar input {
-+  width: 320px !important;
++  width: 100% !important;
 +  height: 36px !important;
 +  border-radius: 99px !important;
 +  background: rgba(255, 255, 255, 0.6) !important;
@@ -483,12 +612,13 @@ index 0000000..97c0489
 +}
 +
 +#view {
-+  padding: 12px 20px 0 !important;
++  padding: 10px 22px 0 !important;
++  background: transparent !important;
 +}
 +
 +/* 悬浮玻璃播放条 */
 +#player {
-+  margin: 0 12px 12px !important;
++  margin: 8px 8px 12px !important;
 +  height: 64px !important;
 +  border-radius: 16px !important;
 +  background: rgba(255, 255, 255, 0.66) !important;
@@ -673,6 +803,21 @@ index 0000000..97c0489
 +  box-shadow: 0 12px 30px rgba(40, 90, 70, .08);
 +  overflow: hidden;
 +}
+diff --git a/src/renderer/assets/styles/index.less b/src/renderer/assets/styles/index.less
+index 1e15d45..c3b4e36 100644
+--- a/src/renderer/assets/styles/index.less
++++ b/src/renderer/assets/styles/index.less
+@@ -388,6 +388,10 @@ strong {
+   font-weight: bold;
+ }
+ 
++a {
++  text-decoration: none;
++}
++
+ .underline {
+   text-decoration: underline;
+ }
 diff --git a/src/renderer/assets/styles/variables.less b/src/renderer/assets/styles/variables.less
 index 7672a97..03d9d9e 100644
 --- a/src/renderer/assets/styles/variables.less
@@ -702,12 +847,19 @@ index 7672a97..03d9d9e 100644
  @transition-slow: .6s ease;
  @transition-normal: .4s ease;
 diff --git a/src/renderer/components/layout/Aside/NavBar.vue b/src/renderer/components/layout/Aside/NavBar.vue
-index c0f7826..1230cce 100644
+index c0f7826..12bf14a 100644
 --- a/src/renderer/components/layout/Aside/NavBar.vue
 +++ b/src/renderer/components/layout/Aside/NavBar.vue
-@@ -1,19 +1,27 @@
+@@ -1,93 +1,82 @@
  <template>
    <div ref="dom_menu" :class="$style.menu">
++    <div :class="$style.brand">
++      <span :class="$style.mark">♪</span>
++      <div :class="$style.brandText">
++        <span :class="$style.name">Ceru Music</span>
++        <span :class="$style.brandSub">青瓷 · CERU JADE</span>
++      </div>
++    </div>
      <ul :class="$style.list" role="toolbar">
 -      <li v-for="item in menus" :key="item.to" :class="$style.navItem" role="presentation">
 +      <li v-for="item in menus" :key="item.name" :class="$style.navItem" role="presentation">
@@ -730,14 +882,16 @@ index c0f7826..1230cce 100644
  
  <script lang="ts">
 -import { appSetting } from '@renderer/store/setting'
+-import { useI18n } from '@root/lang'
 +import { userLists } from '@renderer/store/list/state'
 +import { LIST_IDS } from '@common/constants'
- import { useI18n } from '@root/lang'
  import { ref, computed } from '@common/utils/vueTools'
  import { useIconSize } from '@renderer/utils/compositions/useIconSize'
-@@ -23,23 +31,15 @@ export default {
+ 
+ export default {
+   name: 'NavBar',
    setup() {
-     const t = useI18n()
+-    const t = useI18n()
      const dom_menu = ref<HTMLElement>()
 -    const iconSize = useIconSize(dom_menu, 0.32)
 +    const iconSize = useIconSize(dom_menu, 0.1)
@@ -762,62 +916,52 @@ index c0f7826..1230cce 100644
            icon: '#icon-album',
            iconSize: '0 0 425.2 425.2',
            size,
-@@ -47,31 +47,40 @@ export default {
+           name: 'SongList',
            enable: true,
          },
-         {
+-        {
 -          to: '/leaderboard',
 -          tips: t('leaderboard'),
 -          icon: '#icon-leaderboard',
 -          iconSize: '0 0 425.22 425.2',
-+          to: '/download',
-+          tips: '本地',
-+          icon: '#icon-download-2',
-+          iconSize: '0 0 425.2 425.2',
-           size,
+-          size,
 -          name: 'Leaderboard',
-+          name: 'Download',
-           enable: true,
-         },
-         {
+-          enable: true,
+-        },
+-        {
 -          to: '/list',
 -          tips: t('my_list'),
 -          icon: '#icon-love',
 -          iconSize: '0 0 444.87 391.18',
+-          size,
+-          name: 'List',
+-          enable: true,
+-        },
+         {
+           to: '/download',
+-          tips: t('download'),
++          tips: '本地',
+           icon: '#icon-download-2',
+           iconSize: '0 0 425.2 425.2',
+           size,
+-          enable: appSetting['download.enable'],
+           name: 'Download',
++          enable: true,
+         },
+         {
+-          to: '/setting',
+-          tips: t('setting'),
+-          icon: '#icon-setting',
+-          iconSize: '0 0 493.23 436.47',
 +          to: { path: '/list', query: { id: LIST_IDS.DEFAULT } },
 +          tips: '最近',
 +          icon: '#icon-audio-wave',
 +          iconSize: '0 0 24 24',
            size,
-           name: 'List',
++          name: 'List',
            enable: true,
+-          name: 'Setting',
          },
-         {
--          to: '/download',
--          tips: t('download'),
--          icon: '#icon-download-2',
-+          to: '/search',
-+          tips: t('search'),
-+          icon: '#icon-search-2',
-           iconSize: '0 0 425.2 425.2',
-           size,
--          enable: appSetting['download.enable'],
--          name: 'Download',
-+          name: 'Search',
-+          enable: true,
-+        },
-+        {
-+          to: '/leaderboard',
-+          tips: t('leaderboard'),
-+          icon: '#icon-leaderboard',
-+          iconSize: '0 0 425.22 425.2',
-+          size,
-+          name: 'Leaderboard',
-+          enable: true,
-         },
-         {
-           to: '/setting',
-@@ -85,9 +94,11 @@ export default {
        ].filter(m => m.enable)
      })
      return {
@@ -830,7 +974,7 @@ index c0f7826..1230cce 100644
      }
    },
  }
-@@ -98,109 +109,112 @@ export default {
+@@ -98,109 +87,151 @@ export default {
  
  .menu {
    flex: auto;
@@ -842,6 +986,45 @@ index c0f7826..1230cce 100644
 -  // }
 -  // padding: 5px;
 +  overflow: hidden;
++}
++.brand {
++  display: flex;
++  align-items: center;
++  gap: 10px;
++  padding: 2px 8px 18px;
++  -webkit-app-region: drag;
++}
++.mark {
++  width: 34px;
++  height: 34px;
++  border-radius: 11px;
++  background: linear-gradient(140deg, #7fe3ff, #16b89b);
++  color: #05251f;
++  display: grid;
++  place-items: center;
++  font-size: 17px;
++  font-weight: 800;
++  box-shadow: 0 6px 16px rgba(22, 184, 155, .25);
++  flex: none;
++}
++.brandText {
++  display: flex;
++  flex-direction: column;
++  gap: 2px;
++  min-width: 0;
++}
++.name {
++  font-size: 15px;
++  font-weight: 700;
++  letter-spacing: -.02em;
++  color: #14231f;
++  white-space: nowrap;
++}
++.brandSub {
++  font-size: 8px;
++  letter-spacing: .16em;
++  color: var(--color-font-label);
++  white-space: nowrap;
  }
  .list {
    -webkit-app-region: no-drag;
@@ -1016,154 +1199,65 @@ index c0f7826..1230cce 100644
  // .icon {
  //   // margin-bottom: 5px;
 diff --git a/src/renderer/components/layout/Aside/index.vue b/src/renderer/components/layout/Aside/index.vue
-index 50f47c5..6d00b64 100644
+index 50f47c5..f91b45b 100644
 --- a/src/renderer/components/layout/Aside/index.vue
 +++ b/src/renderer/components/layout/Aside/index.vue
-@@ -1,8 +1,26 @@
+@@ -1,16 +1,10 @@
  <template>
-   <div :class="[$style.aside, { [$style.fullscreen]: isFullscreen }]">
-     <ControlBtns v-if="appSetting['common.controlBtnPosition'] == 'left'" />
+-  <div :class="[$style.aside, { [$style.fullscreen]: isFullscreen }]">
+-    <ControlBtns v-if="appSetting['common.controlBtnPosition'] == 'left'" />
 -    <div v-else :class="$style.logo">L X</div>
-+    <div v-else :class="$style.logo">
-+      <span :class="$style.mark">♪</span>
-+      <div :class="$style.brandCopy">
-+        <span :class="$style.name">Ceru Music</span>
-+        <span :class="$style.sub">青瓷 · CERU JADE</span>
-+      </div>
-+    </div>
++  <div :class="$style.aside">
      <NavBar />
-+    <div :class="$style.sideCard">
-+      <div :class="$style.sideCopy">
-+        <p>青瓷主题</p>
-+        <strong>每日精选</strong>
-+        <span>发现好音乐</span>
-+      </div>
-+      <div :class="$style.miniCovers" aria-hidden="true">
-+        <i :class="$style.cover1"></i>
-+        <i :class="$style.cover2"></i>
-+        <i :class="$style.cover3"></i>
-+      </div>
-+    </div>
    </div>
  </template>
  
-@@ -41,15 +59,112 @@ import NavBar from './NavBar.vue'
+ <script setup>
+-import { isFullscreen } from '@renderer/store'
+-import { appSetting } from '@renderer/store/setting'
+-
+-import ControlBtns from './ControlBtns.vue'
+ import NavBar from './NavBar.vue'
  
- .logo {
-   box-sizing: border-box;
+ </script>
+@@ -20,36 +14,11 @@ import NavBar from './NavBar.vue'
+ @import '@renderer/assets/styles/layout.less';
+ 
+ .aside {
+-  // box-shadow: 0 0 5px rgba(0, 0, 0, .3);
+-  transition: @transition-normal;
+-  transition-property: background-color;
+-  // background-color: @color-theme-sidebar;
+-  // background-color: @color-aside-background;
+-  // border-right: 2px solid var(--color-primary);
+-  -webkit-app-region: drag;
+-  -webkit-user-select: none;
++  height: 100%;
++  box-sizing: border-box;
+   display: flex;
+   flex-flow: column nowrap;
+-
+-  &.fullscreen {
+-    -webkit-app-region: no-drag;
+-    .logo {
+-      display: none;
+-    }
+-  }
+-}
+-
+-.logo {
+-  box-sizing: border-box;
 -  padding: 0 13%;
 -  height: 50px;
 -  color: var(--color-nav-font);
 -  opacity: .8;
-+  padding: 0 10px;
-+  height: 44px;
-+  margin-bottom: 18px;
-+  color: var(--color-font);
-+  opacity: 1;
-   flex: none;
+-  flex: none;
 -  text-align: center;
 -  line-height: 50px;
-+  display: flex;
-+  align-items: center;
-+  gap: 9px;
-   font-weight: bold;
-   // -webkit-app-region: no-drag;
+-  font-weight: bold;
+-  // -webkit-app-region: no-drag;
++  -webkit-user-select: none;
  }
-+.mark {
-+  width: 30px;
-+  height: 30px;
-+  border-radius: 9px;
-+  background: linear-gradient(135deg, #71f0cf, #16b89b);
-+  color: #06251f;
-+  display: grid;
-+  place-items: center;
-+  font-size: 16px;
-+  font-weight: 800;
-+  letter-spacing: .02em;
-+  flex: none;
-+}
-+.brandCopy {
-+  display: flex;
-+  flex-direction: column;
-+  min-width: 0;
-+}
-+.name {
-+  display: block;
-+  font-size: 13px;
-+  font-weight: 700;
-+  letter-spacing: -.02em;
-+  line-height: 1.15;
-+}
-+.sub {
-+  display: block;
-+  margin-top: 2px;
-+  font-size: 7px;
-+  letter-spacing: .12em;
-+  color: var(--color-font-label);
-+  text-transform: uppercase;
-+}
-+.sideCard {
-+  flex: none;
-+  margin: 12px 4px 0;
-+  padding: 10px;
-+  border-radius: 12px;
-+  background: rgba(255, 255, 255, .5);
-+  border: 1px solid rgba(255, 255, 255, .72);
-+  box-shadow: 0 8px 22px rgba(40, 90, 70, .08);
-+  display: flex;
-+  align-items: center;
-+  justify-content: space-between;
-+  gap: 8px;
-+  p {
-+    margin: 0;
-+    font-size: 9px;
-+    letter-spacing: .12em;
-+    text-transform: uppercase;
-+    color: var(--color-font-label);
-+  }
-+  strong {
-+    display: block;
-+    margin-top: 4px;
-+    font-size: 14px;
-+    letter-spacing: -.02em;
-+    color: var(--color-font);
-+  }
-+  span {
-+    display: block;
-+    margin-top: 2px;
-+    font-size: 10px;
-+    color: var(--color-font-label);
-+  }
-+}
-+.sideCopy {
-+  flex: 1;
-+  min-width: 0;
-+}
-+.miniCovers {
-+  display: flex;
-+  flex: none;
-+
-+  i {
-+    width: 20px;
-+    height: 20px;
-+    border-radius: 6px;
-+    border: 2px solid rgba(255, 255, 255, .9);
-+    margin-left: -6px;
-+    display: block;
-+  }
-+  i:first-child {
-+    margin-left: 0;
-+  }
-+}
-+.cover1 {
-+  background: linear-gradient(145deg, #71f0cf, #16b89b);
-+}
-+.cover2 {
-+  background: linear-gradient(145deg, #ffd1dc, #ff8fb1);
-+}
-+.cover3 {
-+  background: linear-gradient(145deg, #c7c2ff, #8b7cff);
-+}
  
  </style>
 diff --git a/src/renderer/components/layout/PlayBar/MiniWidthProgress.vue b/src/renderer/components/layout/PlayBar/MiniWidthProgress.vue
@@ -1319,8 +1413,162 @@ index a6631c0..7a7f1b1 100644
          //- div(:class="$style.info")
          div(:class="$style.info")
            img(v-if="musicInfo.pic" :class="$style.img" :src="musicInfo.pic")
+diff --git a/src/renderer/components/layout/Toolbar/index.vue b/src/renderer/components/layout/Toolbar/index.vue
+index b9a9e04..da6f991 100644
+--- a/src/renderer/components/layout/Toolbar/index.vue
++++ b/src/renderer/components/layout/Toolbar/index.vue
+@@ -1,17 +1,43 @@
+ <template>
+-  <div :class="[$style.toolbar, { [$style.fullscreen]: isFullscreen }, appSetting['common.controlBtnPosition'] == 'left' ? $style.controlBtnLeft : $style.controlBtnRight]">
+-    <SearchInput />
+-    <div v-if="appSetting['common.controlBtnPosition'] == 'left'" :class="$style.logo">L X</div>
+-    <ControlBtns v-else />
++  <div :class="$style.toolbar">
++    <div :class="$style.arrows">
++      <button :class="$style.arrow" type="button" aria-label="后退" @click="router.back()">
++        <svg version="1.1" xmlns="http://www.w3.org/2000/svg" xlink="http://www.w3.org/1999/xlink" viewBox="0 0 451.847 451.847" space="preserve">
++          <use xlink:href="#icon-left" />
++        </svg>
++      </button>
++      <button :class="$style.arrow" type="button" aria-label="前进" @click="router.forward()">
++        <svg version="1.1" xmlns="http://www.w3.org/2000/svg" xlink="http://www.w3.org/1999/xlink" viewBox="0 0 451.847 451.847" space="preserve">
++          <use xlink:href="#icon-right" />
++        </svg>
++      </button>
++    </div>
++    <div :class="$style.searchWrap">
++      <SearchInput />
++    </div>
++    <div :class="$style.actions">
++      <button :class="$style.actionBtn" type="button" aria-label="排行榜" @click="router.push('/leaderboard')">
++        <svg version="1.1" xmlns="http://www.w3.org/2000/svg" xlink="http://www.w3.org/1999/xlink" viewBox="0 0 425.22 425.2" space="preserve">
++          <use xlink:href="#icon-leaderboard" />
++        </svg>
++      </button>
++      <button :class="$style.actionBtn" type="button" aria-label="设置" @click="router.push('/setting')">
++        <svg version="1.1" xmlns="http://www.w3.org/2000/svg" xlink="http://www.w3.org/1999/xlink" viewBox="0 0 493.23 436.47" space="preserve">
++          <use xlink:href="#icon-setting" />
++        </svg>
++      </button>
++      <ControlBtns />
++    </div>
+   </div>
+ </template>
+ 
+ <script setup>
+-import { isFullscreen } from '@renderer/store'
+-import { appSetting } from '@renderer/store/setting'
++import { useRouter } from '@common/utils/vueRouter'
+ import ControlBtns from './ControlBtns.vue'
+ import SearchInput from './SearchInput.vue'
+ 
++const router = useRouter()
++
+ </script>
+ 
+ 
+@@ -22,38 +48,73 @@ import SearchInput from './SearchInput.vue'
+   display: flex;
+   height: @height-toolbar;
+   align-items: center;
+-  justify-content: space-between;
+-  padding-left: 15px;
++  gap: 12px;
++  padding: 0 16px 0 20px;
+   -webkit-app-region: drag;
+-  z-index: 2;
+-
+-  &.fullscreen {
+-    -webkit-app-region: no-drag;
+-    .logo {
+-      display: none;
+-    }
+-  }
++  z-index: 3;
++}
++.arrows {
++  display: flex;
++  gap: 6px;
++  flex: none;
++  -webkit-app-region: no-drag;
++}
++.arrow {
++  width: 28px;
++  height: 28px;
++  border-radius: 50%;
++  border: 1px solid rgba(20, 35, 31, .08);
++  background: rgba(255, 255, 255, .5);
++  color: #5f726b;
++  display: grid;
++  place-items: center;
++  cursor: pointer;
++  padding: 0;
+ 
+-  &.controlBtnLeft {
+-    .control {
+-      display: none;
+-    }
++  &:hover {
++    background: #fff;
++    color: var(--color-primary);
+   }
+-  &.controlBtnRight {
+-    justify-content: space-between;
++  svg {
++    width: 12px;
++    height: 12px;
++    fill: currentColor;
+   }
+ }
+-
+-.logo {
+-  box-sizing: border-box;
+-  padding: 0 @height-toolbar * .4;
+-  height: @height-toolbar;
+-  color: var(--color-primary);
++.searchWrap {
++  flex: 1;
++  max-width: 520px;
++  margin: 0 auto;
++  -webkit-app-region: no-drag;
++}
++.actions {
++  display: flex;
++  align-items: center;
++  gap: 2px;
+   flex: none;
+-  text-align: center;
+-  line-height: @height-toolbar;
+-  font-weight: bold;
+-  // -webkit-app-region: no-drag;
++  -webkit-app-region: no-drag;
++}
++.actionBtn {
++  width: 30px;
++  height: 30px;
++  border: 0;
++  border-radius: 8px;
++  background: transparent;
++  color: #5f726b;
++  display: grid;
++  place-items: center;
++  cursor: pointer;
++  padding: 0;
++
++  &:hover {
++    background: rgba(255, 255, 255, .55);
++    color: var(--color-primary);
++  }
++  svg {
++    width: 15px;
++    height: 15px;
++    fill: currentColor;
++  }
+ }
+ 
+ </style>
 diff --git a/src/renderer/components/material/SearchInput.vue b/src/renderer/components/material/SearchInput.vue
-index 2cef384..bf34d16 100644
+index 2cef384..3dd9979 100644
 --- a/src/renderer/components/material/SearchInput.vue
 +++ b/src/renderer/components/material/SearchInput.vue
 @@ -57,7 +57,7 @@ export default {
@@ -1332,19 +1580,29 @@ index 2cef384..bf34d16 100644
      },
      list: {
        type: Array,
+@@ -203,7 +203,7 @@ export default {
+ 
+ .container {
+   position: relative;
+-  width: 35%;
++  width: 100%;
+   height: @height-toolbar * 0.52;
+   -webkit-app-region: no-drag;
+ }
 diff --git a/src/renderer/core/useApp/index.ts b/src/renderer/core/useApp/index.ts
-index 7953614..d14711c 100644
+index 7953614..a52bb9d 100644
 --- a/src/renderer/core/useApp/index.ts
 +++ b/src/renderer/core/useApp/index.ts
-@@ -57,7 +57,11 @@ export default () => {
+@@ -56,8 +56,11 @@ export default () => {
+       }
      }
  
-     void getViewPrevState().then(state => {
+-    void getViewPrevState().then(state => {
 -      void router.push({ path: state.url, query: state.query })
-+      const startPath = state.url == '/search' ? '/songList/list' : state.url
++    void getViewPrevState().then(() => {
 +      void router.push({
-+        path: startPath,
-+        query: startPath == state.url ? state.query : {},
++        path: '/songList/list',
++        query: {},
 +      })
      })
  
@@ -1389,10 +1647,32 @@ index 7a66853..4b00bd5 100644
      }
      window.setTheme(buildThemeColors(theme, dataPath))
 diff --git a/src/renderer/views/songList/List/components/SongList.vue b/src/renderer/views/songList/List/components/SongList.vue
-index 0295baa..7c8f8d4 100644
+index 0295baa..4ac893c 100644
 --- a/src/renderer/views/songList/List/components/SongList.vue
 +++ b/src/renderer/views/songList/List/components/SongList.vue
-@@ -19,7 +19,6 @@
+@@ -2,24 +2,19 @@
+   <div :class="$style.container">
+     <div v-show="!props.listInfo.noItemLabel" ref="dom_list_ref" :class="$style.listContent" class="scroll">
+       <ul>
+-        <li v-for="item in props.listInfo.list" :key="item.id" :class="$style.item" @click="toDetail(item)">
++        <li v-for="item in props.listInfo.list" :key="item.id" :class="$style.item" :title="item.author" @click="toDetail(item)">
+           <div :class="$style.image">
+             <img :class="$style.img" loading="lazy" decoding="async" :src="item.img">
+           </div>
+           <div :class="$style.desc">
+             <h4>{{ item.name }}</h4>
+-            <div>
+-              <p :class="$style.author">{{ item.author }}</p>
+-              <p v-if="item.time" :class="$style.time">{{ item.time }}</p>
+-              <div :class="$style.songlist_info">
+-                <span v-if="item.total != null"><svg-icon name="music" />{{ item.total }}</span>
+-                <span v-if="item.play_count != null"><svg-icon name="headphones" />{{ item.play_count }}</span>
+-                <span v-if="visibleSource">{{ item.source }}</span>
+-              </div>
++            <p :class="$style.subtitle">精选歌单</p>
++            <div :class="$style.songlist_info">
++              <span v-if="item.play_count != null" :class="$style.play"><svg-icon name="headphones" />{{ item.play_count }}</span>
++              <span v-if="item.total != null" :class="$style.total">{{ item.total }}首</span>
              </div>
            </div>
          </li>
@@ -1400,7 +1680,7 @@ index 0295baa..7c8f8d4 100644
        </ul>
        <div :class="$style.pagination">
          <material-pagination :count="props.listInfo.total" :limit="props.listInfo.limit" :page="props.listInfo.page" @btn-click="togglePage" />
-@@ -106,40 +105,43 @@ defineExpose({
+@@ -106,97 +101,119 @@ defineExpose({
    flex-flow: column nowrap;
    font-size: 14px;
    box-sizing: border-box;
@@ -1413,8 +1693,8 @@ index 0295baa..7c8f8d4 100644
 -    justify-content: space-between;
 +    display: grid;
 +    grid-template-columns: repeat(4, minmax(0, 1fr));
-+    gap: 18px;
-+    justify-content: stretch;
++    gap: 20px;
++    align-items: start;
    }
  }
  .item {
@@ -1427,16 +1707,22 @@ index 0295baa..7c8f8d4 100644
 -  // padding: 10px;
 -  margin-bottom: 20px;
 +  flex-flow: column nowrap;
++  overflow: hidden;
++  border-radius: 14px;
++  background: #fff;
++  border: 1px solid rgba(20, 35, 31, .05);
++  box-shadow: 0 6px 18px rgba(40, 90, 70, .07);
    cursor: pointer;
 -  transition: opacity @transition-normal;
-+  transition: transform .22s ease, opacity .22s ease;
++  transition: transform .22s ease, box-shadow .22s ease;
 +
    &:hover {
 -    opacity: .7;
 +    transform: translateY(-3px);
++    box-shadow: 0 16px 32px rgba(40, 90, 70, .14);
 +
-+    .image {
-+      box-shadow: 0 14px 28px rgba(40, 90, 70, .18);
++    .img {
++      transform: scale(1.04);
 +    }
 +    .desc h4 {
 +      color: var(--color-primary);
@@ -1446,97 +1732,132 @@ index 0295baa..7c8f8d4 100644
  .image {
    flex: none;
 -  width: 40%;
-+  width: 100%;
-   display: flex;
+-  display: flex;
 -  background-position: center;
 -  background-size: cover;
 -  border-radius: 4px;
-+  border-radius: 14px;
++  width: 100%;
    overflow: hidden;
 -  opacity: .9;
    aspect-ratio: 1 / 1;
 -
 -  box-shadow: 0 0 2px 0 rgba(0,0,0,.2);
-+  box-shadow: 0 8px 18px rgba(40, 90, 70, .1);
-+  transition: box-shadow .22s ease;
++  background: rgba(22, 184, 155, .06);
  }
  .img {
++  display: block;
    width: 100%;
-@@ -149,49 +151,57 @@ defineExpose({
+   height: 100%;
+   object-fit: cover;
++  transition: transform .35s ease;
+ }
  
  .desc {
-   flex: auto;
+-  flex: auto;
 -  padding: 2px 15px 2px 7px;
-+  padding: 9px 2px 0;
++  flex: none;
++  padding: 12px 14px 14px;
    overflow: hidden;
    h4 {
--    font-size: 14px;
++    margin: 0;
+     font-size: 14px;
 -    // height: 2.6em;
 -    text-align: justify;
 -    line-height: 1.3;
-+    margin: 0;
-+    font-size: 13px;
 +    text-align: left;
-+    line-height: 1.35;
++    line-height: 1.4;
 +    font-weight: 600;
      .mixin-ellipsis-2();
    }
  }
++.subtitle {
++  margin: 6px 0 0;
++  font-size: 12px;
++  line-height: 1.3;
++  color: var(--color-font-label);
++  .mixin-ellipsis-1();
++}
  .songlist_info {
    display: flex;
    flex-flow: row nowrap;
 -  gap: 15px;
 -  margin-top: 8px;
 -  font-size: 12px;
-+  gap: 10px;
-+  margin-top: 5px;
-+  font-size: 11px;
-   .mixin-ellipsis-1();
+-  .mixin-ellipsis-1();
 -  text-align: justify;
++  align-items: center;
++  gap: 8px;
++  margin-top: 12px;
++  font-size: 11px;
    line-height: 1.2;
 -  // text-indent: 24px;
    color: var(--color-font-label);
++  .mixin-ellipsis-1();
    svg {
-     margin-right: 2px;
+-    margin-right: 2px;
++    margin-right: 4px;
 +    width: 12px;
 +    height: 12px;
    }
  }
- .author {
+-.author {
 -  margin-top: 6px;
 -  font-size: 12px;
-+  margin-top: 4px;
-+  font-size: 11px;
-   .mixin-ellipsis-1();
+-  .mixin-ellipsis-1();
 -  text-align: justify;
-   line-height: 1.3;
+-  line-height: 1.3;
 -  // text-indent: 24px;
-   color: var(--color-font-label);
+-  color: var(--color-font-label);
++.play {
++  display: inline-flex;
++  align-items: center;
++  min-width: 0;
  }
- .time {
-   margin-top: 3px;
+-.time {
+-  margin-top: 3px;
 -  font-size: 12px;
-+  font-size: 11px;
-   .mixin-ellipsis-1();
+-  .mixin-ellipsis-1();
 -  text-align: justify;
-   line-height: 1.3;
+-  line-height: 1.3;
 -  // text-indent: 24px;
-   color: var(--color-font-label);
- }
-+@media (max-width: 980px) {
+-  color: var(--color-font-label);
++.total {
++  flex: none;
++  margin-left: auto;
++  padding: 3px 8px;
++  border-radius: 99px;
++  background: rgba(22, 184, 155, .08);
++  color: var(--color-primary);
++  font-size: 11px;
++}
++@media (max-width: 1180px) {
 +  .listContent ul {
 +    grid-template-columns: repeat(3, minmax(0, 1fr));
-+    gap: 14px;
++    gap: 16px;
 +  }
 +}
-+@media (max-width: 720px) {
++@media (max-width: 860px) {
 +  .listContent ul {
 +    grid-template-columns: repeat(2, minmax(0, 1fr));
 +  }
-+}
+ }
  .pagination {
    text-align: center;
-   padding: 15px 0;
+-  padding: 15px 0;
+-  // left: 50%;
+-  // transform: translateX(-50%);
++  padding: 22px 0 26px;
+ }
+ .noitem {
+   position: absolute;
+@@ -208,7 +225,6 @@ defineExpose({
+   flex-flow: column nowrap;
+   justify-content: center;
+   align-items: center;
+-  // background-color: var(--color-000);
+ 
+   p {
+     font-size: 24px;
 diff --git a/src/renderer/views/songList/List/components/TagList.vue b/src/renderer/views/songList/List/components/TagList.vue
 index 20c8f6b..250ee5c 100644
 --- a/src/renderer/views/songList/List/components/TagList.vue
@@ -1557,170 +1878,241 @@ index 20c8f6b..250ee5c 100644
    // border-left: 2px solid @color-tab-border-bottom;
    box-sizing: border-box;
 diff --git a/src/renderer/views/songList/List/index.vue b/src/renderer/views/songList/List/index.vue
-index 3a3663e..a817f63 100644
+index 3a3663e..f89019d 100644
 --- a/src/renderer/views/songList/List/index.vue
 +++ b/src/renderer/views/songList/List/index.vue
-@@ -1,5 +1,13 @@
+@@ -1,34 +1,36 @@
  <template>
    <div :class="$style.container">
+-    <div :class="$style.header">
+-      <div :class="$style.left">
+-        <tag-list :source="source" :tag-id="tagId" :sort-id="sortId" />
+-        <sort-tab :source="source" :tag-id="tagId" :sort-id="sortId" />
+-      </div>
+-      <base-btn :class="$style.btn" outline min @click="visibleOpenSongListModal = true">{{ $t('songlist__import_input_show_btn') }}</base-btn>
+-      <base-selection :model-value="source" :class="$style.select" :list="sourceList" item-key="id" item-name="name" @update:model-value="handleToggleSource" />
 +    <header :class="$style.hero">
-+      <div>
-+        <p :class="$style.eyebrow">发现音乐</p>
-+        <h2 :class="$style.title">探索最新最热的音乐内容</h2>
-+        <p :class="$style.subtitle">精选歌单、排行榜与每日推荐，找到下一首循环。</p>
-+      </div>
-+      <div :class="$style.heroBadge">青瓷 · 每日精选</div>
++      <h1 :class="$style.title">发现音乐</h1>
++      <p :class="$style.subtitle">探索最新最热的音乐内容</p>
 +    </header>
-     <div :class="$style.header">
-       <div :class="$style.left">
-         <tag-list :source="source" :tag-id="tagId" :sort-id="sortId" />
-@@ -8,7 +16,11 @@
-       <base-btn :class="$style.btn" outline min @click="visibleOpenSongListModal = true">{{ $t('songlist__import_input_show_btn') }}</base-btn>
-       <base-selection :model-value="source" :class="$style.select" :list="sourceList" item-key="id" item-name="name" @update:model-value="handleToggleSource" />
++    <div :class="$style.sectionHead">
++      <h2>热门歌单Top36</h2>
      </div>
 -    <list-view :source="source" :tag-id="tagId" :sort-id="sortId" :page="page" />
-+    <div :class="$style.sectionHead">
-+      <h3>热门歌单 <span :class="$style.topBadge">Top36</span></h3>
-+      <span>每天更新</span>
-+    </div>
+-    <open-list-modal v-model="visibleOpenSongListModal" :source-list="sourceList" />
 +    <list-view :class="$style.listWrap" :source="source" :tag-id="tagId" :sort-id="sortId" :page="page" />
-     <open-list-modal v-model="visibleOpenSongListModal" :source-list="sourceList" />
    </div>
  </template>
-@@ -125,15 +137,88 @@ export default {
+ 
+ <script lang="ts">
+-import { computed, ref } from '@common/utils/vueTools'
++import { ref } from '@common/utils/vueTools'
+ import { getSongListSetting, setSongListSetting } from '@renderer/utils/data'
+-import TagList from './components/TagList.vue'
+-import SortTab from './components/SortTab.vue'
+-import OpenListModal from './components/OpenListModal.vue'
+ import ListView from './ListView.vue'
+-import { sources, listInfo, isVisibleListDetail } from '@renderer/store/songList/state'
+-import { sourceNames } from '@renderer/store'
+-import { useRoute, useRouter } from '@common/utils/vueRouter'
++import { listInfo, isVisibleListDetail, sortList } from '@renderer/store/songList/state'
++
++const getDefaultSortId = (source: LX.OnlineSource) => {
++  const list = sortList[source] ?? []
++  return (list.find(item => String(item.id) === 'hot' || item.name.includes('热')) ?? list[0])?.id ?? ''
++}
+ 
+ const source = ref<LX.OnlineSource>('kw')
+ const tagId = ref<string>('')
+-const sortId = ref<string>('')
++const sortId = ref<string>(getDefaultSortId(source.value))
+ const page = ref<number>(1)
+ 
++const resolveSortId = (source: string, sortId?: string) => {
++  return sortId == null || sortId === '' ? getDefaultSortId(source as LX.OnlineSource) : sortId
++}
++
+ 
+ interface Query {
+   source?: string
+@@ -60,6 +62,9 @@ const verifyQueryParams = async function(this: any, to: { query: Query, path: st
+       _page = '1'
+     }
+ 
++    _source = _source ?? source.value
++    _sortId = resolveSortId(_source, _sortId)
++
+     next({
+       path: to.path,
+       query: { ...to.query, source: _source, tagId: _tagId, sortId: _sortId, page: _page },
+@@ -69,48 +74,24 @@ const verifyQueryParams = async function(this: any, to: { query: Query, path: st
+   next()
+   source.value = _source as LX.OnlineSource
+   tagId.value = _tagId ?? ''
+-  sortId.value = _sortId ?? ''
++  sortId.value = resolveSortId(_source, _sortId)
+   page.value = _page ? parseInt(_page) : 1
+-  void setSongListSetting({ source: _source, tagId: _tagId, sortId: _sortId })
++  void setSongListSetting({ source: _source, tagId: _tagId, sortId: sortId.value })
+ }
+ 
+ 
+ export default {
+   components: {
+-    TagList,
+-    SortTab,
+     ListView,
+-    OpenListModal,
+   },
+   beforeRouteEnter: verifyQueryParams,
+   beforeRouteUpdate: verifyQueryParams,
+   setup() {
+-    const visibleOpenSongListModal = ref(false)
+-
+-    const sourceList = computed(() => {
+-      return sources.map(s => ({ id: s, name: sourceNames.value[s] }))
+-    })
+-    const router = useRouter()
+-    const route = useRoute()
+-    const handleToggleSource = (id: LX.OnlineSource) => {
+-      if (id == source.value) return
+-      void router.replace({
+-        path: route.path,
+-        query: {
+-          source: id,
+-          tagId: '',
+-        },
+-      })
+-    }
+-
+     return {
+       source,
+       tagId,
+       sortId,
+       page,
+-      sourceList,
+-      handleToggleSource,
+-      visibleOpenSongListModal,
+     }
+   },
+ }
+@@ -124,91 +105,41 @@ export default {
+   display: flex;
    flex-flow: column nowrap;
    position: relative;
++  padding: 0 4px;
  }
+-.header {
 +.hero {
-+  flex: none;
-+  display: flex;
-+  align-items: flex-end;
-+  justify-content: space-between;
-+  gap: 16px;
-+  padding: 2px 4px 14px;
-+}
-+.eyebrow {
-+  margin: 0 0 4px;
-+  font-size: 10px;
-+  letter-spacing: .18em;
-+  text-transform: uppercase;
-+  color: var(--color-primary);
-+  font-weight: 600;
-+}
-+.title {
-+  margin: 0;
-+  font-size: 26px;
-+  line-height: 1.1;
-+  letter-spacing: -.04em;
-+  font-weight: 600;
-+  color: var(--color-font);
-+}
-+.subtitle {
-+  margin: 6px 0 0;
-+  font-size: 12px;
-+  color: var(--color-font-label);
-+}
-+.heroBadge {
-+  flex: none;
-+  font-size: 10px;
-+  color: var(--color-primary);
-+  background: rgba(22, 184, 155, .1);
-+  border: 1px solid rgba(22, 184, 155, .2);
-+  padding: 6px 10px;
-+  border-radius: 99px;
-+  white-space: nowrap;
-+}
- .header {
    flex: none;
-   width: 100%;
-   display: flex;
-   flex-flow: row nowrap;
+-  width: 100%;
+-  display: flex;
+-  flex-flow: row nowrap;
 -  // padding-right: 5px;
 -  // box-sizing: border-box;
-+  align-items: center;
-+  gap: 10px;
-   padding-bottom: 5px;
+-  padding-bottom: 5px;
++  padding: 26px 6px 0;
  }
+-.left {
+-  flex: auto;
+-  display: flex;
+-  flex-flow: row nowrap;
+-}
+-
+-.btn {
++.title {
++  margin: 0;
++  font-size: 32px;
++  line-height: 1.15;
++  letter-spacing: -.045em;
++  font-weight: 700;
+   color: var(--color-font);
+-  transition: color @transition-fast;
+-  background: none !important;
+-  &:hover {
+-    color: var(--color-primary-font-hover);
+-  }
+ }
+-
+-
+-.select {
+-  font-size: 12px;
+-  width: auto;
++.subtitle {
++  margin: 8px 0 0;
++  font-size: 14px;
++  color: var(--color-font-label);
++}
 +.sectionHead {
-+  flex: none;
+   flex: none;
+-  padding: 0 5px;
+-
+-  &:hover {
+-    :global(.icon) {
+-      opacity: 1;
+-    }
+-  }
+-
+-
+-  :global {
+-    .label-content {
+-      background-color: transparent !important;
+-      transition: color @transition-fast;
+-      color: var(--color-font);
+-      // line-height: 38px;
+-      // height: 38px;
+-      border-radius: 0;
+-      &:hover {
+-        // background: none !important;
+-        color: var(--color-primary-font-hover);
+-        .icon {
+-          opacity: 1;
+-          // color: var(--color-primary-font-hover);
+-        }
+-      }
+-    }
+-    // .label {
+-    //   color: var(--color-font) !important;
+-    // }
+-    .icon {
+-      svg {
+-        width: .8em;
+-      }
+-      // opacity: .6;
+-      // transition: color @transition-fast;
+-      // color: var(--color-font-label);
+-    }
+-
+-    .selection-list {
+-      max-height: 500px;
+-      box-shadow: 0 1px 4px 0 rgba(0,0,0,.2);
+-      li {
+-        // background-color: var(--color-main-background);
+-        text-align: center;
+-        line-height: 38px;
+-        font-size: 13px;
+-        &:hover {
+-          background-color: var(--color-button-background-hover);
+-        }
+-        &:active {
+-          background-color: var(--color-button-background-active);
+-        }
+-      }
+-    }
 +  display: flex;
 +  align-items: baseline;
 +  justify-content: space-between;
-+  padding: 12px 4px 8px;
-+  h3 {
++  padding: 28px 6px 14px;
++  h2 {
 +    margin: 0;
-+    font-size: 14px;
-+    font-weight: 600;
-+    letter-spacing: -.01em;
-+  }
-+  > span {
-+    font-size: 10px;
-+    color: var(--color-font-label);
-+  }
-+}
-+.topBadge {
-+  display: inline-flex;
-+  align-items: center;
-+  height: 16px;
-+  padding: 0 6px;
-+  margin-left: 4px;
-+  border-radius: 99px;
-+  font-size: 9px;
-+  font-weight: 600;
-+  color: var(--color-primary);
-+  background: var(--color-primary-light-700-alpha-500);
-+  vertical-align: middle;
-+}
++    font-size: 18px;
++    font-weight: 700;
++    letter-spacing: -.02em;
+   }
+ }
 +.listWrap {
 +  flex: auto;
 +  min-height: 0;
 +}
- .left {
-   flex: auto;
-   display: flex;
-@@ -141,11 +226,16 @@ export default {
- }
  
- .btn {
--  color: var(--color-font);
--  transition: color @transition-fast;
--  background: none !important;
-+  height: 30px;
-+  padding: 0 12px;
-+  border-radius: 99px;
-+  background: rgba(255, 255, 255, .6) !important;
-+  border: 1px solid rgba(20, 35, 31, .08);
-+  color: var(--color-font) !important;
-+  transition: background-color @transition-fast, color @transition-fast;
-   &:hover {
--    color: var(--color-primary-font-hover);
-+    background: rgba(255, 255, 255, .82) !important;
-+    color: var(--color-primary) !important;
-   }
- }
- 
-@@ -165,15 +255,17 @@ export default {
- 
-   :global {
-     .label-content {
--      background-color: transparent !important;
--      transition: color @transition-fast;
-+      background-color: rgba(255, 255, 255, .6) !important;
-+      transition: background-color @transition-fast, color @transition-fast;
-       color: var(--color-font);
--      // line-height: 38px;
--      // height: 38px;
--      border-radius: 0;
-+      height: 30px;
-+      line-height: 30px;
-+      border-radius: 99px;
-+      padding: 0 12px;
-+      border: 1px solid rgba(20, 35, 31, .08);
-       &:hover {
--        // background: none !important;
--        color: var(--color-primary-font-hover);
-+        background-color: rgba(255, 255, 255, .82) !important;
-+        color: var(--color-primary);
-         .icon {
-           opacity: 1;
-           // color: var(--color-primary-font-hover);
+ </style>

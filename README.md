@@ -2,13 +2,13 @@
 
 基于 [lyswhut/lx-music-desktop](https://github.com/lyswhut/lx-music-desktop) **v2.12.6** 与 [lyswhut/lx-music-mobile](https://github.com/lyswhut/lx-music-mobile) **v1.9.1** 的非官方 UI 改版。
 
-**当前版本：`v2.12.6-ceru.4`（青瓷改版 rev.4）**
+**当前版本：`v2.12.6-ceru.5`（青瓷改版 rev.5）**
 
 ![主界面](screenshots/主界面.png)
 
 ## 下载
 
-**Release：** https://github.com/baipiao5555/lx-music-ceru-jade/releases/tag/v2.12.6-ceru.4
+**Release：** https://github.com/baipiao5555/lx-music-ceru-jade/releases/tag/v2.12.6-ceru.5
 
 | 平台 | 文件 | 说明 |
 | --- | --- | --- |
@@ -18,11 +18,23 @@
 
 SHA-256：
 
-- Windows：`15de7bb84cc23cfd14c187353c1ca2fcd0b2dd28e01e303e9c50607b9ea01e3b`
+- Windows：`47210c14d2aec9d5b0607a2eda9ec294f0f60bae83ee0a0ba48b883bace4201c`
 - Android universal：`5d4b80904d45b7d65984009fe09b1798c7f812c8fb8366ed6cc7889c9a037dd2`
 - Android arm64：`55429d4ecc23d0ecedd54131bf22ccb2ae01744f4e414907766d056d0688052a`
 
 ## 版本记录
+
+### rev.5（`v2.12.6-ceru.5`）
+
+- 「发现音乐」页按澜音 CeruMusic 界面重做：移除筛选胶囊、导入歌单、来源选择，保留大标题与「热门歌单Top36」。
+- 歌单卡片改为白色圆角卡片（整块封面、标题、精选歌单、播放量、曲目数胶囊），四列自适应网格。
+- 热门歌单默认「最热」排序。
+- 修复首页与侧栏文字下划线。
+- 修复右侧内容区宽度塌陷（`#body` id 与页面 `<body>` 冲突）。
+- 修复歌单卡片点击无反应，实机验证可进入歌单详情。
+- 启动固定进入「发现」页，不再恢复上次的搜索页或详情页。
+- 搜索框自适应宽度，窄窗口下不再与窗口按钮重叠。
+- 重新打包 Windows 安装包，SHA-256 已更新；移动端 APK 与 rev.3 相同。
 
 ### rev.4（`v2.12.6-ceru.4`）
 
@@ -56,10 +68,10 @@ SHA-256：
 ### 桌面端（完整 UI 改版）
 
 - 新增「青瓷」主题：青绿主色、浅色玻璃主面板、柔和渐变背景，并设为默认主题。
-- 启动固定进入「发现」页（原歌单页），不再恢复上次搜索页；首次启动不弹出版本更新日志。
-- 侧栏：Ceru Music 品牌（青瓷 · CERU JADE）、发现 / 本地 / 最近 / 搜索 / 排行榜 / 设置导航、我的歌单圆点、底部迷你封面卡片。
-- 首页：`发现音乐` Hero、胶囊筛选、热门歌单 Top36、四列歌单卡片、悬停上浮。
-- 顶栏搜索框、来源/类型 tab 胶囊化。
+- 启动固定进入「发现」页（原歌单页），不再恢复上次搜索页或详情页；首次启动不弹出版本更新日志。
+- 侧栏：Ceru Music 品牌（青瓷 · CERU JADE）、发现 / 本地 / 最近导航、我的歌单圆点。
+- 首页：`发现音乐` 大标题、热门歌单 Top36、四列白色歌单卡片（整块封面 + 精选歌单 + 播放量 + 曲目数）、悬停上浮。
+- 顶栏：返回/前进、自适应搜索框、排行榜/设置/窗口按钮。
 - 悬浮圆角播放条，青绿圆形播放按钮。
 - 播放详情页：黑胶唱片 + 唱臂 + 玻璃歌词面板样式。
 - 主题名称的中/繁/英/韩翻译。
@@ -84,7 +96,7 @@ SHA-256：
 
 在线预览（GitHub Pages）：https://baipiao5555.github.io/lx-music-ceru-jade/design/preview.html
 
-> 说明：桌面端 rev.4 已按概念稿落地（Ceru Music 品牌、发现/本地/最近、Top36、悬浮播放条）；移动端 rev.3 为第一版抽屉式 UI，底部导航 / 黑胶播放页尚未全部实现。
+> 说明：桌面端 rev.5 已按澜音 CeruMusic 界面重做发现页（白色歌单卡片、精选歌单、播放量与曲目数）；移动端 rev.3 为第一版抽屉式 UI，底部导航 / 黑胶播放页尚未全部实现。
 
 ## 为什么是补丁仓库
 
