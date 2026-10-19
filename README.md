@@ -2,27 +2,34 @@
 
 基于 [lyswhut/lx-music-desktop](https://github.com/lyswhut/lx-music-desktop) **v2.12.6** 与 [lyswhut/lx-music-mobile](https://github.com/lyswhut/lx-music-mobile) **v1.9.1** 的非官方 UI 改版。
 
-**当前版本：`v2.12.6-ceru.2`（青瓷改版 rev.2）**
+**当前版本：`v2.12.6-ceru.3`（青瓷改版 rev.3）**
 
 ![主界面](screenshots/主界面.png)
 
 ## 下载
 
-**Release：** https://github.com/baipiao5555/lx-music-ceru-jade/releases/tag/v2.12.6-ceru.2
+**Release：** https://github.com/baipiao5555/lx-music-ceru-jade/releases/tag/v2.12.6-ceru.3
 
 | 平台 | 文件 | 说明 |
 | --- | --- | --- |
 | Windows x64 | `lx-music-desktop-v2.12.6-x64-Setup.exe` | NSIS 安装包，116 MB，未做商业签名 |
-| Android arm64 | `lx-music-mobile-v1.9.1-ceru-universal.apk` | 28 MB，推荐，arm64 |
-| Android arm64 | `lx-music-mobile-v1.9.1-ceru-arm64.apk` | 14 MB，体积更小，arm64 |
+| Android arm64 | `lx-music-mobile-v1.9.1-ceru3-universal.apk` | 28 MB，推荐，含新移动端 UI |
+| Android arm64 | `lx-music-mobile-v1.9.1-ceru3-arm64.apk` | 14 MB，体积更小，含新移动端 UI |
 
 SHA-256：
 
 - Windows：`f7135c3c006ab26a2d199d7011c4b372d51b6a062939f381bd65c4667fbf5be9`
-- Android universal：`943c951b3ea1b1dea781569dd41a28b81a47369907a3c765fabb5d4d80402569`
-- Android arm64：`c2845cd43a89a1cf1ece80ec456b220f22b6224a7b8e3cda267dfa5491996ca1`
+- Android universal：`5d4b80904d45b7d65984009fe09b1798c7f812c8fb8366ed6cc7889c9a037dd2`
+- Android arm64：`55429d4ecc23d0ecedd54131bf22ccb2ae01744f4e414907766d056d0688052a`
 
 ## 版本记录
+
+### rev.3（`v2.12.6-ceru.3`）
+
+- 移动端实际 APK 落地青瓷 UI 第一版：默认「发现」页、抽屉品牌头与胶囊导航、两列歌单卡片、悬浮播放条、搜索页品牌空状态。
+- 抽屉顺序调整为 发现 / 搜索 / 排行榜 / 我的列表 / 设置，启动默认进入发现。
+- 新增移动端布局补丁 `0003-feat-ui-ceru-mobile-layout.patch`。
+- 桌面端安装包与 rev.2 相同。
 
 ### rev.2（`v2.12.6-ceru.2`）
 
@@ -49,13 +56,13 @@ SHA-256：
 - 播放详情页：黑胶唱片 + 唱臂 + 玻璃歌词面板样式。
 - 主题名称的中/繁/英/韩翻译。
 
-### 移动端（青瓷主题版）
+### 移动端（青瓷 UI 第一版）
 
 - 新增「青瓷」主题并设为默认：青绿主色、浅色主背景。
-- 移动端完整布局改版尚未做，界面仍是洛雪移动版的原布局；APK 是主题版。
-- rev.2 已补手机端 UI 概念稿（发现页 / 正在播放页），见下方「设计预览」。
+- rev.3 已落地移动端 UI 第一版：默认「发现」页、抽屉品牌头与胶囊导航、两列歌单卡片、悬浮播放条、搜索页品牌空状态。
+- 底部导航概念稿（发现 / 正在播放）尚未完全实现；当前 APK 使用抽屉导航。
 
-## 设计预览（rev.2）
+## 设计预览（概念稿）
 
 桌面端 + 手机端概念稿：
 
@@ -69,9 +76,17 @@ SHA-256：
 
 在线预览（GitHub Pages）：https://baipiao5555.github.io/lx-music-ceru-jade/design/preview.html
 
+> 说明：设计预览是概念稿；实际 APK rev.3 已落地第一版抽屉式移动 UI，底部导航等概念细节尚未全部实现。
+
 ## 为什么是补丁仓库
 
 Mimosa 的 Git 安全门禁在提交前扫描到上游源码中的 12 个既有高危项（音乐源加密、同步路径处理等），按规则阻止了完整源码提交。本仓库只包含本次 UI/主题改动，避免重新分发上游高风险代码；上游项目仍采用 Apache-2.0 许可。
+
+## 补丁文件
+
+- `patches/0001-feat-ui-ceru-jade.patch`：桌面端青瓷 UI，基于官方 v2.12.6。
+- `patches/0002-feat-ui-ceru-mobile-theme.patch`：移动端青瓷主题，基于官方 v1.9.1。
+- `patches/0003-feat-ui-ceru-mobile-layout.patch`：移动端青瓷布局，基于官方 v1.9.1。
 
 ## 应用补丁
 
@@ -100,6 +115,7 @@ npm run build
 git clone --depth 1 --branch v1.9.1 https://github.com/lyswhut/lx-music-mobile.git
 cd lx-music-mobile
 git apply /path/to/patches/0002-feat-ui-ceru-mobile-theme.patch
+git apply /path/to/patches/0003-feat-ui-ceru-mobile-layout.patch
 npm run build:theme
 npm install --legacy-peer-deps --registry=https://registry.npmmirror.com
 ```
@@ -117,7 +133,7 @@ gradlew.bat assembleRelease -PreactNativeArchitectures=arm64-v8a --no-daemon
 
 - 播放详情页的黑胶样式已编译通过，但当前环境没有可用播放源，未实际播放验证。
 - Windows 安装包和 Android APK 都是自签名，系统可能提示未知发布者/未知来源。
-- 移动端 APK 是 arm64-v8a，要求 Android 5.0+；如已安装其它签名的洛雪，需要先卸载。
+- 移动端 universal APK 含 arm64-v8a 等 ABI；arm64 版体积更小。要求 Android 5.0+；如已安装其它签名的洛雪，需要先卸载。
 - 应用补丁后如果仍显示旧主题，到「设置 → 主题」选择「青瓷」；新配置默认就是青瓷。
 
 ## 许可
