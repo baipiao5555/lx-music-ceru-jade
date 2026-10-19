@@ -1,6 +1,6 @@
-# 青瓷 UI 概念预览 · rev.3
+# 青瓷 UI 概念预览 · rev.4
 
-对应版本：`v2.12.6-ceru.3`
+对应版本：`v2.12.6-ceru.4`
 
 ![桌面 + 手机](preview.jpg)
 
@@ -29,7 +29,7 @@
 ## 说明
 
 - 本目录是 UI 概念稿，用于确认视觉方向。
-- `v2.12.6-ceru.3` 的 Windows 安装包是已落地的桌面青瓷 UI（启动默认进入歌单首页）。
+- `v2.12.6-ceru.4` 的 Windows 安装包已按概念稿落地：Ceru Music 品牌、发现/本地/最近、我的歌单圆点、Top36、悬浮播放条，启动固定进入「发现」页。
 - Android APK rev.3 已落地第一版抽屉式移动 UI：默认「发现」页、胶囊导航、两列歌单卡片、悬浮播放条。
 - 概念稿里的底部导航 / 黑胶播放页尚未全部实现到 React Native。
 - 在线预览：https://baipiao5555.github.io/lx-music-ceru-jade/design/preview.html
