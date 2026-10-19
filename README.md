@@ -2,27 +2,37 @@
 
 基于 [lyswhut/lx-music-desktop](https://github.com/lyswhut/lx-music-desktop) **v2.12.6** 与 [lyswhut/lx-music-mobile](https://github.com/lyswhut/lx-music-mobile) **v1.9.1** 的非官方 UI 改版。
 
-**当前版本：`v2.12.6-ceru.7`（青瓷改版 rev.7）**
+**当前版本：`v2.12.6-ceru.8`（青瓷改版 rev.8）**
 
 ![主界面](screenshots/主界面.png)
 
 ## 下载
 
-**Release：** https://github.com/baipiao5555/lx-music-ceru-jade/releases/tag/v2.12.6-ceru.7
+**Release：** https://github.com/baipiao5555/lx-music-ceru-jade/releases/tag/v2.12.6-ceru.8
 
 | 平台 | 文件 | 说明 |
 | --- | --- | --- |
 | Windows x64 | `lx-music-desktop-v2.12.6-x64-Setup.exe` | NSIS 安装包，116 MB，未做商业签名 |
-| Android arm64 | `lx-music-mobile-v1.9.1-ceru4-universal.apk` | 28 MB，推荐，含澜音 v1 风格移动端 UI |
-| Android arm64 | `lx-music-mobile-v1.9.1-ceru4-arm64.apk` | 14 MB，体积更小，含澜音 v1 风格移动端 UI |
+| Android arm64 | `lx-music-mobile-v1.9.1-ceru5-universal.apk` | 28 MB，推荐，含澜音 v1 布局移动端 UI |
+| Android arm64 | `lx-music-mobile-v1.9.1-ceru5-arm64.apk` | 14 MB，体积更小，含澜音 v1 布局移动端 UI |
 
 SHA-256：
 
 - Windows：`ad7f1beb246be097bb3e2ec9a04629afd4a001d77746b2b8b406897d4b9d2e62`
-- Android universal：`295659b64817499a89c8c58439e8c8d05f352200e5f077a09d325a07a3f5fbb3`
-- Android arm64：`4a8e1fbccf00c4ebf360ca3c35ea3f985cd20577cf1b0257a90bc2928e299327`
+- Android universal：`4e3fb72a45c6503a945efe3f75fd0b689e0ab84e37fedb8724c90bf38fbf1b16`
+- Android arm64：`1695b1fef12bdfbdc038ec9b4501d5b66a45d02cbc31090da671e500fe283b3e`
 
 ## 版本记录
+
+### rev.8（`v2.12.6-ceru.8` + 移动端 `v1.9.1-ceru5`）
+
+- 移动端移除洛雪式抽屉 / 汉堡菜单，改为底部四栏导航：发现 / 搜索 / 音乐库 / 我的。
+- 顶部改为 Ceru Music 品牌栏 + 排行榜 / 搜索 / 头像入口。
+- 发现页改为概念稿布局：问候语 +「发现新声音」+ 每日精选 Hero + 横滑热门歌单 + 最近播放。
+- 播放条改为悬浮迷你卡片，只在实际播放时显示；播放键改为青绿圆形按钮。
+- 设置页改为白色卡片分组，字体预览 / 关于页品牌改为 Ceru Music。
+- 搜索页改为圆角搜索框 +「全部音源」胶囊。
+- 空封面占位由「LX」改为音符图标；桌面安装包与 rev.7 相同。
 
 ### rev.7（`v2.12.6-ceru.7` + 移动端 `v1.9.1-ceru4`）
 
@@ -97,12 +107,15 @@ SHA-256：
 - 播放详情页：黑胶唱片 + 唱臂 + 玻璃歌词面板样式。
 - 主题名称的中/繁/英/韩翻译。
 
-### 移动端（澜音 v1 风格）
+### 移动端（澜音 v1 布局）
 
 - 新增「青瓷」主题并设为默认：青绿主色、浅色主背景。
-- 发现页：`发现音乐` + `热门歌单Top36` + 两列白色歌单卡片（精选歌单 / 播放量 / 曲目数）。
-- 抽屉品牌改为 Ceru Music，移除底部主题装饰卡。
-- 播放条改为贴底通栏。
+- 底部四栏导航：发现 / 搜索 / 音乐库 / 我的，移除洛雪式抽屉 / 汉堡菜单。
+- 顶部 Ceru Music 品牌栏 + 排行榜 / 搜索 / 头像入口。
+- 发现页：问候语 +「发现新声音」+ 每日精选 Hero + 横滑热门歌单 + 最近播放。
+- 悬浮迷你播放条（仅播放时显示），青绿圆形播放键。
+- 设置页白色卡片分组；搜索页圆角搜索框 +「全部音源」胶囊。
+- 空封面占位改为音符图标。
 
 ## 设计预览（概念稿）
 
@@ -118,7 +131,7 @@ SHA-256：
 
 在线预览（GitHub Pages）：https://baipiao5555.github.io/lx-music-ceru-jade/design/preview.html
 
-> 说明：桌面端 rev.7 已按澜音 v1 平面风格重构外壳、发现页和详情页；移动端 ceru4 同步改为简洁发现页、白色卡片和贴底播放条。
+> 说明：桌面端 rev.7 已按澜音 v1 平面风格重构外壳、发现页和详情页；移动端 rev.8 已按概念稿改为底部四栏导航、Hero + 横滑歌单 + 最近播放、悬浮迷你播放条和卡片化设置页。
 
 ## 为什么是补丁仓库
 
