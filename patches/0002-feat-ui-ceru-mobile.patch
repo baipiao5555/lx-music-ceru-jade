@@ -1,3 +1,17 @@
+diff --git a/android/gradle/wrapper/gradle-wrapper.properties b/android/gradle/wrapper/gradle-wrapper.properties
+index 6f7a6eb..d0b6b99 100644
+--- a/android/gradle/wrapper/gradle-wrapper.properties
++++ b/android/gradle/wrapper/gradle-wrapper.properties
+@@ -1,7 +1,7 @@
+ distributionBase=GRADLE_USER_HOME
+ distributionPath=wrapper/dists
+-distributionUrl=https\://services.gradle.org/distributions/gradle-8.8-all.zip
++distributionUrl=file\:///D:/gradle-8.8-bin.zip
+ networkTimeout=10000
+-validateDistributionUrl=true
++validateDistributionUrl=false
+ zipStoreBase=GRADLE_USER_HOME
+ zipStorePath=wrapper/dists
 diff --git a/src/components/player/PlayerBar/components/ControlBtn.tsx b/src/components/player/PlayerBar/components/ControlBtn.tsx
 index e89b473..b0c220b 100644
 --- a/src/components/player/PlayerBar/components/ControlBtn.tsx
@@ -82,7 +96,7 @@ index 267d262..f62b4a9 100644
    },
  })
 diff --git a/src/components/player/PlayerBar/index.tsx b/src/components/player/PlayerBar/index.tsx
-index 610ffda..e6f0c4d 100644
+index 610ffda..4f8853c 100644
 --- a/src/components/player/PlayerBar/index.tsx
 +++ b/src/components/player/PlayerBar/index.tsx
 @@ -19,7 +19,7 @@ export default memo(({ isHome = false }: { isHome?: boolean }) => {
@@ -94,7 +108,7 @@ index 610ffda..e6f0c4d 100644
        <Pic isHome={isHome} />
        <View style={styles.center}>
          <Title isHome={isHome} />
-@@ -42,21 +42,20 @@ export default memo(({ isHome = false }: { isHome?: boolean }) => {
+@@ -42,21 +42,13 @@ export default memo(({ isHome = false }: { isHome?: boolean }) => {
  
  const styles = createStyle({
    container: {
@@ -110,25 +124,18 @@ index 610ffda..e6f0c4d 100644
 -    // backgroundColor: 'red',
 -    borderTopLeftRadius: 6,
 -    borderTopRightRadius: 6,
-+    marginHorizontal: 8,
-+    marginBottom: 6,
 +    paddingVertical: 6,
-+    paddingLeft: 8,
-+    paddingRight: 6,
-+    borderRadius: 16,
-+    borderWidth: 1,
++    paddingLeft: 10,
++    paddingRight: 8,
++    borderTopWidth: 1,
      flexDirection: 'row',
      alignItems: 'center',
 -    elevation: 10,
-+    elevation: 8,
-+    shadowColor: '#000',
-+    shadowOffset: { width: 0, height: 3 },
-+    shadowOpacity: 0.14,
-+    shadowRadius: 8,
++    minHeight: 62,
    },
    left: {
      // borderRadius: 3,
-@@ -67,7 +66,7 @@ const styles = createStyle({
+@@ -67,7 +59,7 @@ const styles = createStyle({
      flexDirection: 'column',
      flexGrow: 1,
      flexShrink: 1,
@@ -151,6 +158,29 @@ index b70b252..2abf196 100644
    { id: 'nav_top', icon: 'leaderboard' },
    { id: 'nav_love', icon: 'love' },
    // { id: 'download', icon: 'download-2' },
+diff --git a/src/config/defaultSetting.ts b/src/config/defaultSetting.ts
+index 238de11..33eb368 100644
+--- a/src/config/defaultSetting.ts
++++ b/src/config/defaultSetting.ts
+@@ -73,8 +73,8 @@ const defaultSetting: LX.AppSetting = {
+   'sync.enable': false,
+ 
+   // 'theme.id': 'blue_plus',
+-  'theme.id': 'green',
+-  'theme.lightId': 'green',
++  'theme.id': 'ceru',
++  'theme.lightId': 'ceru',
+   'theme.darkId': 'black',
+   'theme.hideBgDark': false,
+   'theme.dynamicBg': false,
+@@ -84,7 +84,6 @@ const defaultSetting: LX.AppSetting = {
+ 
+ // 使用新年皮肤
+ if (new Date().getMonth() < 2) {
+-  defaultSetting['theme.id'] = 'happy_new_year'
+   defaultSetting['desktopLyric.style.lyricPlayedColor'] = 'rgba(255, 18, 34, 1)'
+ }
+ 
 diff --git a/src/lang/en-us.json b/src/lang/en-us.json
 index 3d9be61..30289d0 100644
 --- a/src/lang/en-us.json
@@ -191,7 +221,7 @@ index 2bec8f5..31b6b69 100644
    "never_show": "不再提醒",
    "no_item": "清單竟然是空的...",
 diff --git a/src/screens/Home/Vertical/DrawerNav.tsx b/src/screens/Home/Vertical/DrawerNav.tsx
-index 0c1a2aa..9d01aa8 100644
+index 0c1a2aa..394b15e 100644
 --- a/src/screens/Home/Vertical/DrawerNav.tsx
 +++ b/src/screens/Home/Vertical/DrawerNav.tsx
 @@ -16,20 +16,29 @@ import { useSettingValue } from '@/store/setting/hook'
@@ -313,7 +343,7 @@ index 0c1a2aa..9d01aa8 100644
 +          <Icon name="logo" color="#fff" size={22} />
 +        </View>
 +        <View>
-+          <Text style={styles.brandName} size={18} color={theme['c-font']}>LX Music</Text>
++          <Text style={styles.brandName} size={18} color={theme['c-font']}>Ceru Music</Text>
 +          <Text style={styles.brandSub} size={9} color={theme['c-font-label']}>青瓷 · CERU JADE</Text>
 +        </View>
        </View>
@@ -342,22 +372,6 @@ index 0c1a2aa..9d01aa8 100644
        </TouchableOpacity>
  }
  
-@@ -132,6 +178,15 @@ export default memo(() => {
-         </View>
-       </ScrollView>
- 
-+      <View style={[styles.themeCard, { backgroundColor: theme['c-primary-light-700-alpha-500'], borderColor: theme['c-border-background'] }]}>
-+        <View style={[styles.themeAccent, { backgroundColor: theme['c-primary'] }]} />
-+        <View style={styles.themeCopy}>
-+          <Text size={9} color={theme['c-font-label']}>青瓷主题</Text>
-+          <Text style={styles.themeTitle} size={14} color={theme['c-font']}>每日精选</Text>
-+          <Text size={9} color={theme['c-font-label']}>发现好音乐</Text>
-+        </View>
-+      </View>
-+
-       {
-         showBackBtn ? <MenuItem id="back_home" icon="home" onPress={handlePress} /> : null
-       }
 diff --git a/src/screens/Home/Vertical/Header.tsx b/src/screens/Home/Vertical/Header.tsx
 index f2a89b4..4268584 100644
 --- a/src/screens/Home/Vertical/Header.tsx
@@ -584,102 +598,117 @@ index 7a55d82..c36a6cf 100644
    },
  })
 diff --git a/src/screens/Home/Views/SongList/Content.tsx b/src/screens/Home/Views/SongList/Content.tsx
-index 7764f06..6ea9f68 100644
+index 7764f06..090ce39 100644
 --- a/src/screens/Home/Views/SongList/Content.tsx
 +++ b/src/screens/Home/Views/SongList/Content.tsx
-@@ -6,6 +6,8 @@ import { StyleSheet, View } from 'react-native'
- import HeaderBar, { type HeaderBarProps, type HeaderBarType } from './HeaderBar'
- import songlistState, { type InitState, type SortInfo } from '@/store/songlist/state'
+@@ -1,63 +1,32 @@
+-import { getSongListSetting, saveSongListSetting } from '@/utils/data'
++import { getSongListSetting } from '@/utils/data'
+ import { useEffect, useRef } from 'react'
+ import { StyleSheet, View } from 'react-native'
+ 
+-// import List from './List/List'
+-import HeaderBar, { type HeaderBarProps, type HeaderBarType } from './HeaderBar'
+-import songlistState, { type InitState, type SortInfo } from '@/store/songlist/state'
++import songlistState from '@/store/songlist/state'
  import List, { type ListType } from './List'
+-
+-
+-interface SonglistInfo {
+-  source: InitState['sources'][number]
+-  sortId: SortInfo['id']
+-  tagId: string
+-}
 +import Text from '@/components/common/Text'
 +import { useTheme } from '@/store/theme/hook'
  
- 
- interface SonglistInfo {
-@@ -17,6 +19,7 @@ interface SonglistInfo {
  export default () => {
-   const headerBarRef = useRef<HeaderBarType>(null)
+-  const headerBarRef = useRef<HeaderBarType>(null)
    const listRef = useRef<ListType>(null)
+-  const songlistInfo = useRef<SonglistInfo>({ source: 'kw', sortId: '5', tagId: '' })
 +  const theme = useTheme()
-   const songlistInfo = useRef<SonglistInfo>({ source: 'kw', sortId: '5', tagId: '' })
  
    useEffect(() => {
-@@ -52,12 +55,26 @@ export default () => {
+     void getSongListSetting().then(info => {
+-      songlistInfo.current.source = info.source
+-      songlistInfo.current.sortId = info.sortId
+-      songlistInfo.current.tagId = info.tagId
+-      headerBarRef.current?.setSource(info.source, info.sortId, info.tagName, info.tagId)
+-      listRef.current?.loadList(info.source, info.sortId, info.tagId)
++      const sortId = info.sortId || songlistState.sortList[info.source]?.[0]?.id || ''
++      listRef.current?.loadList(info.source, sortId, info.tagId)
+     })
+   }, [])
  
+-  const handleSortChange: HeaderBarProps['onSortChange'] = (id) => {
+-    songlistInfo.current.sortId = id
+-    void saveSongListSetting({ sortId: id })
+-    listRef.current?.loadList(songlistInfo.current.source, id, songlistInfo.current.tagId)
+-  }
+-
+-  const handleTagChange: HeaderBarProps['onTagChange'] = (name, id) => {
+-    songlistInfo.current.tagId = id
+-    void saveSongListSetting({ tagName: name, tagId: id })
+-    listRef.current?.loadList(songlistInfo.current.source, songlistInfo.current.sortId, id)
+-  }
+-
+-  const handleSourceChange: HeaderBarProps['onSourceChange'] = (source) => {
+-    songlistInfo.current.source = source
+-    songlistInfo.current.tagId = ''
+-    songlistInfo.current.sortId = songlistState.sortList[source]![0].id
+-    void saveSongListSetting({ sortId: songlistInfo.current.sortId, source, tagId: '', tagName: '' })
+-    headerBarRef.current?.setSource(source, songlistInfo.current.sortId, '', songlistInfo.current.tagId)
+-    listRef.current?.loadList(source, songlistInfo.current.sortId, songlistInfo.current.tagId)
+-  }
+-
    return (
      <View style={styles.container}>
-+      <View style={[styles.hero, { backgroundColor: theme['c-primary-light-700-alpha-500'], borderColor: theme['c-border-background'] }]}>
-+        <View style={styles.heroTop}>
-+          <Text size={10} color={theme['c-primary']} style={styles.eyebrow}>发现音乐</Text>
-+          <View style={[styles.badge, { backgroundColor: theme['c-content-background'] }]}>
-+            <Text size={9} color={theme['c-primary-font']}>青瓷 · 每日精选</Text>
-+          </View>
-+        </View>
-+        <Text size={22} color={theme['c-font']} style={styles.title}>探索最新最热的音乐内容</Text>
-+        <Text size={11} color={theme['c-font-label']} style={styles.subtitle}>精选歌单、排行榜与每日推荐，找到下一首循环。</Text>
+-      <HeaderBar
+-        ref={headerBarRef}
+-        onSortChange={handleSortChange}
+-        onTagChange={handleTagChange}
+-        onSourceChange={handleSourceChange}
+-      />
++      <View style={styles.pageHeader}>
++        <Text size={26} color={theme['c-font']} style={styles.title}>发现音乐</Text>
++        <Text size={12} color={theme['c-font-label']} style={styles.subtitle}>探索最新最热的音乐内容</Text>
 +      </View>
-       <HeaderBar
-         ref={headerBarRef}
-         onSortChange={handleSortChange}
-         onTagChange={handleTagChange}
-         onSourceChange={handleSourceChange}
-       />
 +      <View style={styles.sectionHead}>
-+        <Text size={13} color={theme['c-font']} style={styles.sectionTitle}>热门歌单</Text>
-+        <Text size={9} color={theme['c-font-label']}>每天更新</Text>
++        <Text size={16} color={theme['c-font']} style={styles.sectionTitle}>热门歌单Top36</Text>
 +      </View>
        <List ref={listRef} />
      </View>
    )
-@@ -68,5 +85,48 @@ const styles = StyleSheet.create({
-     position: 'relative',
+@@ -65,8 +34,27 @@ export default () => {
+ 
+ const styles = StyleSheet.create({
+   container: {
+-    position: 'relative',
      flex: 1,
-   },
-+  hero: {
-+    marginHorizontal: 12,
-+    marginTop: 8,
-+    marginBottom: 6,
-+    padding: 14,
-+    borderRadius: 16,
-+    borderWidth: 1,
++    backgroundColor: '#f5f8f7',
 +  },
-+  heroTop: {
-+    flexDirection: 'row',
-+    alignItems: 'center',
-+    justifyContent: 'space-between',
-+  },
-+  eyebrow: {
-+    fontWeight: '700',
-+    letterSpacing: 1.5,
-+  },
-+  badge: {
-+    paddingHorizontal: 8,
-+    paddingVertical: 4,
-+    borderRadius: 999,
++  pageHeader: {
++    paddingHorizontal: 18,
++    paddingTop: 18,
++    paddingBottom: 2,
 +  },
 +  title: {
-+    marginTop: 6,
 +    fontWeight: '600',
-+    letterSpacing: -0.5,
-+    lineHeight: 27,
++    letterSpacing: -0.6,
 +  },
 +  subtitle: {
-+    marginTop: 5,
-+    lineHeight: 16,
++    marginTop: 6,
 +  },
 +  sectionHead: {
-+    flexDirection: 'row',
-+    alignItems: 'baseline',
-+    justifyContent: 'space-between',
-+    paddingHorizontal: 16,
-+    marginTop: 8,
-+    marginBottom: 2,
++    paddingHorizontal: 18,
++    paddingTop: 16,
++    paddingBottom: 4,
 +  },
 +  sectionTitle: {
 +    fontWeight: '600',
-+  },
+   },
  })
- 
+-
 diff --git a/src/screens/Home/Views/SongList/HeaderBar/OpenList/index.tsx b/src/screens/Home/Views/SongList/HeaderBar/OpenList/index.tsx
 index df19114..5161782 100644
 --- a/src/screens/Home/Views/SongList/HeaderBar/OpenList/index.tsx
@@ -926,40 +955,71 @@ index 926452b..f19677b 100644
    footer: {
      textAlign: 'center',
 diff --git a/src/screens/Home/Views/SongList/components/Songlist/ListItem.tsx b/src/screens/Home/Views/SongList/components/Songlist/ListItem.tsx
-index 156233e..cc4450a 100644
+index 156233e..d26ed82 100644
 --- a/src/screens/Home/Views/SongList/components/Songlist/ListItem.tsx
 +++ b/src/screens/Home/Views/SongList/components/Songlist/ListItem.tsx
-@@ -27,12 +27,14 @@ export default memo(({ item, index, width, showSource, onPress }: {
-           <View style={{ ...styles.listItem, width: itemWidth }}>
-             <View style={{ ...styles.listItemImg, backgroundColor: theme['c-content-background'] }}>
-               <TouchableOpacity activeOpacity={0.5} onPress={handlePress}>
+@@ -21,51 +21,81 @@ export default memo(({ item, index, width, showSource, onPress }: {
+   const handlePress = () => {
+     onPress(item, index)
+   }
++
++  if (!item.source) return <View style={{ width: itemWidth }} />
++
+   return (
+-    item.source
+-      ? (
+-          <View style={{ ...styles.listItem, width: itemWidth }}>
+-            <View style={{ ...styles.listItemImg, backgroundColor: theme['c-content-background'] }}>
+-              <TouchableOpacity activeOpacity={0.5} onPress={handlePress}>
 -                <Image url={item.img} nativeID={`${NAV_SHEAR_NATIVE_IDS.songlistDetail_pic}_from_${item.id}`} style={{ width: itemWidth, height: itemWidth, borderRadius: 4 }} />
-+                <Image url={item.img} nativeID={`${NAV_SHEAR_NATIVE_IDS.songlistDetail_pic}_from_${item.id}`} style={{ width: itemWidth, height: itemWidth, borderRadius: 12 }} />
-                 { showSource ? <Text style={styles.sourceLabel} size={9} color="#fff" >{item.source}</Text> : null }
-               </TouchableOpacity>
+-                { showSource ? <Text style={styles.sourceLabel} size={9} color="#fff" >{item.source}</Text> : null }
+-              </TouchableOpacity>
++    <TouchableOpacity
++      activeOpacity={0.85}
++      onPress={handlePress}
++      style={[styles.card, { width: itemWidth, backgroundColor: theme['c-content-background'] }]}
++    >
++      <Image
++        url={item.img}
++        nativeID={`${NAV_SHEAR_NATIVE_IDS.songlistDetail_pic}_from_${item.id}`}
++        style={{ width: itemWidth, height: itemWidth }}
++      />
++      {showSource ? <Text style={styles.sourceLabel} size={9} color="#fff">{item.source}</Text> : null}
++      <View style={styles.body}>
++        <Text style={styles.title} color={theme['c-font']} numberOfLines={2}>{item.name}</Text>
++        <Text style={styles.subtitle} size={10} color={theme['c-font-label']} numberOfLines={1}>精选歌单</Text>
++        <View style={styles.meta}>
++          {item.play_count ? <Text size={9} color={theme['c-font-label']}>{item.play_count}</Text> : <View />}
++          {item.total ? (
++            <View style={[styles.totalPill, { backgroundColor: theme['c-primary-alpha-900'] }]}>
++              <Text size={9} color={theme['c-primary']}>{item.total}首</Text>
              </View>
-             <TouchableOpacity activeOpacity={0.5} onPress={handlePress}>
+-            <TouchableOpacity activeOpacity={0.5} onPress={handlePress}>
 -              <Text style={styles.listItemTitle} numberOfLines={ 2 }>{item.name}</Text>
-+              <Text style={styles.listItemTitle} color={theme['c-font']} numberOfLines={2}>{item.name}</Text>
-+              {item.author ? <Text style={styles.listItemAuthor} size={10} color={theme['c-font-label']} numberOfLines={1}>{item.author}</Text> : null}
-+              {item.play_count ? <Text size={9} color={theme['c-font-label']}>{item.play_count}</Text> : null}
-             </TouchableOpacity>
-             {/* <Text>{JSON.stringify(item)}</Text> */}
-           </View>
-@@ -43,26 +45,24 @@ export default memo(({ item, index, width, showSource, onPress }: {
+-            </TouchableOpacity>
+-            {/* <Text>{JSON.stringify(item)}</Text> */}
+-          </View>
+-        )
+-      : <View style={{ ...styles.listItem, width: itemWidth }} />
++          ) : null}
++        </View>
++      </View>
++    </TouchableOpacity>
+   )
+ })
  
  const styles = createStyle({
-   listItem: {
+-  listItem: {
 -    // width: 90,
 -    margin: 10,
-+    margin: 6,
-   },
-   listItemImg: {
+-  },
+-  listItemImg: {
 -    // backgroundColor: '#eee',
 -    borderRadius: 4,
 -    marginBottom: 5,
-+    borderRadius: 12,
-+    marginBottom: 7,
++  card: {
++    margin: 5,
++    borderRadius: 14,
      overflow: 'hidden',
      ...Platform.select({
        ios: {
@@ -971,28 +1031,50 @@ index 156233e..cc4450a 100644
          },
 -        shadowOpacity: 0.20,
 -        shadowRadius: 1.41,
-+        shadowOpacity: 0.16,
++        shadowOpacity: 0.12,
 +        shadowRadius: 6,
        },
        android: {
--        elevation: 2,
-+        elevation: 3,
+         elevation: 2,
        },
      }),
    },
-@@ -78,7 +78,11 @@ const styles = createStyle({
++  body: {
++    paddingHorizontal: 11,
++    paddingTop: 9,
++    paddingBottom: 11,
++  },
++  title: {
++    fontSize: 13,
++    fontWeight: '600',
++    lineHeight: 17,
++  },
++  subtitle: {
++    marginTop: 5,
++  },
++  meta: {
++    marginTop: 10,
++    flexDirection: 'row',
++    alignItems: 'center',
++    justifyContent: 'space-between',
++  },
++  totalPill: {
++    paddingHorizontal: 7,
++    paddingVertical: 3,
++    borderRadius: 999,
++  },
+   sourceLabel: {
+     paddingLeft: 4,
+     paddingBottom: 2,
+@@ -76,9 +106,4 @@ const styles = createStyle({
+     borderBottomLeftRadius: 3,
+     backgroundColor: 'rgba(0, 0, 0, 0.3)',
    },
-   listItemTitle: {
-     fontSize: 12,
+-  listItemTitle: {
+-    fontSize: 12,
 -    // overflow: 'hidden',
 -    marginBottom: 5,
-+    fontWeight: '600',
-+    lineHeight: 16,
-+    marginBottom: 3,
-+  },
-+  listItemAuthor: {
-+    marginBottom: 1,
-   },
+-  },
  })
 diff --git a/src/store/common/state.ts b/src/store/common/state.ts
 index b6893b3..90d9a8e 100644
@@ -1009,3 +1091,308 @@ index b6893b3..90d9a8e 100644
    sourceNames: initData as InitState['sourceNames'],
    bgPic: null,
  }
+diff --git a/src/theme/themes/createThemes.js b/src/theme/themes/createThemes.js
+index 4ca4f5f..2563cdb 100644
+--- a/src/theme/themes/createThemes.js
++++ b/src/theme/themes/createThemes.js
+@@ -295,6 +295,24 @@ const defaultThemes = [
+       'c-badge-tertiary': 'var(c-primary-light-100)',
+     },
+   },
++  {
++    id: 'ceru',
++    name: '青瓷',
++    isDark: false,
++    config: {
++      primary: 'rgb(22, 184, 155)',
++      font: 'rgb(20, 35, 31)',
++      'c-app-background': 'var(c-primary-light-600-alpha-700)',
++      'c-main-background': 'rgba(255, 255, 255, 0.92)',
++      'bg-image': '',
++      'bg-image-position': 'center',
++      'bg-image-size': 'cover',
++
++      'c-badge-primary': 'var(c-primary)',
++      'c-badge-secondary': '#5cbf9b',
++      'c-badge-tertiary': '#8b7cff',
++    },
++  },
+ ]
+ 
+ const themes = defaultThemes.map(({ config: { primary, font, ...extInfo }, ...themeInfo }) => {
+diff --git a/src/theme/themes/index.ts b/src/theme/themes/index.ts
+index d53103b..9343405 100644
+--- a/src/theme/themes/index.ts
++++ b/src/theme/themes/index.ts
+@@ -128,7 +128,7 @@ export const getTheme = async() => {
+     userThemes = await getUserTheme()
+     theme = userThemes.find(theme => theme.id == themeId)
+     if (!theme) {
+-      themeId = settingState.setting['theme.id'] == 'auto' && shouldUseDarkColors ? 'black' : 'green'
++      themeId = settingState.setting['theme.id'] == 'auto' && shouldUseDarkColors ? 'black' : 'ceru'
+       theme = themes.find(theme => theme.id == themeId) as LX.Theme
+     }
+   }
+diff --git a/src/theme/themes/themes.ts b/src/theme/themes/themes.ts
+index bb92012..7fbee66 100644
+--- a/src/theme/themes/themes.ts
++++ b/src/theme/themes/themes.ts
+@@ -4033,5 +4033,257 @@ export default [
+         "c-badge-tertiary": "var(c-primary-light-100)"
+       }
+     }
++  },
++  {
++    "id": "ceru",
++    "name": "青瓷",
++    "isDark": false,
++    "isCustom": false,
++    "config": {
++      "themeColors": {
++        "c-primary": "rgb(22, 184, 155)",
++        "c-primary-dark-100": "rgb(20,166,140)",
++        "c-primary-dark-100-alpha-100": "rgba(20, 166, 140, 0.90)",
++        "c-primary-alpha-100": "rgba(22, 184, 155, 0.90)",
++        "c-primary-dark-100-alpha-200": "rgba(20, 166, 140, 0.80)",
++        "c-primary-alpha-200": "rgba(22, 184, 155, 0.80)",
++        "c-primary-dark-100-alpha-300": "rgba(20, 166, 140, 0.70)",
++        "c-primary-alpha-300": "rgba(22, 184, 155, 0.70)",
++        "c-primary-dark-100-alpha-400": "rgba(20, 166, 140, 0.60)",
++        "c-primary-alpha-400": "rgba(22, 184, 155, 0.60)",
++        "c-primary-dark-100-alpha-500": "rgba(20, 166, 140, 0.50)",
++        "c-primary-alpha-500": "rgba(22, 184, 155, 0.50)",
++        "c-primary-dark-100-alpha-600": "rgba(20, 166, 140, 0.40)",
++        "c-primary-alpha-600": "rgba(22, 184, 155, 0.40)",
++        "c-primary-dark-100-alpha-700": "rgba(20, 166, 140, 0.30)",
++        "c-primary-alpha-700": "rgba(22, 184, 155, 0.30)",
++        "c-primary-dark-100-alpha-800": "rgba(20, 166, 140, 0.20)",
++        "c-primary-alpha-800": "rgba(22, 184, 155, 0.20)",
++        "c-primary-dark-100-alpha-900": "rgba(20, 166, 140, 0.10)",
++        "c-primary-alpha-900": "rgba(22, 184, 155, 0.10)",
++        "c-primary-dark-200": "rgb(18,149,126)",
++        "c-primary-dark-200-alpha-100": "rgba(18, 149, 126, 0.90)",
++        "c-primary-dark-200-alpha-200": "rgba(18, 149, 126, 0.80)",
++        "c-primary-dark-200-alpha-300": "rgba(18, 149, 126, 0.70)",
++        "c-primary-dark-200-alpha-400": "rgba(18, 149, 126, 0.60)",
++        "c-primary-dark-200-alpha-500": "rgba(18, 149, 126, 0.50)",
++        "c-primary-dark-200-alpha-600": "rgba(18, 149, 126, 0.40)",
++        "c-primary-dark-200-alpha-700": "rgba(18, 149, 126, 0.30)",
++        "c-primary-dark-200-alpha-800": "rgba(18, 149, 126, 0.20)",
++        "c-primary-dark-200-alpha-900": "rgba(18, 149, 126, 0.10)",
++        "c-primary-dark-300": "rgb(16,134,113)",
++        "c-primary-dark-300-alpha-100": "rgba(16, 134, 113, 0.90)",
++        "c-primary-dark-300-alpha-200": "rgba(16, 134, 113, 0.80)",
++        "c-primary-dark-300-alpha-300": "rgba(16, 134, 113, 0.70)",
++        "c-primary-dark-300-alpha-400": "rgba(16, 134, 113, 0.60)",
++        "c-primary-dark-300-alpha-500": "rgba(16, 134, 113, 0.50)",
++        "c-primary-dark-300-alpha-600": "rgba(16, 134, 113, 0.40)",
++        "c-primary-dark-300-alpha-700": "rgba(16, 134, 113, 0.30)",
++        "c-primary-dark-300-alpha-800": "rgba(16, 134, 113, 0.20)",
++        "c-primary-dark-300-alpha-900": "rgba(16, 134, 113, 0.10)",
++        "c-primary-dark-400": "rgb(14,121,102)",
++        "c-primary-dark-400-alpha-100": "rgba(14, 121, 102, 0.90)",
++        "c-primary-dark-400-alpha-200": "rgba(14, 121, 102, 0.80)",
++        "c-primary-dark-400-alpha-300": "rgba(14, 121, 102, 0.70)",
++        "c-primary-dark-400-alpha-400": "rgba(14, 121, 102, 0.60)",
++        "c-primary-dark-400-alpha-500": "rgba(14, 121, 102, 0.50)",
++        "c-primary-dark-400-alpha-600": "rgba(14, 121, 102, 0.40)",
++        "c-primary-dark-400-alpha-700": "rgba(14, 121, 102, 0.30)",
++        "c-primary-dark-400-alpha-800": "rgba(14, 121, 102, 0.20)",
++        "c-primary-dark-400-alpha-900": "rgba(14, 121, 102, 0.10)",
++        "c-primary-dark-500": "rgb(13,109,92)",
++        "c-primary-dark-500-alpha-100": "rgba(13, 109, 92, 0.90)",
++        "c-primary-dark-500-alpha-200": "rgba(13, 109, 92, 0.80)",
++        "c-primary-dark-500-alpha-300": "rgba(13, 109, 92, 0.70)",
++        "c-primary-dark-500-alpha-400": "rgba(13, 109, 92, 0.60)",
++        "c-primary-dark-500-alpha-500": "rgba(13, 109, 92, 0.50)",
++        "c-primary-dark-500-alpha-600": "rgba(13, 109, 92, 0.40)",
++        "c-primary-dark-500-alpha-700": "rgba(13, 109, 92, 0.30)",
++        "c-primary-dark-500-alpha-800": "rgba(13, 109, 92, 0.20)",
++        "c-primary-dark-500-alpha-900": "rgba(13, 109, 92, 0.10)",
++        "c-primary-dark-600": "rgb(12,98,83)",
++        "c-primary-dark-600-alpha-100": "rgba(12, 98, 83, 0.90)",
++        "c-primary-dark-600-alpha-200": "rgba(12, 98, 83, 0.80)",
++        "c-primary-dark-600-alpha-300": "rgba(12, 98, 83, 0.70)",
++        "c-primary-dark-600-alpha-400": "rgba(12, 98, 83, 0.60)",
++        "c-primary-dark-600-alpha-500": "rgba(12, 98, 83, 0.50)",
++        "c-primary-dark-600-alpha-600": "rgba(12, 98, 83, 0.40)",
++        "c-primary-dark-600-alpha-700": "rgba(12, 98, 83, 0.30)",
++        "c-primary-dark-600-alpha-800": "rgba(12, 98, 83, 0.20)",
++        "c-primary-dark-600-alpha-900": "rgba(12, 98, 83, 0.10)",
++        "c-primary-dark-700": "rgb(11,88,75)",
++        "c-primary-dark-700-alpha-100": "rgba(11, 88, 75, 0.90)",
++        "c-primary-dark-700-alpha-200": "rgba(11, 88, 75, 0.80)",
++        "c-primary-dark-700-alpha-300": "rgba(11, 88, 75, 0.70)",
++        "c-primary-dark-700-alpha-400": "rgba(11, 88, 75, 0.60)",
++        "c-primary-dark-700-alpha-500": "rgba(11, 88, 75, 0.50)",
++        "c-primary-dark-700-alpha-600": "rgba(11, 88, 75, 0.40)",
++        "c-primary-dark-700-alpha-700": "rgba(11, 88, 75, 0.30)",
++        "c-primary-dark-700-alpha-800": "rgba(11, 88, 75, 0.20)",
++        "c-primary-dark-700-alpha-900": "rgba(11, 88, 75, 0.10)",
++        "c-primary-dark-800": "rgb(10,79,68)",
++        "c-primary-dark-800-alpha-100": "rgba(10, 79, 68, 0.90)",
++        "c-primary-dark-800-alpha-200": "rgba(10, 79, 68, 0.80)",
++        "c-primary-dark-800-alpha-300": "rgba(10, 79, 68, 0.70)",
++        "c-primary-dark-800-alpha-400": "rgba(10, 79, 68, 0.60)",
++        "c-primary-dark-800-alpha-500": "rgba(10, 79, 68, 0.50)",
++        "c-primary-dark-800-alpha-600": "rgba(10, 79, 68, 0.40)",
++        "c-primary-dark-800-alpha-700": "rgba(10, 79, 68, 0.30)",
++        "c-primary-dark-800-alpha-800": "rgba(10, 79, 68, 0.20)",
++        "c-primary-dark-800-alpha-900": "rgba(10, 79, 68, 0.10)",
++        "c-primary-dark-900": "rgb(9,71,61)",
++        "c-primary-dark-900-alpha-100": "rgba(9, 71, 61, 0.90)",
++        "c-primary-dark-900-alpha-200": "rgba(9, 71, 61, 0.80)",
++        "c-primary-dark-900-alpha-300": "rgba(9, 71, 61, 0.70)",
++        "c-primary-dark-900-alpha-400": "rgba(9, 71, 61, 0.60)",
++        "c-primary-dark-900-alpha-500": "rgba(9, 71, 61, 0.50)",
++        "c-primary-dark-900-alpha-600": "rgba(9, 71, 61, 0.40)",
++        "c-primary-dark-900-alpha-700": "rgba(9, 71, 61, 0.30)",
++        "c-primary-dark-900-alpha-800": "rgba(9, 71, 61, 0.20)",
++        "c-primary-dark-900-alpha-900": "rgba(9, 71, 61, 0.10)",
++        "c-primary-dark-1000": "rgb(8,64,55)",
++        "c-primary-dark-1000-alpha-100": "rgba(8, 64, 55, 0.90)",
++        "c-primary-dark-1000-alpha-200": "rgba(8, 64, 55, 0.80)",
++        "c-primary-dark-1000-alpha-300": "rgba(8, 64, 55, 0.70)",
++        "c-primary-dark-1000-alpha-400": "rgba(8, 64, 55, 0.60)",
++        "c-primary-dark-1000-alpha-500": "rgba(8, 64, 55, 0.50)",
++        "c-primary-dark-1000-alpha-600": "rgba(8, 64, 55, 0.40)",
++        "c-primary-dark-1000-alpha-700": "rgba(8, 64, 55, 0.30)",
++        "c-primary-dark-1000-alpha-800": "rgba(8, 64, 55, 0.20)",
++        "c-primary-dark-1000-alpha-900": "rgba(8, 64, 55, 0.10)",
++        "c-primary-light-100": "rgb(69,198,175)",
++        "c-primary-light-100-alpha-100": "rgba(69, 198, 175, 0.90)",
++        "c-primary-light-100-alpha-200": "rgba(69, 198, 175, 0.80)",
++        "c-primary-light-100-alpha-300": "rgba(69, 198, 175, 0.70)",
++        "c-primary-light-100-alpha-400": "rgba(69, 198, 175, 0.60)",
++        "c-primary-light-100-alpha-500": "rgba(69, 198, 175, 0.50)",
++        "c-primary-light-100-alpha-600": "rgba(69, 198, 175, 0.40)",
++        "c-primary-light-100-alpha-700": "rgba(69, 198, 175, 0.30)",
++        "c-primary-light-100-alpha-800": "rgba(69, 198, 175, 0.20)",
++        "c-primary-light-100-alpha-900": "rgba(69, 198, 175, 0.10)",
++        "c-primary-light-200": "rgb(106,209,191)",
++        "c-primary-light-200-alpha-100": "rgba(106, 209, 191, 0.90)",
++        "c-primary-light-200-alpha-200": "rgba(106, 209, 191, 0.80)",
++        "c-primary-light-200-alpha-300": "rgba(106, 209, 191, 0.70)",
++        "c-primary-light-200-alpha-400": "rgba(106, 209, 191, 0.60)",
++        "c-primary-light-200-alpha-500": "rgba(106, 209, 191, 0.50)",
++        "c-primary-light-200-alpha-600": "rgba(106, 209, 191, 0.40)",
++        "c-primary-light-200-alpha-700": "rgba(106, 209, 191, 0.30)",
++        "c-primary-light-200-alpha-800": "rgba(106, 209, 191, 0.20)",
++        "c-primary-light-200-alpha-900": "rgba(106, 209, 191, 0.10)",
++        "c-primary-light-300": "rgb(136,218,204)",
++        "c-primary-light-300-alpha-100": "rgba(136, 218, 204, 0.90)",
++        "c-primary-light-300-alpha-200": "rgba(136, 218, 204, 0.80)",
++        "c-primary-light-300-alpha-300": "rgba(136, 218, 204, 0.70)",
++        "c-primary-light-300-alpha-400": "rgba(136, 218, 204, 0.60)",
++        "c-primary-light-300-alpha-500": "rgba(136, 218, 204, 0.50)",
++        "c-primary-light-300-alpha-600": "rgba(136, 218, 204, 0.40)",
++        "c-primary-light-300-alpha-700": "rgba(136, 218, 204, 0.30)",
++        "c-primary-light-300-alpha-800": "rgba(136, 218, 204, 0.20)",
++        "c-primary-light-300-alpha-900": "rgba(136, 218, 204, 0.10)",
++        "c-primary-light-400": "rgb(160,225,214)",
++        "c-primary-light-400-alpha-100": "rgba(160, 225, 214, 0.90)",
++        "c-primary-light-400-alpha-200": "rgba(160, 225, 214, 0.80)",
++        "c-primary-light-400-alpha-300": "rgba(160, 225, 214, 0.70)",
++        "c-primary-light-400-alpha-400": "rgba(160, 225, 214, 0.60)",
++        "c-primary-light-400-alpha-500": "rgba(160, 225, 214, 0.50)",
++        "c-primary-light-400-alpha-600": "rgba(160, 225, 214, 0.40)",
++        "c-primary-light-400-alpha-700": "rgba(160, 225, 214, 0.30)",
++        "c-primary-light-400-alpha-800": "rgba(160, 225, 214, 0.20)",
++        "c-primary-light-400-alpha-900": "rgba(160, 225, 214, 0.10)",
++        "c-primary-light-500": "rgb(179,231,222)",
++        "c-primary-light-500-alpha-100": "rgba(179, 231, 222, 0.90)",
++        "c-primary-light-500-alpha-200": "rgba(179, 231, 222, 0.80)",
++        "c-primary-light-500-alpha-300": "rgba(179, 231, 222, 0.70)",
++        "c-primary-light-500-alpha-400": "rgba(179, 231, 222, 0.60)",
++        "c-primary-light-500-alpha-500": "rgba(179, 231, 222, 0.50)",
++        "c-primary-light-500-alpha-600": "rgba(179, 231, 222, 0.40)",
++        "c-primary-light-500-alpha-700": "rgba(179, 231, 222, 0.30)",
++        "c-primary-light-500-alpha-800": "rgba(179, 231, 222, 0.20)",
++        "c-primary-light-500-alpha-900": "rgba(179, 231, 222, 0.10)",
++        "c-primary-light-600": "rgb(194,236,229)",
++        "c-primary-light-600-alpha-100": "rgba(194, 236, 229, 0.90)",
++        "c-primary-light-600-alpha-200": "rgba(194, 236, 229, 0.80)",
++        "c-primary-light-600-alpha-300": "rgba(194, 236, 229, 0.70)",
++        "c-primary-light-600-alpha-400": "rgba(194, 236, 229, 0.60)",
++        "c-primary-light-600-alpha-500": "rgba(194, 236, 229, 0.50)",
++        "c-primary-light-600-alpha-600": "rgba(194, 236, 229, 0.40)",
++        "c-primary-light-600-alpha-700": "rgba(194, 236, 229, 0.30)",
++        "c-primary-light-600-alpha-800": "rgba(194, 236, 229, 0.20)",
++        "c-primary-light-600-alpha-900": "rgba(194, 236, 229, 0.10)",
++        "c-primary-light-700": "rgb(206,240,234)",
++        "c-primary-light-700-alpha-100": "rgba(206, 240, 234, 0.90)",
++        "c-primary-light-700-alpha-200": "rgba(206, 240, 234, 0.80)",
++        "c-primary-light-700-alpha-300": "rgba(206, 240, 234, 0.70)",
++        "c-primary-light-700-alpha-400": "rgba(206, 240, 234, 0.60)",
++        "c-primary-light-700-alpha-500": "rgba(206, 240, 234, 0.50)",
++        "c-primary-light-700-alpha-600": "rgba(206, 240, 234, 0.40)",
++        "c-primary-light-700-alpha-700": "rgba(206, 240, 234, 0.30)",
++        "c-primary-light-700-alpha-800": "rgba(206, 240, 234, 0.20)",
++        "c-primary-light-700-alpha-900": "rgba(206, 240, 234, 0.10)",
++        "c-primary-light-800": "rgb(216,243,238)",
++        "c-primary-light-800-alpha-100": "rgba(216, 243, 238, 0.90)",
++        "c-primary-light-800-alpha-200": "rgba(216, 243, 238, 0.80)",
++        "c-primary-light-800-alpha-300": "rgba(216, 243, 238, 0.70)",
++        "c-primary-light-800-alpha-400": "rgba(216, 243, 238, 0.60)",
++        "c-primary-light-800-alpha-500": "rgba(216, 243, 238, 0.50)",
++        "c-primary-light-800-alpha-600": "rgba(216, 243, 238, 0.40)",
++        "c-primary-light-800-alpha-700": "rgba(216, 243, 238, 0.30)",
++        "c-primary-light-800-alpha-800": "rgba(216, 243, 238, 0.20)",
++        "c-primary-light-800-alpha-900": "rgba(216, 243, 238, 0.10)",
++        "c-primary-light-900": "rgb(224,245,241)",
++        "c-primary-light-900-alpha-100": "rgba(224, 245, 241, 0.90)",
++        "c-primary-light-900-alpha-200": "rgba(224, 245, 241, 0.80)",
++        "c-primary-light-900-alpha-300": "rgba(224, 245, 241, 0.70)",
++        "c-primary-light-900-alpha-400": "rgba(224, 245, 241, 0.60)",
++        "c-primary-light-900-alpha-500": "rgba(224, 245, 241, 0.50)",
++        "c-primary-light-900-alpha-600": "rgba(224, 245, 241, 0.40)",
++        "c-primary-light-900-alpha-700": "rgba(224, 245, 241, 0.30)",
++        "c-primary-light-900-alpha-800": "rgba(224, 245, 241, 0.20)",
++        "c-primary-light-900-alpha-900": "rgba(224, 245, 241, 0.10)",
++        "c-primary-light-1000": "rgb(255,255,255)",
++        "c-primary-light-1000-alpha-100": "rgba(255, 255, 255, 0.90)",
++        "c-primary-light-1000-alpha-200": "rgba(255, 255, 255, 0.80)",
++        "c-primary-light-1000-alpha-300": "rgba(255, 255, 255, 0.70)",
++        "c-primary-light-1000-alpha-400": "rgba(255, 255, 255, 0.60)",
++        "c-primary-light-1000-alpha-500": "rgba(255, 255, 255, 0.50)",
++        "c-primary-light-1000-alpha-600": "rgba(255, 255, 255, 0.40)",
++        "c-primary-light-1000-alpha-700": "rgba(255, 255, 255, 0.30)",
++        "c-primary-light-1000-alpha-800": "rgba(255, 255, 255, 0.20)",
++        "c-primary-light-1000-alpha-900": "rgba(255, 255, 255, 0.10)",
++        "c-theme": "rgb(22, 184, 155)",
++        "c-1000": "rgb(20, 35, 31)",
++        "c-950": "rgb(32,46,42)",
++        "c-900": "rgb(44,57,53)",
++        "c-850": "rgb(55,68,65)",
++        "c-800": "rgb(67,79,76)",
++        "c-750": "rgb(79,90,87)",
++        "c-700": "rgb(91,101,98)",
++        "c-650": "rgb(102,112,109)",
++        "c-600": "rgb(114,123,121)",
++        "c-550": "rgb(126,134,132)",
++        "c-500": "rgb(138,145,143)",
++        "c-450": "rgb(149,156,154)",
++        "c-400": "rgb(161,167,165)",
++        "c-350": "rgb(173,178,177)",
++        "c-300": "rgb(185,189,188)",
++        "c-250": "rgb(196,200,199)",
++        "c-200": "rgb(208,211,210)",
++        "c-150": "rgb(220,222,221)",
++        "c-100": "rgb(232,233,233)",
++        "c-050": "rgb(243,244,244)",
++        "c-000": "rgb(255,255,255)"
++      },
++      "extInfo": {
++        "c-app-background": "var(c-primary-light-600-alpha-700)",
++        "c-main-background": "rgba(255, 255, 255, 0.92)",
++        "bg-image": "",
++        "bg-image-position": "center",
++        "bg-image-size": "cover",
++        "c-badge-primary": "var(c-primary)",
++        "c-badge-secondary": "#5cbf9b",
++        "c-badge-tertiary": "#8b7cff"
++      }
++    }
+   }
+ ] as const
+\ No newline at end of file

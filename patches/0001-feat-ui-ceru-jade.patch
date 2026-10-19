@@ -421,7 +421,7 @@ index 71670b9..a3e44b0 100644
      }
    }
 diff --git a/src/renderer/App.vue b/src/renderer/App.vue
-index 99ac2b9..3585fa0 100644
+index 99ac2b9..d4bc120 100644
 --- a/src/renderer/App.vue
 +++ b/src/renderer/App.vue
 @@ -1,11 +1,13 @@
@@ -460,7 +460,7 @@ index 99ac2b9..3585fa0 100644
      border-radius: @radius-border;
    }
    #root {
-@@ -99,62 +102,63 @@ body {
+@@ -99,62 +102,60 @@ body {
  .disableTransparent {
    background-color: var(--color-content-background);
  
@@ -522,19 +522,16 @@ index 99ac2b9..3585fa0 100644
 -
 -  border-top-left-radius: @radius-border;
 -  border-bottom-left-radius: @radius-border;
-+  margin: 0 8px 0 0;
-+  background: rgba(255, 255, 255, .78);
-+  border: 1px solid rgba(255, 255, 255, .8);
-+  border-radius: 18px;
++  margin: 0;
++  background: transparent;
    overflow: hidden;
 -  box-shadow: 0px 0px 4px rgba(0, 0, 0, 0.1);
-+  box-shadow: 0 12px 40px rgba(40, 90, 70, .12);
-+}
+ }
+-#toolbar, #player {
 +#toolbar {
 +  flex: none;
 +  z-index: 3;
- }
--#toolbar, #player {
++}
 +#player {
    flex: none;
  }
@@ -550,16 +547,16 @@ index 99ac2b9..3585fa0 100644
  .view-container {
 diff --git a/src/renderer/assets/styles/ceru.less b/src/renderer/assets/styles/ceru.less
 new file mode 100644
-index 0000000..edb61ab
+index 0000000..a5f2fe3
 --- /dev/null
 +++ b/src/renderer/assets/styles/ceru.less
 @@ -0,0 +1,249 @@
 +@import './layout.less';
 +
-+/* 青瓷：浅色毛玻璃外壳 */
++/* 澜音 CeruMusic v1：浅色平面外壳 */
 +html,
 +body {
-+  background: #dfeee8;
++  background: #f5f8f7;
 +}
 +
 +#root {
@@ -568,63 +565,63 @@ index 0000000..edb61ab
 +
 +#container {
 +  background:
-+    radial-gradient(90% 70% at 0% 0%, #b8f5dd 0%, rgba(184, 245, 221, 0) 55%),
-+    radial-gradient(70% 60% at 100% 0%, #ffd6e0 0%, rgba(255, 214, 224, 0) 52%),
-+    radial-gradient(80% 70% at 50% 110%, #d8d0ff 0%, rgba(216, 208, 255, 0) 62%),
-+    linear-gradient(135deg, #eef9f4 0%, #f8f3ff 55%, #eef9f4 100%) !important;
++    linear-gradient(180deg, #d9f7eb 0%, rgba(217, 247, 235, 0) 300px),
++    #f6f9f8 !important;
 +  padding: 0 !important;
 +}
 +
 +#left {
-+  width: 184px !important;
-+  padding: 16px 12px 10px !important;
++  width: 240px !important;
++  padding: 18px 14px 12px !important;
 +  box-sizing: border-box !important;
-+  background: transparent !important;
++  background: linear-gradient(180deg, rgba(22, 184, 155, .16) 0%, rgba(22, 184, 155, 0) 300px) !important;
++  border-right: 1px solid rgba(20, 35, 31, .06);
 +}
 +
 +#right {
-+  margin: 0 8px 0 0 !important;
-+  border-radius: 18px !important;
-+  background: rgba(255, 255, 255, 0.78) !important;
-+  backdrop-filter: blur(22px) !important;
-+  border: 1px solid rgba(255, 255, 255, 0.8) !important;
-+  box-shadow: 0 12px 40px rgba(40, 90, 70, 0.12) !important;
++  margin: 0 !important;
++  border-radius: 0 !important;
++  background: transparent !important;
++  backdrop-filter: none !important;
++  border: none !important;
++  box-shadow: none !important;
 +  overflow: hidden !important;
 +}
 +
 +#toolbar {
-+  height: 64px !important;
-+  padding: 0 6px 0 20px !important;
++  height: 68px !important;
++  padding: 0 12px 0 24px !important;
 +  background: transparent !important;
-+  border-bottom: 1px solid rgba(20, 35, 31, 0.06) !important;
++  border-bottom: none !important;
 +}
 +
 +#toolbar input {
 +  width: 100% !important;
 +  height: 36px !important;
 +  border-radius: 99px !important;
-+  background: rgba(255, 255, 255, 0.6) !important;
-+  border: 1px solid rgba(255, 255, 255, 0.82) !important;
++  background: rgba(255, 255, 255, .9) !important;
++  border: 1px solid rgba(20, 35, 31, .08) !important;
 +  padding: 0 16px !important;
 +  font-size: 12px !important;
 +  color: #14231f !important;
-+  box-shadow: 0 4px 14px rgba(40, 90, 70, 0.06) !important;
++  box-shadow: 0 2px 8px rgba(20, 50, 40, .04) !important;
 +}
 +
 +#view {
-+  padding: 10px 22px 0 !important;
++  padding: 0 28px 0 !important;
 +  background: transparent !important;
 +}
 +
-+/* 悬浮玻璃播放条 */
++/* 贴底播放条 */
 +#player {
-+  margin: 8px 8px 12px !important;
-+  height: 64px !important;
-+  border-radius: 16px !important;
-+  background: rgba(255, 255, 255, 0.66) !important;
-+  border: 1px solid rgba(255, 255, 255, 0.86) !important;
-+  box-shadow: 0 12px 30px rgba(40, 90, 70, 0.12) !important;
-+  backdrop-filter: blur(18px) !important;
++  margin: 0 !important;
++  height: 70px !important;
++  border-radius: 0 !important;
++  background: #f7faf9 !important;
++  border: none !important;
++  border-top: 1px solid rgba(20, 35, 31, .08) !important;
++  box-shadow: 0 -6px 22px rgba(20, 50, 40, .05) !important;
++  backdrop-filter: none !important;
 +}
 +
 +#player::before {
@@ -819,7 +816,7 @@ index 1e15d45..c3b4e36 100644
    text-decoration: underline;
  }
 diff --git a/src/renderer/assets/styles/variables.less b/src/renderer/assets/styles/variables.less
-index 7672a97..03d9d9e 100644
+index 7672a97..8cc02e0 100644
 --- a/src/renderer/assets/styles/variables.less
 +++ b/src/renderer/assets/styles/variables.less
 @@ -2,11 +2,11 @@
@@ -827,7 +824,7 @@ index 7672a97..03d9d9e 100644
  
  // Width
 -@width-app-left: 6.6%;
-+@width-app-left: 184px;
++@width-app-left: 240px;
  
  // Height
 -@height-toolbar: 54px;
@@ -847,10 +844,10 @@ index 7672a97..03d9d9e 100644
  @transition-slow: .6s ease;
  @transition-normal: .4s ease;
 diff --git a/src/renderer/components/layout/Aside/NavBar.vue b/src/renderer/components/layout/Aside/NavBar.vue
-index c0f7826..12bf14a 100644
+index c0f7826..08a6c6c 100644
 --- a/src/renderer/components/layout/Aside/NavBar.vue
 +++ b/src/renderer/components/layout/Aside/NavBar.vue
-@@ -1,93 +1,82 @@
+@@ -1,11 +1,19 @@
  <template>
    <div ref="dom_menu" :class="$style.menu">
 +    <div :class="$style.brand">
@@ -871,20 +868,12 @@ index c0f7826..12bf14a 100644
          </router-link>
        </li>
      </ul>
-+    <div :class="$style.playlists">
-+      <p :class="$style.playlistTitle">我的歌单</p>
-+      <router-link :to="{ path: '/list', query: { id: LIST_IDS.DEFAULT } }" :class="$style.playlistLink"><span :class="$style.dot" :style="{ backgroundColor: dotColors[0] }"></span><span :class="$style.playlistText">试听列表</span></router-link>
-+      <router-link :to="{ path: '/list', query: { id: LIST_IDS.LOVE } }" :class="$style.playlistLink"><span :class="$style.dot" :style="{ backgroundColor: dotColors[1] }"></span><span :class="$style.playlistText">我的收藏</span></router-link>
-+      <router-link v-for="(item, index) in userLists.slice(0, 4)" :key="item.id" :to="{ path: '/list', query: { id: item.id } }" :class="$style.playlistLink"><span :class="$style.dot" :style="{ backgroundColor: dotColors[(index + 2) % dotColors.length] }"></span><span :class="$style.playlistText">{{ item.name }}</span></router-link>
-+    </div>
-   </div>
+@@ -13,79 +21,48 @@
  </template>
  
  <script lang="ts">
 -import { appSetting } from '@renderer/store/setting'
 -import { useI18n } from '@root/lang'
-+import { userLists } from '@renderer/store/list/state'
-+import { LIST_IDS } from '@common/constants'
  import { ref, computed } from '@common/utils/vueTools'
  import { useIconSize } from '@renderer/utils/compositions/useIconSize'
  
@@ -895,7 +884,6 @@ index c0f7826..12bf14a 100644
      const dom_menu = ref<HTMLElement>()
 -    const iconSize = useIconSize(dom_menu, 0.32)
 +    const iconSize = useIconSize(dom_menu, 0.1)
-+    const dotColors = ['#16b89b', '#ff9db9', '#8b7cff', '#ffb347']
  
      const menus = computed(() => {
        const size = iconSize.value
@@ -953,7 +941,7 @@ index c0f7826..12bf14a 100644
 -          tips: t('setting'),
 -          icon: '#icon-setting',
 -          iconSize: '0 0 493.23 436.47',
-+          to: { path: '/list', query: { id: LIST_IDS.DEFAULT } },
++          to: { path: '/list', query: { id: 'default' } },
 +          tips: '最近',
 +          icon: '#icon-audio-wave',
 +          iconSize: '0 0 24 24',
@@ -968,13 +956,8 @@ index c0f7826..12bf14a 100644
 -      appSetting,
        menus,
        dom_menu,
-+      userLists,
-+      LIST_IDS,
-+      dotColors,
      }
-   },
- }
-@@ -98,109 +87,151 @@ export default {
+@@ -98,109 +75,108 @@ export default {
  
  .menu {
    flex: auto;
@@ -998,8 +981,8 @@ index c0f7826..12bf14a 100644
 +  width: 34px;
 +  height: 34px;
 +  border-radius: 11px;
-+  background: linear-gradient(140deg, #7fe3ff, #16b89b);
-+  color: #05251f;
++  background: linear-gradient(140deg, #5fe0c2, #16b89b);
++  color: #fff;
 +  display: grid;
 +  place-items: center;
 +  font-size: 17px;
@@ -1151,49 +1134,6 @@ index c0f7826..12bf14a 100644
 +  font-size: 13px;
 +  font-weight: 500;
 +  white-space: nowrap;
-+}
-+.playlists {
-+  margin-top: 18px;
-+  padding: 0 4px;
-+  overflow: hidden;
-+}
-+.playlistTitle {
-+  margin: 0 0 6px;
-+  padding: 0 8px;
-+  font-size: 10px;
-+  letter-spacing: .12em;
-+  color: var(--color-font-label);
-+  text-transform: uppercase;
-+}
-+.playlistLink {
-+  display: flex;
-+  align-items: center;
-+  gap: 7px;
-+  padding: 6px 8px;
-+  border-radius: 7px;
-+  font-size: 12px;
-+  color: #4a5b55;
-+  white-space: nowrap;
-+  overflow: hidden;
-+  transition: @transition-fast;
-+  transition-property: background-color, color;
-+
-+  &:hover {
-+    background-color: rgba(255, 255, 255, .5);
-+    color: var(--color-primary);
-+  }
-+}
-+.dot {
-+  width: 6px;
-+  height: 6px;
-+  border-radius: 50%;
-+  flex: none;
-+}
-+.playlistText {
-+  flex: 1;
-+  min-width: 0;
-+  overflow: hidden;
-+  text-overflow: ellipsis;
 +}
  
  // .icon {
@@ -1515,18 +1455,137 @@ index a6631c0..7a7f1b1 100644
          div(:class="$style.info")
            img(v-if="musicInfo.pic" :class="$style.img" :src="musicInfo.pic")
 diff --git a/src/renderer/components/layout/Toolbar/ControlBtns.vue b/src/renderer/components/layout/Toolbar/ControlBtns.vue
-index fe5dbfe..81ef2f2 100644
+index fe5dbfe..9c32602 100644
 --- a/src/renderer/components/layout/Toolbar/ControlBtns.vue
 +++ b/src/renderer/components/layout/Toolbar/ControlBtns.vue
-@@ -71,7 +71,7 @@ onBeforeUnmount(() => {
-     align-items: center;
-     justify-content: center;
-     position: relative;
+@@ -1,59 +1,15 @@
+ <template>
+-  <div v-show="!isFullscreen" ref="dom_btns" :class="$style.control">
+-    <button type="button" :class="[$style.btn, $style.min]" :aria-label="$t('min')" ignore-tip :title="$t('min')" @click="minWindow">
+-      <svg version="1.1" xmlns="http://www.w3.org/2000/svg" xlink="http://www.w3.org/1999/xlink" height="60%" viewBox="0 0 24 24" space="preserve">
+-        <use xlink:href="#icon-window-minimize-2" />
+-      </svg>
+-    </button>
+-    <button type="button" :class="[$style.btn, $style.close]" :aria-label="$t('close')" ignore-tip :title="$t('close')" @click="closeWindow">
+-      <svg version="1.1" xmlns="http://www.w3.org/2000/svg" xlink="http://www.w3.org/1999/xlink" height="60%" viewBox="0 0 24 24" space="preserve">
+-        <use xlink:href="#icon-window-close-2" />
+-      </svg>
+-    </button>
++  <div v-show="!isFullscreen" :class="$style.control">
++    <button type="button" :class="[$style.dot, $style.min]" :aria-label="$t('min')" ignore-tip :title="$t('min')" @click="minWindow" />
++    <button type="button" :class="[$style.dot, $style.max]" aria-label="最大化" ignore-tip title="最大化" @click="maxWindow" />
++    <button type="button" :class="[$style.dot, $style.close]" :aria-label="$t('close')" ignore-tip :title="$t('close')" @click="closeWindow" />
+   </div>
+ </template>
+ 
+ <script setup>
+-import { minWindow, closeWindow } from '@renderer/utils/ipc'
+-import { onMounted, onBeforeUnmount, ref, useCssModule } from '@common/utils/vueTools'
+-// import { getRandom } from '../../utils'
++import { minWindow, maxWindow, closeWindow } from '@renderer/utils/ipc'
+ import { isFullscreen } from '@renderer/store'
+ 
+-const dom_btns = ref()
+-
+-const cssModule = useCssModule()
+-
+-const handle_focus = () => {
+-  if (!dom_btns.value) return
+-  for (const node of dom_btns.value.childNodes) {
+-    if (node.tagName != 'BUTTON') continue
+-    node.classList.remove(cssModule.hover)
+-  }
+-}
+-const getBtnEl = (el) => el.tagName == 'BUTTON' || !el ? el : getBtnEl(el.parentNode)
+-const handle_mouseover = (event) => {
+-  const btn = getBtnEl(event.target)
+-  if (!btn) return
+-  btn.classList.add(cssModule.hover)
+-}
+-const handle_mouseout = (event) => {
+-  const btn = getBtnEl(event.target)
+-  if (!btn) return
+-  btn.classList.remove(cssModule.hover)
+-}
+-
+-
+-onMounted(() => {
+-  window.app_event.on('focus', handle_focus)
+-  dom_btns.value.addEventListener('mouseover', handle_mouseover)
+-  dom_btns.value.addEventListener('mouseout', handle_mouseout)
+-})
+-onBeforeUnmount(() => {
+-  window.app_event.off('focus', handle_focus)
+-  dom_btns.value.removeEventListener('mouseover', handle_mouseover)
+-  dom_btns.value.removeEventListener('mouseout', handle_mouseout)
+-})
+-
+ </script>
+ 
+ 
+@@ -62,33 +18,38 @@ onBeforeUnmount(() => {
+ 
+ .control {
+   display: flex;
+-  align-self: flex-start;
+-  -webkit-app-region: no-drag;
++  align-items: center;
++  gap: 8px;
+   height: 30px;
++  padding: 0 2px;
++  -webkit-app-region: no-drag;
++}
+ 
+-  .btn {
+-    display: flex;
+-    align-items: center;
+-    justify-content: center;
+-    position: relative;
 -    width: 46px;
-+    width: 38px;
-     height: 30px;
-     background: none;
-     border: none;
+-    height: 30px;
+-    background: none;
+-    border: none;
+-    outline: none;
+-    padding: 1px;
+-    cursor: pointer;
+-    color: var(--color-font-label);
+-    transition: background-color 0.2s ease-in-out;
+-    &.hover {
+-      &.min, &.max {
+-        background-color: var(--color-button-background-hover);
+-      }
+-      &.close {
+-        background-color: var(--color-btn-close);
+-      }
+-    }
++.dot {
++  width: 11px;
++  height: 11px;
++  padding: 0;
++  border: 0;
++  border-radius: 50%;
++  cursor: pointer;
++  transition: transform .15s ease, filter .15s ease;
++
++  &:hover {
++    transform: scale(1.15);
++    filter: brightness(.95);
+   }
++  &:active {
++    transform: scale(.95);
++  }
++}
++.min {
++  background: #f5c542;
++}
++.max {
++  background: #35c759;
++}
++.close {
++  background: #ff5f57;
+ }
+ 
+ </style>
 diff --git a/src/renderer/components/layout/Toolbar/index.vue b/src/renderer/components/layout/Toolbar/index.vue
 index b9a9e04..81873a5 100644
 --- a/src/renderer/components/layout/Toolbar/index.vue
@@ -1767,6 +1826,133 @@ index 7a66853..4b00bd5 100644
        theme = themeInfo.themes.find(theme => theme.id == themeId)!
      }
      window.setTheme(buildThemeColors(theme, dataPath))
+diff --git a/src/renderer/views/songList/Detail/index.vue b/src/renderer/views/songList/Detail/index.vue
+index 5ed1431..427233e 100644
+--- a/src/renderer/views/songList/Detail/index.vue
++++ b/src/renderer/views/songList/Detail/index.vue
+@@ -7,6 +7,7 @@
+       <div :class="$style.songListHeaderMiddle">
+         <h3 :title="listDetailInfo.info.name">{{ listDetailInfo.info.name }}</h3>
+         <p :title="listDetailInfo.info.desc">{{ listDetailInfo.info.desc }}</p>
++        <p :class="$style.stats">{{ listDetailInfo.total }} 首歌曲</p>
+       </div>
+       <div :class="$style.songListHeaderRight">
+         <base-btn
+@@ -18,12 +19,13 @@
+         </base-btn>
+         <base-btn
+           :class="$style.headerRightBtn"
++          outline
+           :disabled="!!listDetailInfo.noItemLabel"
+           @click="addSongListDetail(listDetailInfo.id, listDetailInfo.source, listDetailInfo.info.name)"
+         >
+           {{ $t('list__collect') }}
+         </base-btn>
+-        <base-btn :class="$style.headerRightBtn" @click="handleBack">{{ $t('back') }}</base-btn>
++        <base-btn :class="$style.headerRightBtn" outline @click="handleBack">{{ $t('back') }}</base-btn>
+       </div>
+     </div>
+     <div :class="$style.list">
+@@ -175,20 +177,24 @@ export default {
+   flex: none;
+   display: flex;
+   flex-flow: row nowrap;
+-  height: 80px;
++  align-items: center;
++  gap: 20px;
++  margin: 4px 0 8px;
++  padding: 22px;
++  border-radius: 18px;
++  background: linear-gradient(135deg, rgba(22, 184, 155, .16), rgba(255, 255, 255, .35) 62%);
+ }
+ .songListHeaderLeft {
+   flex: none;
+-  margin-left: 15px;
+-  height: 100%;
++  margin-left: 0;
++  height: 124px;
+   aspect-ratio: 1 / 1;
+   position: relative;
+   overflow: hidden;
+-  border-radius: 4px;
++  border-radius: 14px;
+   background-position: center;
+   background-size: cover;
+-  opacity: .9;
+-  box-shadow: 0 0 2px 0 rgba(0,0,0,.2);
++  box-shadow: 0 12px 26px rgba(20, 60, 48, .16);
+ }
+ .playNum {
+   position: absolute;
+@@ -205,36 +211,57 @@ export default {
+ 
+ .songListHeaderMiddle {
+   flex: auto;
+-  padding: 2px 7px;
++  padding: 0;
+   min-width: 0;
+   h3 {
+     .mixin-ellipsis-1();
+     line-height: 1.2;
+-    padding-bottom: 5px;
++    padding-bottom: 8px;
++    font-size: 22px;
++    font-weight: 700;
++    letter-spacing: -.03em;
+     color: var(--color-font);
+   }
+   p {
+     .mixin-ellipsis(3);
+     font-size: 12px;
+-    line-height: 1.2;
++    line-height: 1.5;
+     color: var(--color-font-label);
+   }
+ }
++.stats {
++  margin-top: 8px;
++  font-size: 11px !important;
++  color: var(--color-primary) !important;
++  opacity: .8;
++}
+ .songListHeaderRight {
+   flex: none;
+   display: flex;
+   align-items: center;
+-  padding-right: 15px;
++  gap: 8px;
++  padding-right: 0;
+ 
+   .headerRightBtn {
+-    border-radius: 0;
+-    &:first-child {
+-      border-top-left-radius: 4px;
+-      border-bottom-left-radius: 4px;
++    height: 34px;
++    padding: 0 16px;
++    border-radius: 99px !important;
++    background: rgba(255, 255, 255, .72) !important;
++    border: 1px solid rgba(22, 184, 155, .25) !important;
++    color: var(--color-primary) !important;
++    transition: background-color @transition-fast, color @transition-fast;
++
++    &:hover {
++      background: #fff !important;
+     }
+-    &:last-child {
+-      border-top-right-radius: 4px;
+-      border-bottom-right-radius: 4px;
++    &:first-child {
++      background: var(--color-primary) !important;
++      border-color: transparent !important;
++      color: #fff !important;
++
++      &:hover {
++        filter: brightness(1.04);
++      }
+     }
+   }
+ }
 diff --git a/src/renderer/views/songList/List/components/SongList.vue b/src/renderer/views/songList/List/components/SongList.vue
 index 0295baa..4ac893c 100644
 --- a/src/renderer/views/songList/List/components/SongList.vue

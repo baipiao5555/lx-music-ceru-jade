@@ -2,27 +2,38 @@
 
 基于 [lyswhut/lx-music-desktop](https://github.com/lyswhut/lx-music-desktop) **v2.12.6** 与 [lyswhut/lx-music-mobile](https://github.com/lyswhut/lx-music-mobile) **v1.9.1** 的非官方 UI 改版。
 
-**当前版本：`v2.12.6-ceru.6`（青瓷改版 rev.6）**
+**当前版本：`v2.12.6-ceru.7`（青瓷改版 rev.7）**
 
 ![主界面](screenshots/主界面.png)
 
 ## 下载
 
-**Release：** https://github.com/baipiao5555/lx-music-ceru-jade/releases/tag/v2.12.6-ceru.6
+**Release：** https://github.com/baipiao5555/lx-music-ceru-jade/releases/tag/v2.12.6-ceru.7
 
 | 平台 | 文件 | 说明 |
 | --- | --- | --- |
 | Windows x64 | `lx-music-desktop-v2.12.6-x64-Setup.exe` | NSIS 安装包，116 MB，未做商业签名 |
-| Android arm64 | `lx-music-mobile-v1.9.1-ceru3-universal.apk` | 28 MB，推荐，含新移动端 UI |
-| Android arm64 | `lx-music-mobile-v1.9.1-ceru3-arm64.apk` | 14 MB，体积更小，含新移动端 UI |
+| Android arm64 | `lx-music-mobile-v1.9.1-ceru4-universal.apk` | 28 MB，推荐，含澜音 v1 风格移动端 UI |
+| Android arm64 | `lx-music-mobile-v1.9.1-ceru4-arm64.apk` | 14 MB，体积更小，含澜音 v1 风格移动端 UI |
 
 SHA-256：
 
-- Windows：`2219d22cd1cdaf0257bef3aa08c4fcd641d55354d2ce12e2a3f043896eba0adc`
-- Android universal：`5d4b80904d45b7d65984009fe09b1798c7f812c8fb8366ed6cc7889c9a037dd2`
-- Android arm64：`55429d4ecc23d0ecedd54131bf22ccb2ae01744f4e414907766d056d0688052a`
+- Windows：`ad7f1beb246be097bb3e2ec9a04629afd4a001d77746b2b8b406897d4b9d2e62`
+- Android universal：`295659b64817499a89c8c58439e8c8d05f352200e5f077a09d325a07a3f5fbb3`
+- Android arm64：`4a8e1fbccf00c4ebf360ca3c35ea3f985cd20577cf1b0257a90bc2928e299327`
 
 ## 版本记录
+
+### rev.7（`v2.12.6-ceru.7` + 移动端 `v1.9.1-ceru4`）
+
+- 桌面端按澜音 v1 平面风格重构：移除粉紫渐变与毛玻璃面板，改为浅色平面外壳。
+- 侧栏改为 240px：Ceru Music 品牌 + 发现 / 本地 / 最近，移除「我的歌单」快速链接。
+- 窗口按钮改为澜音同款黄 / 绿 / 红三色圆点。
+- 播放条改为贴底通栏，去掉外边距和悬浮圆角。
+- 歌单详情页改为大封面头部 + 歌曲数 + 胶囊按钮。
+- 移动端发现页改为「发现音乐」+「热门歌单Top36」+ 白色歌单卡片，移除 Hero 大卡和筛选栏。
+- 移动端播放条改为贴底通栏，抽屉品牌改为 Ceru Music，移除主题装饰卡。
+- 重新构建并签名移动端 APK。
 
 ### rev.6（`v2.12.6-ceru.6`）
 
@@ -57,7 +68,7 @@ SHA-256：
 
 - 移动端实际 APK 落地青瓷 UI 第一版：默认「发现」页、抽屉品牌头与胶囊导航、两列歌单卡片、悬浮播放条、搜索页品牌空状态。
 - 抽屉顺序调整为 发现 / 搜索 / 排行榜 / 我的列表 / 设置，启动默认进入发现。
-- 新增移动端布局补丁 `0003-feat-ui-ceru-mobile-layout.patch`。
+- 新增移动端布局补丁（现合并为 `0002-feat-ui-ceru-mobile.patch`）。
 - 桌面端安装包与 rev.2 相同。
 
 ### rev.2（`v2.12.6-ceru.2`）
@@ -76,20 +87,22 @@ SHA-256：
 
 ### 桌面端（完整 UI 改版）
 
-- 新增「青瓷」主题：青绿主色、浅色玻璃主面板、柔和渐变背景，并设为默认主题。
+- 新增「青瓷」主题：青绿主色、澜音 v1 平面浅色外壳，并设为默认主题。
 - 启动固定进入「发现」页（原歌单页），不再恢复上次搜索页或详情页；首次启动不弹出版本更新日志。
-- 侧栏：Ceru Music 品牌（青瓷 · CERU JADE）、发现 / 本地 / 最近导航、我的歌单圆点。
+- 侧栏：240px，Ceru Music 品牌（青瓷 · CERU JADE）、发现 / 本地 / 最近导航。
 - 首页：`发现音乐` 大标题、热门歌单 Top36、四列白色歌单卡片（整块封面 + 精选歌单 + 播放量 + 曲目数）、悬停上浮。
-- 顶栏：返回/前进、自适应搜索框、排行榜/设置/窗口按钮；窗口变窄时搜索框自动收缩。
-- 悬浮圆角播放条，青绿圆形播放按钮，播放键组居中，时间与功能按钮分列两侧。
+- 顶栏：返回/前进、自适应搜索框、排行榜/设置按钮、黄 / 绿 / 红三色窗口圆点；窗口变窄时搜索框自动收缩。
+- 贴底通栏播放条，青绿圆形播放按钮，播放键组居中，时间与功能按钮分列两侧。
+- 歌单详情页：大封面头部 + 歌曲数 + 胶囊按钮。
 - 播放详情页：黑胶唱片 + 唱臂 + 玻璃歌词面板样式。
 - 主题名称的中/繁/英/韩翻译。
 
-### 移动端（青瓷 UI 第一版）
+### 移动端（澜音 v1 风格）
 
 - 新增「青瓷」主题并设为默认：青绿主色、浅色主背景。
-- rev.3 已落地移动端 UI 第一版：默认「发现」页、抽屉品牌头与胶囊导航、两列歌单卡片、悬浮播放条、搜索页品牌空状态。
-- 底部导航概念稿（发现 / 正在播放）尚未完全实现；当前 APK 使用抽屉导航。
+- 发现页：`发现音乐` + `热门歌单Top36` + 两列白色歌单卡片（精选歌单 / 播放量 / 曲目数）。
+- 抽屉品牌改为 Ceru Music，移除底部主题装饰卡。
+- 播放条改为贴底通栏。
 
 ## 设计预览（概念稿）
 
@@ -105,7 +118,7 @@ SHA-256：
 
 在线预览（GitHub Pages）：https://baipiao5555.github.io/lx-music-ceru-jade/design/preview.html
 
-> 说明：桌面端 rev.6 已按澜音 CeruMusic 界面重做发现页，并将播放条改为居中三段式；移动端 rev.3 为第一版抽屉式 UI，底部导航 / 黑胶播放页尚未全部实现。
+> 说明：桌面端 rev.7 已按澜音 v1 平面风格重构外壳、发现页和详情页；移动端 ceru4 同步改为简洁发现页、白色卡片和贴底播放条。
 
 ## 为什么是补丁仓库
 
@@ -114,8 +127,7 @@ Mimosa 的 Git 安全门禁在提交前扫描到上游源码中的 12 个既有�
 ## 补丁文件
 
 - `patches/0001-feat-ui-ceru-jade.patch`：桌面端青瓷 UI，基于官方 v2.12.6。
-- `patches/0002-feat-ui-ceru-mobile-theme.patch`：移动端青瓷主题，基于官方 v1.9.1。
-- `patches/0003-feat-ui-ceru-mobile-layout.patch`：移动端青瓷布局，基于官方 v1.9.1。
+- `patches/0002-feat-ui-ceru-mobile.patch`：移动端青瓷主题 + 澜音 v1 布局，基于官方 v1.9.1。
 
 ## 应用补丁
 
@@ -143,8 +155,7 @@ npm run build
 ```bash
 git clone --depth 1 --branch v1.9.1 https://github.com/lyswhut/lx-music-mobile.git
 cd lx-music-mobile
-git apply /path/to/patches/0002-feat-ui-ceru-mobile-theme.patch
-git apply /path/to/patches/0003-feat-ui-ceru-mobile-layout.patch
+git apply /path/to/patches/0002-feat-ui-ceru-mobile.patch
 npm run build:theme
 npm install --legacy-peer-deps --registry=https://registry.npmmirror.com
 ```
