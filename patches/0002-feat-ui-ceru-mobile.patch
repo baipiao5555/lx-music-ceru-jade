@@ -1,3 +1,12 @@
+diff --git a/android/app/src/main/res/values/strings.xml b/android/app/src/main/res/values/strings.xml
+index b80075c..fef632a 100644
+--- a/android/app/src/main/res/values/strings.xml
++++ b/android/app/src/main/res/values/strings.xml
+@@ -1,3 +1,3 @@
+ <resources>
+-    <string name="app_name">LX Music</string>
++    <string name="app_name">Ceru Music</string>
+ </resources>
 diff --git a/android/gradle/wrapper/gradle-wrapper.properties b/android/gradle/wrapper/gradle-wrapper.properties
 index 6f7a6eb..d0b6b99 100644
 --- a/android/gradle/wrapper/gradle-wrapper.properties
@@ -12,8 +21,34 @@ index 6f7a6eb..d0b6b99 100644
 +validateDistributionUrl=false
  zipStoreBase=GRADLE_USER_HOME
  zipStorePath=wrapper/dists
+diff --git a/app.json b/app.json
+index 40a9a4a..00a62f1 100644
+--- a/app.json
++++ b/app.json
+@@ -1,4 +1,4 @@
+ {
+   "name": "LX Music",
+-  "displayName": "洛雪音乐助手"
++  "displayName": "Ceru Music"
+ }
+diff --git a/src/components/common/Image.tsx b/src/components/common/Image.tsx
+index 9d94af2..8ea4e77 100644
+--- a/src/components/common/Image.tsx
++++ b/src/components/common/Image.tsx
+@@ -27,9 +27,8 @@ const EmptyPic = memo(({ style, nativeID }: { style: ImageProps['style'], native
+   const size = width * 0.36
+ 
+   return (
+-    <View style={StyleSheet.compose({ ...styles.emptyPic, backgroundColor: theme['c-primary-light-900-alpha-200'], gap: size * 0.1 }, style)} onLayout={onLayout} nativeID={nativeID}>
+-      <Text size={size} color={theme['c-primary-light-400-alpha-200']}>L</Text>
+-      <Text size={size} color={theme['c-primary-light-400-alpha-200']} style={styles.text}>X</Text>
++    <View style={StyleSheet.compose({ ...styles.emptyPic, backgroundColor: theme['c-primary-light-900-alpha-200'] }, style)} onLayout={onLayout} nativeID={nativeID}>
++      <Text size={size} color={theme['c-primary-light-400-alpha-200']}>♪</Text>
+     </View>
+   )
+ })
 diff --git a/src/components/player/PlayerBar/components/ControlBtn.tsx b/src/components/player/PlayerBar/components/ControlBtn.tsx
-index e89b473..b0c220b 100644
+index e89b473..45a9238 100644
 --- a/src/components/player/PlayerBar/components/ControlBtn.tsx
 +++ b/src/components/player/PlayerBar/components/ControlBtn.tsx
 @@ -4,7 +4,6 @@ import { useIsPlay } from '@/store/player/hook'
@@ -24,7 +59,16 @@ index e89b473..b0c220b 100644
  
  const BTN_SIZE = 24
  const handlePlayPrev = () => {
-@@ -46,17 +45,9 @@ const TogglePlayBtn = () => {
+@@ -39,24 +38,16 @@ const TogglePlayBtn = () => {
+   const theme = useTheme()
+ 
+   return (
+-    <TouchableOpacity style={styles.cotrolBtn} activeOpacity={0.5} onPress={togglePlay}>
+-      <Icon name={isPlay ? 'pause' : 'play'} color={theme['c-button-font']} size={BTN_SIZE} />
++    <TouchableOpacity style={[styles.cotrolBtn, styles.playToggle, { backgroundColor: theme['c-primary'] }]} activeOpacity={0.5} onPress={togglePlay}>
++      <Icon name={isPlay ? 'pause' : 'play'} color="#fff" size={22} />
+     </TouchableOpacity>
+   )
  }
  
  export default () => {
@@ -43,7 +87,7 @@ index e89b473..b0c220b 100644
        <TogglePlayBtn />
        <PlayNextBtn />
      </>
-@@ -66,12 +57,10 @@ export default () => {
+@@ -66,13 +57,21 @@ export default () => {
  
  const styles = createStyle({
    cotrolBtn: {
@@ -57,6 +101,17 @@ index e89b473..b0c220b 100644
      shadowOpacity: 1,
      textShadowRadius: 1,
    },
++  playToggle: {
++    width: 40,
++    height: 40,
++    borderRadius: 20,
++    elevation: 3,
++    shadowColor: '#000',
++    shadowOffset: { width: 0, height: 3 },
++    shadowOpacity: 0.18,
++    shadowRadius: 6,
++  },
+ })
 diff --git a/src/components/player/PlayerBar/components/Pic.tsx b/src/components/player/PlayerBar/components/Pic.tsx
 index 1a14181..19b08aa 100644
 --- a/src/components/player/PlayerBar/components/Pic.tsx
@@ -96,19 +151,40 @@ index 267d262..f62b4a9 100644
    },
  })
 diff --git a/src/components/player/PlayerBar/index.tsx b/src/components/player/PlayerBar/index.tsx
-index 610ffda..4f8853c 100644
+index 610ffda..5b3352e 100644
 --- a/src/components/player/PlayerBar/index.tsx
 +++ b/src/components/player/PlayerBar/index.tsx
-@@ -19,7 +19,7 @@ export default memo(({ isHome = false }: { isHome?: boolean }) => {
-   const autoHidePlayBar = useSettingValue('common.autoHidePlayBar')
+@@ -10,6 +10,7 @@ import { createStyle } from '@/utils/tools'
+ // import { useSettingValue } from '@/store/setting/hook'
+ import { useTheme } from '@/store/theme/hook'
+ import { useSettingValue } from '@/store/setting/hook'
++import { usePlayerMusicInfo } from '@/store/player/hook'
  
-   const playerComponent = useMemo(() => (
+ 
+ export default memo(({ isHome = false }: { isHome?: boolean }) => {
+@@ -17,9 +18,10 @@ export default memo(({ isHome = false }: { isHome?: boolean }) => {
+   const { keyboardShown } = useKeyboard()
+   const theme = useTheme()
+   const autoHidePlayBar = useSettingValue('common.autoHidePlayBar')
++  const musicInfo = usePlayerMusicInfo()
+ 
+-  const playerComponent = useMemo(() => (
 -    <View style={{ ...styles.container, backgroundColor: theme['c-content-background'] }}>
++  const playerComponent = useMemo(() => !musicInfo.id ? null : (
 +    <View style={{ ...styles.container, backgroundColor: theme['c-content-background'], borderColor: theme['c-border-background'] }}>
        <Pic isHome={isHome} />
        <View style={styles.center}>
          <Title isHome={isHome} />
-@@ -42,21 +42,13 @@ export default memo(({ isHome = false }: { isHome?: boolean }) => {
+@@ -32,7 +34,7 @@ export default memo(({ isHome = false }: { isHome?: boolean }) => {
+         <ControlBtn />
+       </View>
+     </View>
+-  ), [theme, isHome])
++  ), [theme, isHome, musicInfo.id])
+ 
+   // console.log('render pb')
+ 
+@@ -42,21 +44,21 @@ export default memo(({ isHome = false }: { isHome?: boolean }) => {
  
  const styles = createStyle({
    container: {
@@ -124,18 +200,26 @@ index 610ffda..4f8853c 100644
 -    // backgroundColor: 'red',
 -    borderTopLeftRadius: 6,
 -    borderTopRightRadius: 6,
++    marginHorizontal: 8,
++    marginBottom: 4,
 +    paddingVertical: 6,
-+    paddingLeft: 10,
-+    paddingRight: 8,
-+    borderTopWidth: 1,
++    paddingLeft: 8,
++    paddingRight: 6,
++    borderRadius: 16,
++    borderWidth: 1,
      flexDirection: 'row',
      alignItems: 'center',
 -    elevation: 10,
-+    minHeight: 62,
++    minHeight: 60,
++    elevation: 6,
++    shadowColor: '#000',
++    shadowOffset: { width: 0, height: 3 },
++    shadowOpacity: 0.14,
++    shadowRadius: 8,
    },
    left: {
      // borderRadius: 3,
-@@ -67,7 +59,7 @@ const styles = createStyle({
+@@ -67,7 +69,7 @@ const styles = createStyle({
      flexDirection: 'column',
      flexGrow: 1,
      flexShrink: 1,
@@ -182,44 +266,231 @@ index 238de11..33eb368 100644
  }
  
 diff --git a/src/lang/en-us.json b/src/lang/en-us.json
-index 3d9be61..30289d0 100644
+index 3d9be61..20d1cda 100644
 --- a/src/lang/en-us.json
 +++ b/src/lang/en-us.json
-@@ -167,7 +167,7 @@
-   "nav_love": "Your Library",
+@@ -164,10 +164,10 @@
+   "music_toggle__duplicate_tip": "The same song already exists in the list, should I remove it and continue?",
+   "name": "Title: {name}",
+   "nav_exit": "Exit App",
+-  "nav_love": "Your Library",
++  "nav_love": "Library",
    "nav_search": "Search",
-   "nav_setting": "Settings",
+-  "nav_setting": "Settings",
 -  "nav_songlist": "Playlists",
++  "nav_setting": "Me",
 +  "nav_songlist": "Discover",
    "nav_top": "Charts",
    "never_show": "Never show again",
    "no_item": "The list is empty...",
+@@ -216,6 +216,7 @@
+   "quality_lossless": "SQ",
+   "quality_lossless_24bit": "24bit",
+   "search__welcome": "Search what I want~~😉",
++  "search_placeholder": "Search music, artists or playlists",
+   "search_history_search": "Search History",
+   "search_hot_search": "Top Searches",
+   "search_type_music": "Song",
+@@ -231,7 +232,7 @@
+   "setting__other_other_source_clear_btn": "Clear Song Cache of Changed Source",
+   "setting__other_other_source_label": "Number of songs information that changed source: ",
+   "setting__other_resource_cache": "Resource Cache Management",
+-  "setting_about": "About LX Music",
++  "setting_about": "About Ceru Music",
+   "setting_backup": "Backup & Restore",
+   "setting_backup_all": "All data (\"List\" data and \"Setting\" data)",
+   "setting_backup_all_export": "Export",
+@@ -270,7 +271,7 @@
+   "setting_basic_font_size_130": "Oversize",
+   "setting_basic_font_size_80": "Smaller",
+   "setting_basic_font_size_90": "Small",
+-  "setting_basic_font_size_preview": "LX Music Font Size Preview",
++  "setting_basic_font_size_preview": "Ceru Music Font Size Preview",
+   "setting_basic_home_page_scroll": "Allow horizontal scrolling on vertical homepage",
+   "setting_basic_lang": "Language",
+   "setting_basic_share_type": "Share",
+@@ -402,7 +403,7 @@
+   "songlist_tag_default": "Default",
+   "songlist_tag_hot": "Top",
+   "songlist_tags": "Playlist Category",
+-  "source_alias_all": "Aggregated",
++  "source_alias_all": "All sources",
+   "source_alias_bd": "BD Music",
+   "source_alias_kg": "KG Music",
+   "source_alias_kw": "KW Music",
 diff --git a/src/lang/zh-cn.json b/src/lang/zh-cn.json
-index 683d8bf..24f673b 100644
+index 683d8bf..216262e 100644
 --- a/src/lang/zh-cn.json
 +++ b/src/lang/zh-cn.json
-@@ -167,7 +167,7 @@
-   "nav_love": "我的列表",
+@@ -164,10 +164,10 @@
+   "music_toggle__duplicate_tip": "列表中已存在相同的歌曲，是否将其移除并继续？",
+   "name": "歌曲名：{name}",
+   "nav_exit": "退出应用",
+-  "nav_love": "我的列表",
++  "nav_love": "音乐库",
    "nav_search": "搜索",
-   "nav_setting": "设置",
+-  "nav_setting": "设置",
 -  "nav_songlist": "歌单",
++  "nav_setting": "我的",
 +  "nav_songlist": "发现",
    "nav_top": "排行榜",
    "never_show": "不再提醒",
    "no_item": "列表竟然是空的...",
+@@ -216,6 +216,7 @@
+   "quality_lossless": "SQ",
+   "quality_lossless_24bit": "24bit",
+   "search__welcome": "搜我所想~~😉",
++  "search_placeholder": "搜索音乐、歌手或歌单",
+   "search_history_search": "历史搜索",
+   "search_hot_search": "热门搜索",
+   "search_type_music": "歌曲",
+@@ -231,7 +232,7 @@
+   "setting__other_other_source_clear_btn": "清理换源歌曲缓存",
+   "setting__other_other_source_label": "换源歌曲信息数量：",
+   "setting__other_resource_cache": "资源缓存管理（包括歌曲、图片缓存）",
+-  "setting_about": "关于 LX Music",
++  "setting_about": "关于 Ceru Music",
+   "setting_backup": "备份与恢复",
+   "setting_backup_all": "所有数据（列表数据与设置数据）",
+   "setting_backup_all_export": "导出",
+@@ -270,7 +271,7 @@
+   "setting_basic_font_size_130": "非常大",
+   "setting_basic_font_size_80": "更小",
+   "setting_basic_font_size_90": "小",
+-  "setting_basic_font_size_preview": "LX Music 字体大小预览",
++  "setting_basic_font_size_preview": "Ceru Music 字体大小预览",
+   "setting_basic_home_page_scroll": "启用竖屏首页横向滚动",
+   "setting_basic_lang": "语言",
+   "setting_basic_share_type": "分享方式",
+@@ -402,7 +403,7 @@
+   "songlist_tag_default": "默认",
+   "songlist_tag_hot": "热门",
+   "songlist_tags": "歌单类别",
+-  "source_alias_all": "聚合大会",
++  "source_alias_all": "全部音源",
+   "source_alias_bd": "小杜音乐",
+   "source_alias_kg": "小枸音乐",
+   "source_alias_kw": "小蜗音乐",
 diff --git a/src/lang/zh-tw.json b/src/lang/zh-tw.json
-index 2bec8f5..31b6b69 100644
+index 2bec8f5..c327acb 100644
 --- a/src/lang/zh-tw.json
 +++ b/src/lang/zh-tw.json
-@@ -167,7 +167,7 @@
-   "nav_love": "我的清單",
+@@ -164,10 +164,10 @@
+   "music_toggle__duplicate_tip": "列表中已存在相同的歌曲，是否將其移除並繼續？",
+   "name": "標題：{name}",
+   "nav_exit": "退出應用",
+-  "nav_love": "我的清單",
++  "nav_love": "音樂庫",
    "nav_search": "搜尋",
-   "nav_setting": "設定",
+-  "nav_setting": "設定",
 -  "nav_songlist": "歌單",
++  "nav_setting": "我的",
 +  "nav_songlist": "發現",
    "nav_top": "排行榜",
    "never_show": "不再提醒",
    "no_item": "清單竟然是空的...",
+@@ -216,6 +216,7 @@
+   "quality_lossless": "SQ",
+   "quality_lossless_24bit": "24bit",
+   "search__welcome": "搜我所想~~😉",
++  "search_placeholder": "搜尋音樂、歌手或歌單",
+   "search_history_search": "歷史搜尋",
+   "search_hot_search": "熱門搜尋",
+   "search_type_music": "歌曲",
+@@ -231,7 +232,7 @@
+   "setting__other_other_source_clear_btn": "清理變更來源歌曲快取",
+   "setting__other_other_source_label": "變更來源歌曲資訊數量：",
+   "setting__other_resource_cache": "資源快取管理（包括歌曲、圖片快取）",
+-  "setting_about": "關於 LX Music",
++  "setting_about": "關於 Ceru Music",
+   "setting_backup": "備份與復原",
+   "setting_backup_all": "所有資料（清單資料與設定資料）",
+   "setting_backup_all_export": "匯出",
+@@ -270,7 +271,7 @@
+   "setting_basic_font_size_130": "非常大",
+   "setting_basic_font_size_80": "更小",
+   "setting_basic_font_size_90": "小",
+-  "setting_basic_font_size_preview": "LX Music 字體大小預覽",
++  "setting_basic_font_size_preview": "Ceru Music 字體大小預覽",
+   "setting_basic_home_page_scroll": "啟用豎屏首頁橫向滾動",
+   "setting_basic_lang": "語言",
+   "setting_basic_share_type": "分享方式",
+@@ -402,7 +403,7 @@
+   "songlist_tag_default": "預設",
+   "songlist_tag_hot": "熱門",
+   "songlist_tags": "歌單類別",
+-  "source_alias_all": "聚合大會",
++  "source_alias_all": "全部音源",
+   "source_alias_bd": "小杜音樂",
+   "source_alias_kg": "小枸音樂",
+   "source_alias_kw": "小蝸音樂",
+diff --git a/src/screens/Home/Vertical/Content.tsx b/src/screens/Home/Vertical/Content.tsx
+index 801bb64..3e0dfb7 100644
+--- a/src/screens/Home/Vertical/Content.tsx
++++ b/src/screens/Home/Vertical/Content.tsx
+@@ -1,60 +1,13 @@
+-import { useEffect, useRef } from 'react'
+-// import { getWindowSise, onDimensionChange } from '@/utils/tools'
+-import DrawerNav from './DrawerNav'
+ import Header from './Header'
+ import Main from './Main'
+-import { useSettingValue } from '@/store/setting/hook'
+-import { COMPONENT_IDS } from '@/config/constant'
+-import DrawerLayoutFixed, { type DrawerLayoutFixedType } from '@/components/common/DrawerLayoutFixed'
+-import { scaleSizeW } from '@/utils/pixelRatio'
+-
+-const MAX_WIDTH = scaleSizeW(300)
+ 
+ const Content = () => {
+-  const drawer = useRef<DrawerLayoutFixedType>(null)
+-  const drawerLayoutPosition = useSettingValue('common.drawerLayoutPosition')
+-
+-  useEffect(() => {
+-    const changeVisible = (visible: boolean) => {
+-      if (visible) {
+-        drawer.current?.openDrawer()
+-      } else {
+-        drawer.current?.closeDrawer()
+-      }
+-    }
+-
+-    global.app_event.on('changeMenuVisible', changeVisible)
+-
+-    return () => {
+-      global.app_event.off('changeMenuVisible', changeVisible)
+-    }
+-  }, [])
+-
+-  const navigationView = () => <DrawerNav />
+-  // console.log('render drawer content')
+-
+   return (
+-    <DrawerLayoutFixed
+-      ref={drawer}
+-      widthPercentage={0.7}
+-      widthPercentageMax={MAX_WIDTH}
+-      visibleNavNames={[COMPONENT_IDS.home]}
+-      // drawerWidth={width}
+-      drawerPosition={drawerLayoutPosition}
+-      renderNavigationView={navigationView}
+-    >
++    <>
+       <Header />
+       <Main />
+-      {/* <View style={styles.container}>
+-      </View> */}
+-    </DrawerLayoutFixed>
++    </>
+   )
+ }
+ 
+-// const styles = createStyle({
+-//   container: {
+-//     flex: 1,
+-//   },
+-// })
+-
+ export default Content
 diff --git a/src/screens/Home/Vertical/DrawerNav.tsx b/src/screens/Home/Vertical/DrawerNav.tsx
 index 0c1a2aa..394b15e 100644
 --- a/src/screens/Home/Vertical/DrawerNav.tsx
@@ -373,64 +644,164 @@ index 0c1a2aa..394b15e 100644
  }
  
 diff --git a/src/screens/Home/Vertical/Header.tsx b/src/screens/Home/Vertical/Header.tsx
-index f2a89b4..4268584 100644
+index f2a89b4..87ec741 100644
 --- a/src/screens/Home/Vertical/Header.tsx
 +++ b/src/screens/Home/Vertical/Header.tsx
-@@ -41,13 +41,18 @@ const LeftHeader = () => {
-       ...styles.container,
-       height: scaleSizeH(HEADER_HEIGHT) + statusBarHeight,
-       paddingTop: statusBarHeight,
-+      backgroundColor: theme['c-content-background'],
-+      borderBottomColor: theme['c-border-background'],
-     }}>
-       <View style={styles.left}>
+@@ -1,7 +1,4 @@
+ import { View, TouchableOpacity } from 'react-native'
+-// import Button from '@/components/common/Button'
+-// import { navigations } from '@/navigation'
+-// import { BorderWidths } from '@/theme'
+ import { useTheme } from '@/store/theme/hook'
+ import { useNavActiveId, useStatusbarHeight } from '@/store/common/hook'
+ import { useI18n } from '@/lang'
+@@ -9,149 +6,99 @@ import { createStyle } from '@/utils/tools'
+ import { Icon } from '@/components/common/Icon'
+ import Text from '@/components/common/Text'
+ import StatusBar from '@/components/common/StatusBar'
+-import { useSettingValue } from '@/store/setting/hook'
+ import { scaleSizeH } from '@/utils/pixelRatio'
+ import { HEADER_HEIGHT } from '@/config/constant'
+ import { type InitState as CommonState } from '@/store/common/state'
+ import SearchTypeSelector from '@/screens/Home/Views/Search/SearchTypeSelector'
++import { setNavActiveId } from '@/core/common'
+ 
+ const headerComponents: Partial<Record<CommonState['navActiveId'], React.ReactNode>> = {
+   nav_search: <SearchTypeSelector />,
+ }
+ 
+-
+-// const LeftTitle = () => {
+-//   const id = useNavActiveId()
+-//   const t = useI18n()
+-
+-//   return <Text style={styles.leftTitle} size={18}>{t(id)}</Text>
+-// }
+-const LeftHeader = () => {
++const Header = () => {
+   const theme = useTheme()
+   const id = useNavActiveId()
+   const t = useI18n()
+   const statusBarHeight = useStatusbarHeight()
+-
+-  const openMenu = () => {
+-    global.app_event.changeMenuVisible(true)
+-  }
+-
+-  return (
+-    <View style={{
+-      ...styles.container,
+-      height: scaleSizeH(HEADER_HEIGHT) + statusBarHeight,
+-      paddingTop: statusBarHeight,
+-    }}>
+-      <View style={styles.left}>
 -        <TouchableOpacity style={styles.btn} onPress={openMenu}>
 -          <Icon color={theme['c-font']} name="menu" size={18} />
-+        <TouchableOpacity style={[styles.btn, { backgroundColor: theme['c-primary-light-700-alpha-500'] }]} onPress={openMenu}>
-+          <Icon color={theme['c-primary']} name="menu" size={18} />
-         </TouchableOpacity>
-+        <View style={[styles.brandMark, { backgroundColor: theme['c-primary'] }]}>
-+          <Icon color="#fff" name="logo" size={14} />
-+        </View>
-         <TouchableOpacity style={styles.titleBtn} onPress={openMenu}>
+-        </TouchableOpacity>
+-        <TouchableOpacity style={styles.titleBtn} onPress={openMenu}>
 -          <Text style={styles.leftTitle} size={18}>{t(id)}</Text>
-+          <Text style={styles.leftTitle} size={20} color={theme['c-font']}>{t(id)}</Text>
-         </TouchableOpacity>
-       </View>
-       {headerComponents[id] ?? null}
-@@ -80,15 +85,20 @@ const RightHeader = () => {
-       ...styles.container,
-       height: scaleSizeH(HEADER_HEIGHT) + statusBarHeight,
-       paddingTop: statusBarHeight,
-+      backgroundColor: theme['c-content-background'],
-+      borderBottomColor: theme['c-border-background'],
-     }}>
-       <View style={styles.left}>
-+        <View style={[styles.brandMark, { backgroundColor: theme['c-primary'] }]}>
-+          <Icon color="#fff" name="logo" size={14} />
-+        </View>
-         <TouchableOpacity style={styles.titleBtn} onPress={openMenu}>
+-        </TouchableOpacity>
+-      </View>
+-      {headerComponents[id] ?? null}
+-
+-      {/* <TouchableOpacity style={styles.btn} onPress={openSetting}>
+-        <Icon style={{ ...styles.btnText, color: theme['c-font'] }} name="setting" size={styles.btnText.fontSize} />
+-      </TouchableOpacity> */}
+-    </View>
+-  )
+-}
+-
+-
+-// const RightTitle = () => {
+-//   const id = useNavActiveId()
+-//   const t = useI18n()
+-
+-//   return <Text style={styles.rightTitle} size={18}>{t(id)}</Text>
+-// }
+-const RightHeader = () => {
+-  const theme = useTheme()
+-  const t = useI18n()
+-  const id = useNavActiveId()
+-  const statusBarHeight = useStatusbarHeight()
+-
+-  const openMenu = () => {
+-    global.app_event.changeMenuVisible(true)
+-  }
+-  return (
+-    <View style={{
+-      ...styles.container,
+-      height: scaleSizeH(HEADER_HEIGHT) + statusBarHeight,
+-      paddingTop: statusBarHeight,
+-    }}>
+-      <View style={styles.left}>
+-        <TouchableOpacity style={styles.titleBtn} onPress={openMenu}>
 -          <Text style={styles.rightTitle} size={18}>{t(id)}</Text>
-+          <Text style={styles.rightTitle} size={20} color={theme['c-font']}>{t(id)}</Text>
-         </TouchableOpacity>
-       </View>
-       {headerComponents[id] ?? null}
+-        </TouchableOpacity>
+-      </View>
+-      {headerComponents[id] ?? null}
 -      <TouchableOpacity style={styles.btn} onPress={openMenu}>
 -        <Icon color={theme['c-font']} name="menu" size={18} />
-+      <TouchableOpacity style={[styles.btn, { backgroundColor: theme['c-primary-light-700-alpha-500'] }]} onPress={openMenu}>
-+        <Icon color={theme['c-primary']} name="menu" size={18} />
-       </TouchableOpacity>
-       {/* <TouchableOpacity style={styles.btn} onPress={openSetting}>
-         <Icon style={{ ...styles.btnText, color: theme['c-font'] }} name="setting" size={styles.btnText.fontSize} />
-@@ -116,42 +126,51 @@ const Header = () => {
+-      </TouchableOpacity>
+-      {/* <TouchableOpacity style={styles.btn} onPress={openSetting}>
+-        <Icon style={{ ...styles.btnText, color: theme['c-font'] }} name="setting" size={styles.btnText.fontSize} />
+-      </TouchableOpacity> */}
+-    </View>
+-  )
+-}
+-
+-const Header = () => {
+-  const drawerLayoutPosition = useSettingValue('common.drawerLayoutPosition')
++  const isFind = id == 'nav_songlist'
  
+   return (
+     <>
+       <StatusBar />
+-      {
+-        drawerLayoutPosition == 'left'
+-          ? <LeftHeader />
+-          : <RightHeader />
+-      }
+-
++      <View style={{
++        ...styles.container,
++        height: scaleSizeH(HEADER_HEIGHT) + statusBarHeight,
++        paddingTop: statusBarHeight,
++        backgroundColor: '#f5f8f7',
++        borderBottomColor: theme['c-border-background'],
++      }}>
++        <View style={styles.left}>
++          <View style={[styles.brandMark, { backgroundColor: theme['c-primary'] }]}>
++            <Icon color="#fff" name="logo" size={15} />
++          </View>
++          <Text style={styles.leftTitle} size={20} color={theme['c-font']}>{isFind ? 'Ceru Music' : t(id)}</Text>
++        </View>
++        {headerComponents[id] ?? null}
++        {id != 'nav_search' ? (
++          <>
++            <TouchableOpacity style={styles.iconBtn} onPress={() => setNavActiveId('nav_top')}>
++              <Icon name="leaderboard" size={18} color={theme['c-font-label']} />
++            </TouchableOpacity>
++            <TouchableOpacity style={styles.iconBtn} onPress={() => setNavActiveId('nav_search')}>
++              <Icon name="search-2" size={18} color={theme['c-font-label']} />
++            </TouchableOpacity>
++            <TouchableOpacity style={[styles.avatar, { backgroundColor: theme['c-primary'] }]} onPress={() => setNavActiveId('nav_setting')}>
++              <Text size={11} color="#fff">C</Text>
++            </TouchableOpacity>
++          </>
++        ) : null}
++      </View>
+     </>
+   )
+ }
+ 
+-
  const styles = createStyle({
    container: {
 -    // width: '100%',
-     paddingRight: 5,
-+    borderBottomWidth: 1,
+-    paddingRight: 5,
++    paddingRight: 6,
      flexDirection: 'row',
-     justifyContent: 'center',
+-    justifyContent: 'center',
      alignItems: 'center',
 -    // backgroundColor: 'rgba(0,0,0,0.1)',
      zIndex: 10,
@@ -442,48 +813,71 @@ index f2a89b4..4268584 100644
      alignItems: 'center',
      height: '100%',
    },
-   btn: {
+-  btn: {
 -    // flex: 1,
 -    width: HEADER_HEIGHT,
 -    // backgroundColor: 'rgba(0,0,0,0.1)',
-+    width: 34,
-+    height: 34,
-+    borderRadius: 10,
++  brandMark: {
++    width: 28,
++    height: 28,
++    borderRadius: 9,
      alignItems: 'center',
      justifyContent: 'center',
 -    height: '100%',
-+    marginLeft: 8,
-+  },
-+  brandMark: {
-+    width: 26,
-+    height: 26,
-+    borderRadius: 8,
-+    alignItems: 'center',
-+    justifyContent: 'center',
-+    marginLeft: 8,
-   },
-   titleBtn: {
-     flex: 1,
+-  },
+-  titleBtn: {
+-    flex: 1,
 -    // backgroundColor: 'rgba(0,0,0,0.1)',
-     height: '100%',
-     justifyContent: 'center',
+-    height: '100%',
+-    justifyContent: 'center',
++    marginLeft: 10,
    },
    leftTitle: {
 -    paddingLeft: 14,
+-    paddingRight: 16,
 +    paddingLeft: 8,
-     paddingRight: 16,
++    paddingRight: 8,
 +    fontWeight: '600',
 +    letterSpacing: -0.3,
    },
-   rightTitle: {
+-  rightTitle: {
 -    paddingLeft: 16,
-+    paddingLeft: 8,
-     paddingRight: 16,
-+    fontWeight: '600',
-+    letterSpacing: -0.3,
+-    paddingRight: 16,
++  iconBtn: {
++    width: 32,
++    height: 32,
++    alignItems: 'center',
++    justifyContent: 'center',
++  },
++  avatar: {
++    width: 28,
++    height: 28,
++    borderRadius: 14,
++    alignItems: 'center',
++    justifyContent: 'center',
++    marginLeft: 2,
++    marginRight: 4,
    },
  })
  
+diff --git a/src/screens/Home/Vertical/index.tsx b/src/screens/Home/Vertical/index.tsx
+index 1c04f1e..8055145 100644
+--- a/src/screens/Home/Vertical/index.tsx
++++ b/src/screens/Home/Vertical/index.tsx
+@@ -1,11 +1,13 @@
+ import Content from './Content'
+ import PlayerBar from '@/components/player/PlayerBar'
++import BottomNav from './BottomNav'
+ 
+ export default () => {
+   return (
+     <>
+       <Content />
+       <PlayerBar isHome />
++      <BottomNav />
+     </>
+   )
+ }
 diff --git a/src/screens/Home/Views/Search/BlankView/index.tsx b/src/screens/Home/Views/Search/BlankView/index.tsx
 index 838474d..f53974d 100644
 --- a/src/screens/Home/Views/Search/BlankView/index.tsx
@@ -526,6 +920,106 @@ index 838474d..f53974d 100644
 +  },
 +  welcomeSub: {
 +    marginTop: 6,
+   },
+ })
+diff --git a/src/screens/Home/Views/Search/HeaderBar/SearchInput.tsx b/src/screens/Home/Views/Search/HeaderBar/SearchInput.tsx
+index eb8c81f..df560af 100644
+--- a/src/screens/Home/Views/Search/HeaderBar/SearchInput.tsx
++++ b/src/screens/Home/Views/Search/HeaderBar/SearchInput.tsx
+@@ -1,6 +1,7 @@
+ import { useCallback, useRef, forwardRef, useImperativeHandle, useState } from 'react'
+ // import { StyleSheet } from 'react-native'
+ import Input, { type InputType, type InputProps } from '@/components/common/Input'
++import { useI18n } from '@/lang'
+ 
+ export interface SearchInputProps {
+   onChangeText: (text: string) => void
+@@ -18,6 +19,7 @@ export interface SearchInputType {
+ 
+ export default forwardRef<SearchInputType, SearchInputProps>(({ onChangeText, onSubmit, onBlur, onTouchStart }, ref) => {
+   // const theme = useTheme()
++  const t = useI18n()
+   const [text, setText] = useState('')
+   const inputRef = useRef<InputType>(null)
+ 
+@@ -54,7 +56,7 @@ export default forwardRef<SearchInputType, SearchInputProps>(({ onChangeText, on
+   return (
+     <Input
+       ref={inputRef}
+-      placeholder="Search for something..."
++      placeholder={t('search_placeholder')}
+       value={text}
+       onChangeText={handleChangeText}
+       // style={{ ...styles.input, backgroundColor: theme['c-primary-input-background'] }}
+diff --git a/src/screens/Home/Views/Search/HeaderBar/index.tsx b/src/screens/Home/Views/Search/HeaderBar/index.tsx
+index 68e153e..1d9594d 100644
+--- a/src/screens/Home/Views/Search/HeaderBar/index.tsx
++++ b/src/screens/Home/Views/Search/HeaderBar/index.tsx
+@@ -2,7 +2,6 @@ import { useRef, forwardRef, useImperativeHandle } from 'react'
+ import { View } from 'react-native'
+ 
+ // import music from '@/utils/musicSdk'
+-import { BorderWidths } from '@/theme'
+ // import InsetShadow from 'react-native-inset-shadow'
+ import SourceSelector, {
+   type SourceSelectorType as _SourceSelectorType,
+@@ -52,17 +51,19 @@ export default forwardRef<HeaderBarType, HeaderBarProps>(({ onSourceChange, onTi
+ 
+ 
+   return (
+-    <View style={{ ...styles.searchBar, borderBottomColor: theme['c-border-background'] }}>
+-      <View style={styles.selector}>
++    <View style={styles.searchBar}>
++      <View style={[styles.selector, { backgroundColor: theme['c-primary-light-900'] }]}>
+         <SourceSelector ref={sourceSelectorRef} onSourceChange={onSourceChange} center />
+       </View>
+-      <SearchInput
+-        ref={searchInputRef}
+-        onChangeText={onTipSearch}
+-        onSubmit={onSearch}
+-        onBlur={onHideTipList}
+-        onTouchStart={onShowTipList}
+-      />
++      <View style={[styles.inputWrap, { backgroundColor: theme['c-content-background'], borderColor: theme['c-border-background'] }]}>
++        <SearchInput
++          ref={searchInputRef}
++          onChangeText={onTipSearch}
++          onSubmit={onSearch}
++          onBlur={onHideTipList}
++          onTouchStart={onShowTipList}
++        />
++      </View>
+     </View>
+   )
+ })
+@@ -70,12 +71,25 @@ export default forwardRef<HeaderBarType, HeaderBarProps>(({ onSourceChange, onTi
+ const styles = createStyle({
+   searchBar: {
+     flexDirection: 'row',
+-    height: 38,
++    height: 52,
++    alignItems: 'center',
++    paddingHorizontal: 12,
++    backgroundColor: '#f5f8f7',
+     zIndex: 2,
+-    paddingRight: 10,
+-    borderBottomWidth: BorderWidths.normal,
+   },
+   selector: {
+-    // width: 86,
++    height: 34,
++    borderRadius: 17,
++    justifyContent: 'center',
++    paddingHorizontal: 10,
++    marginRight: 8,
++  },
++  inputWrap: {
++    flex: 1,
++    height: 36,
++    borderRadius: 18,
++    borderWidth: 1,
++    paddingHorizontal: 10,
++    justifyContent: 'center',
    },
  })
 diff --git a/src/screens/Home/Views/Search/SearchTypeSelector.tsx b/src/screens/Home/Views/Search/SearchTypeSelector.tsx
@@ -597,8 +1091,103 @@ index 7a55d82..c36a6cf 100644
 -    // width: 80,
    },
  })
+diff --git a/src/screens/Home/Views/Setting/Vertical/Main.tsx b/src/screens/Home/Views/Setting/Vertical/Main.tsx
+index 8e7f1a9..3e76329 100644
+--- a/src/screens/Home/Views/Setting/Vertical/Main.tsx
++++ b/src/screens/Home/Views/Setting/Vertical/Main.tsx
+@@ -19,10 +19,10 @@ type FlatListType = FlatListProps<SettingScreenIds>
+ 
+ const styles = createStyle({
+   content: {
+-    paddingLeft: 15,
+-    paddingRight: 15,
+-    paddingTop: 15,
+-    paddingBottom: 15,
++    paddingLeft: 0,
++    paddingRight: 0,
++    paddingTop: 12,
++    paddingBottom: 12,
+     flex: 0,
+   },
+ })
+@@ -51,6 +51,7 @@ export default () => {
+   return (
+     <FlatList
+       data={SETTING_SCREENS}
++      style={{ flex: 1, backgroundColor: '#f5f8f7' }}
+       keyboardShouldPersistTaps={'always'}
+       renderItem={renderItem}
+       keyExtractor={getkey}
+diff --git a/src/screens/Home/Views/Setting/components/CheckBoxItem.tsx b/src/screens/Home/Views/Setting/components/CheckBoxItem.tsx
+index d588abd..309ab7b 100644
+--- a/src/screens/Home/Views/Setting/components/CheckBoxItem.tsx
++++ b/src/screens/Home/Views/Setting/components/CheckBoxItem.tsx
+@@ -16,9 +16,7 @@ export default memo((props: CheckBoxProps) => {
+ 
+ const styles = createStyle({
+   container: {
+-    paddingLeft: 25,
+-    // marginTop: -10,
+-    // marginBottom: 0,
++    paddingVertical: 3,
+   },
+ })
+ 
+diff --git a/src/screens/Home/Views/Setting/components/Section.tsx b/src/screens/Home/Views/Setting/components/Section.tsx
+index 48f16ad..adc6876 100644
+--- a/src/screens/Home/Views/Setting/components/Section.tsx
++++ b/src/screens/Home/Views/Setting/components/Section.tsx
+@@ -14,7 +14,7 @@ export default ({ title, children }: Props) => {
+   const theme = useTheme()
+ 
+   return (
+-    <View style={styles.container}>
++    <View style={[styles.container, { backgroundColor: theme['c-content-background'], borderColor: theme['c-border-background'] }]}>
+       <Text style={{ ...styles.title, borderLeftColor: theme['c-primary'] }} size={16} >{title}</Text>
+       <View>
+         {children}
+@@ -26,13 +26,16 @@ export default ({ title, children }: Props) => {
+ 
+ const styles = createStyle({
+   container: {
+-    // paddingLeft: 10,
+-    // backgroundColor: 'rgba(0,0,0,0.2)',
++    marginHorizontal: 12,
++    marginBottom: 12,
++    padding: 14,
++    borderRadius: 16,
++    borderWidth: 1,
+   },
+   title: {
+-    borderLeftWidth: 5,
+-    paddingLeft: 12,
+-    marginBottom: 10,
+-    // lineHeight: 16,
++    borderLeftWidth: 4,
++    paddingLeft: 10,
++    marginBottom: 12,
++    fontWeight: '600',
+   },
+ })
+diff --git a/src/screens/Home/Views/Setting/components/SubTitle.tsx b/src/screens/Home/Views/Setting/components/SubTitle.tsx
+index 2f9cb30..b6f62dd 100644
+--- a/src/screens/Home/Views/Setting/components/SubTitle.tsx
++++ b/src/screens/Home/Views/Setting/components/SubTitle.tsx
+@@ -19,12 +19,9 @@ export default memo(({ title, children }: {
+ 
+ const styles = createStyle({
+   container: {
+-    paddingLeft: 25,
+     marginBottom: 18,
+   },
+   title: {
+-    marginLeft: -10,
+     marginBottom: 10,
+-    // lineHeight: 16,
+   },
+ })
 diff --git a/src/screens/Home/Views/SongList/Content.tsx b/src/screens/Home/Views/SongList/Content.tsx
-index 7764f06..090ce39 100644
+index 7764f06..05092b1 100644
 --- a/src/screens/Home/Views/SongList/Content.tsx
 +++ b/src/screens/Home/Views/SongList/Content.tsx
 @@ -1,63 +1,32 @@
@@ -627,6 +1216,8 @@ index 7764f06..090ce39 100644
    const listRef = useRef<ListType>(null)
 -  const songlistInfo = useRef<SonglistInfo>({ source: 'kw', sortId: '5', tagId: '' })
 +  const theme = useTheme()
++  const hour = new Date().getHours()
++  const greeting = hour < 12 ? '早上好' : hour < 18 ? '下午好' : '晚上好'
  
    useEffect(() => {
      void getSongListSetting().then(info => {
@@ -670,16 +1261,14 @@ index 7764f06..090ce39 100644
 -        onSourceChange={handleSourceChange}
 -      />
 +      <View style={styles.pageHeader}>
-+        <Text size={26} color={theme['c-font']} style={styles.title}>发现音乐</Text>
-+        <Text size={12} color={theme['c-font-label']} style={styles.subtitle}>探索最新最热的音乐内容</Text>
-+      </View>
-+      <View style={styles.sectionHead}>
-+        <Text size={16} color={theme['c-font']} style={styles.sectionTitle}>热门歌单Top36</Text>
++        <Text size={12} color={theme['c-font-label']} style={styles.greeting}>{greeting}</Text>
++        <Text size={26} color={theme['c-font']} style={styles.title}>发现新声音</Text>
++        <Text size={12} color={theme['c-font-label']} style={styles.subtitle}>为你挑选今日的 30 首新歌</Text>
 +      </View>
        <List ref={listRef} />
      </View>
    )
-@@ -65,8 +34,27 @@ export default () => {
+@@ -65,8 +34,22 @@ export default () => {
  
  const styles = StyleSheet.create({
    container: {
@@ -689,8 +1278,11 @@ index 7764f06..090ce39 100644
 +  },
 +  pageHeader: {
 +    paddingHorizontal: 18,
-+    paddingTop: 18,
++    paddingTop: 14,
 +    paddingBottom: 2,
++  },
++  greeting: {
++    marginBottom: 2,
 +  },
 +  title: {
 +    fontWeight: '600',
@@ -698,14 +1290,6 @@ index 7764f06..090ce39 100644
 +  },
 +  subtitle: {
 +    marginTop: 6,
-+  },
-+  sectionHead: {
-+    paddingHorizontal: 18,
-+    paddingTop: 16,
-+    paddingBottom: 4,
-+  },
-+  sectionTitle: {
-+    fontWeight: '600',
    },
  })
 -
@@ -939,21 +1523,441 @@ index 0561e0c..6594b8c 100644
    selector: {
      width: 86,
 diff --git a/src/screens/Home/Views/SongList/components/Songlist/List.tsx b/src/screens/Home/Views/SongList/components/Songlist/List.tsx
-index 926452b..f19677b 100644
+index 926452b..71c98d3 100644
 --- a/src/screens/Home/Views/SongList/components/Songlist/List.tsx
 +++ b/src/screens/Home/Views/SongList/components/Songlist/List.tsx
-@@ -207,8 +207,9 @@ const styles = createStyle({
-   },
-   list: {
+@@ -1,21 +1,16 @@
+-import { useRef, useState, useMemo, forwardRef, useImperativeHandle } from 'react'
+-import { FlatList, View, RefreshControl, type FlatListProps } from 'react-native'
++import { useRef, useState, useMemo, forwardRef, useImperativeHandle, useEffect } from 'react'
++import { View, RefreshControl, ScrollView, TouchableOpacity, useWindowDimensions } from 'react-native'
+ 
+-import ListItem from './ListItem'
+-// import { navigations } from '@/navigation'
+ import { type ListInfoItem } from '@/store/songlist/state'
+-import { useLayout } from '@/utils/hooks'
+ import { useTheme } from '@/store/theme/hook'
+ import { useI18n } from '@/lang'
+-import { scaleSizeW } from '@/utils/pixelRatio'
+ import { createStyle } from '@/utils/tools'
+ import Text from '@/components/common/Text'
+-
+-type FlatListType = FlatListProps<ListInfoItem>
+-
+-// const MAX_WIDTH = scaleSizeW(110)
+-const MIN_WIDTH = scaleSizeW(110)
+-const GAP = scaleSizeW(20)
++import { Icon } from '@/components/common/Icon'
++import Image from '@/components/common/Image'
++import playerState from '@/store/player/state'
++import { playListById } from '@/core/player/player'
++import { clearPlayedList } from '@/core/player/playedList'
+ 
+ export interface ListProps {
+   onRefresh: () => void
+@@ -30,17 +25,16 @@ export interface ListType {
+ }
+ 
+ export default forwardRef<ListType, ListProps>(({ onRefresh, onLoadMore, onOpenDetail }, ref) => {
+-  const flatListRef = useRef<FlatList>(null)
+   const [currentList, setList] = useState<ListInfoItem[]>([])
+   const [showSource, setShowSource] = useState(false)
+   const [status, setStatus] = useState<Status>('idle')
+-  const { onLayout, width } = useLayout()
++  const [playedList, setPlayedList] = useState([...playerState.playedList])
++  const { width } = useWindowDimensions()
+   const theme = useTheme()
+-  // console.log('render songlist')
++  const t = useI18n()
+ 
+   useImperativeHandle(ref, () => ({
+     setList(list, showSource = false) {
+-      // rawListRef.current = list
+       setList(list)
+       setShowSource(showSource)
+     },
+@@ -49,169 +43,245 @@ export default forwardRef<ListType, ListProps>(({ onRefresh, onLoadMore, onOpenD
+     },
+   }))
+ 
++  useEffect(() => {
++    const handlePlayedListChanged = (list: typeof playerState.playedList) => {
++      setPlayedList([...list])
++    }
++    global.state_event.on('playPlayedListChanged', handlePlayedListChanged)
++    return () => {
++      global.state_event.off('playPlayedListChanged', handlePlayedListChanged)
++    }
++  }, [])
++
++  const hero = currentList[0]
++  const hotCardWidth = Math.round(width * 0.38)
++  const recentList = useMemo(() => playedList.slice(-6).reverse(), [playedList])
++
+   const handleLoadMore = () => {
+-    if (status != 'idle') return
++    if (status !== 'idle') return
+     onLoadMore()
+   }
+ 
+-  const renderItem: FlatListType['renderItem'] = ({ item, index }) => (
+-    <ListItem
+-      item={item}
+-      index={index}
+-      width={rowInfo.width}
+-      showSource={showSource}
+-      onPress={onOpenDetail}
+-    />
+-  )
+-  const getkey: FlatListType['keyExtractor'] = item => item.id
+-  // const getItemLayout: FlatListType['getItemLayout'] = (data, index) => {
+-  //   return { length: ITEM_HEIGHT, offset: ITEM_HEIGHT * index, index }
+-  // }
++  const handleScroll = (event: any) => {
++    const { contentOffset, layoutMeasurement, contentSize } = event.nativeEvent
++    if (contentOffset.y + layoutMeasurement.height >= contentSize.height - 240) {
++      handleLoadMore()
++    }
++  }
++
++  const handleRecentPress = (item: typeof playerState.playedList[number]) => {
++    if (!item.listId) return
++    void playListById(item.listId, item.musicInfo.id)
++  }
++
+   const refreshControl = useMemo(() => (
+     <RefreshControl
+       colors={[theme['c-primary']]}
+-      // progressBackgroundColor={theme.primary}
+       refreshing={status == 'refreshing'}
+-      onRefresh={onRefresh} />
++      onRefresh={onRefresh}
++    />
+   ), [status, onRefresh, theme])
+-  const footerComponent = useMemo(() => {
+-    let label: FooterLabel
+-    switch (status) {
+-      case 'refreshing': return null
+-      case 'loading':
+-        label = 'list_loading'
+-        break
+-      case 'end':
+-        label = 'list_end'
+-        break
+-      case 'error':
+-        label = 'list_error'
+-        break
+-      case 'idle':
+-        label = null
+-        break
+-    }
++
++  if (!currentList.length) {
+     return (
+-      <View style={{ width: '100%' }}>
+-        <Footer label={label} onLoadMore={onLoadMore} />
++      <View style={styles.empty}>
++        <Text size={12} color={theme['c-font-label']}>{status == 'error' ? t('list_error') : t('list_loading')}</Text>
+       </View>
+     )
+-  }, [onLoadMore, status])
+-
+-
+-  // const itemWidth = useMemo(() => {
+-  //   let itemWidth = Math.max(Math.trunc(width * 0.125), MAX_WIDTH)
+-  //   // if (itemWidth < )
+-  // }, [width])
+-  // const computedItemWidth = useMemo(() => {
+-  //   let w = width - GAP
+-  //   let n = width / (MIN_WIDTH + GAP)
+-  //   if (n > 10) n = 10
+-  //   return Math.floor(w / n)
+-  // }, [width])
+-  // console.log(Math.trunc(width * 0.125), itemWidth)
+-  // console.log(itemWidth, MIN_WIDTH, GAP, width)
+-  const rowInfo = useMemo(() => {
+-    let w = width - GAP
+-    let n = width / (MIN_WIDTH + GAP)
+-    if (n > 10) n = 10
+-    let computedItemWidth = Math.floor(w / n)
+-    const num = Math.max(Math.floor(width / computedItemWidth), 2)
+-    return {
+-      num,
+-      width: (width - GAP) / num,
+-    }
+-  }, [width])
+-  // console.log(rowNum)
+-  const list = useMemo(() => {
+-    const list = [...currentList]
+-    let whiteItemNum = (list.length % rowInfo.num)
+-    if (whiteItemNum > 0) whiteItemNum = rowInfo.num - whiteItemNum
+-    for (let i = 0; i < whiteItemNum; i++) {
+-      list.push({
+-        id: `white__${i}`,
+-        play_count: '',
+-        author: '',
+-        name: '',
+-        img: '',
+-        desc: '',
+-        // @ts-expect-error
+-        source: '',
+-      })
+-    }
+-    return list
+-  }, [currentList, rowInfo])
+-  // console.log(listInfo.list.map((item) => item.id))
++  }
+ 
+   return (
+-    <View style={styles.container} onLayout={onLayout}>
+-      {
+-        width == 0
+-          ? null
+-          : (
+-              <FlatList
+-                key={String(rowInfo.num)}
+-                ref={flatListRef}
+-                style={styles.list}
+-                columnWrapperStyle={{ justifyContent: 'space-evenly' }}
+-                numColumns={rowInfo.num}
+-                data={list}
+-                maxToRenderPerBatch={4}
+-                // updateCellsBatchingPeriod={80}
+-                windowSize={8}
+-                removeClippedSubviews={true}
+-                // initialNumToRender={12}
+-                renderItem={renderItem}
+-                keyExtractor={getkey}
+-                // getItemLayout={getItemLayout}
+-                // onRefresh={onRefresh}
+-                // refreshing={refreshing}
+-                onEndReachedThreshold={0.6}
+-                onEndReached={handleLoadMore}
+-                refreshControl={refreshControl}
+-                ListFooterComponent={footerComponent}
+-              />
+-            )
+-      }
+-    </View>
+-  )
+-})
++    <ScrollView
++      style={styles.container}
++      contentContainerStyle={styles.content}
++      refreshControl={refreshControl}
++      onScroll={handleScroll}
++      scrollEventThrottle={200}
++      showsVerticalScrollIndicator={false}
++    >
++      {hero ? (
++        <TouchableOpacity activeOpacity={0.9} onPress={() => onOpenDetail(hero, 0)} style={styles.hero}>
++          <Image url={hero.img} style={styles.heroImage} resizeMode="cover" />
++          <View style={styles.heroMask} />
++          <View style={styles.heroContent}>
++            <View style={styles.heroBadge}>
++              <Text size={9} color="#fff">每日精选</Text>
++            </View>
++            <Text size={17} color="#fff" numberOfLines={1} style={styles.heroTitle}>{hero.name}</Text>
++            <Text size={10} color="rgba(255,255,255,.78)" numberOfLines={1}>适合此刻的 {hero.total || 20} 首歌曲</Text>
++          </View>
++          <View style={styles.heroPlay}>
++            <Icon name="play" size={20} color="#fff" />
++          </View>
++        </TouchableOpacity>
++      ) : null}
+ 
+-type FooterLabel = 'list_loading' | 'list_end' | 'list_error' | null
+-const Footer = ({ label, onLoadMore }: {
+-  label: FooterLabel
+-  onLoadMore: () => void
+-}) => {
+-  const theme = useTheme()
+-  const t = useI18n()
+-  const handlePress = () => {
+-    if (label != 'list_error') return
+-    onLoadMore()
+-  }
+-  return (
+-    label
+-      ? (
+-          <View>
+-            <Text onPress={handlePress} style={styles.footer} color={theme['c-font-label']}>{t(label)}</Text>
++      <View style={styles.sectionHead}>
++        <Text size={16} color={theme['c-font']} style={styles.sectionTitle}>热门歌单</Text>
++        <Text size={10} color={theme['c-font-label']}>查看全部</Text>
++      </View>
++      <ScrollView horizontal showsHorizontalScrollIndicator={false} contentContainerStyle={styles.hotRow}>
++        {currentList.map((item, index) => (
++          <TouchableOpacity
++            key={item.id}
++            activeOpacity={0.85}
++            onPress={() => onOpenDetail(item, index)}
++            style={{ width: hotCardWidth, marginRight: 12 }}
++          >
++            <View style={{ width: hotCardWidth, height: hotCardWidth, borderRadius: 14, overflow: 'hidden' }}>
++              <Image url={item.img} style={{ width: '100%', height: '100%' }} resizeMode="cover" />
++              {showSource ? <Text style={styles.sourceLabel} size={9} color="#fff">{item.source}</Text> : null}
++            </View>
++            <Text size={12} color={theme['c-font']} numberOfLines={2} style={styles.hotTitle}>{item.name}</Text>
++            <Text size={10} color={theme['c-font-label']} numberOfLines={1}>{item.author || '精选歌单'}</Text>
++          </TouchableOpacity>
++        ))}
++      </ScrollView>
++
++      {recentList.length ? (
++        <>
++          <View style={styles.sectionHead}>
++            <Text size={16} color={theme['c-font']} style={styles.sectionTitle}>最近播放</Text>
++            <TouchableOpacity onPress={clearPlayedList}>
++              <Text size={10} color={theme['c-font-label']}>清空</Text>
++            </TouchableOpacity>
+           </View>
+-        )
+-      : null
+-  )
+-}
++          {recentList.map((item, index) => (
++            <TouchableOpacity
++              key={`${item.musicInfo.id}_${index}`}
++              activeOpacity={0.7}
++              style={styles.recentItem}
++              onPress={() => handleRecentPress(item)}
++            >
++              <Image url={item.musicInfo.pic} style={styles.recentCover} resizeMode="cover" />
++              <View style={styles.recentInfo}>
++                <Text size={13} color={theme['c-font']} numberOfLines={1}>{item.musicInfo.name}</Text>
++                <Text size={10} color={theme['c-font-label']} numberOfLines={1}>{item.musicInfo.singer}</Text>
++              </View>
++              <Text size={10} color={theme['c-font-label']}>{item.musicInfo.interval || ''}</Text>
++            </TouchableOpacity>
++          ))}
++        </>
++      ) : null}
+ 
++      <View style={styles.footer}>
++        <Text size={11} color={theme['c-font-label']}>
++          {status == 'loading' ? t('list_loading') : status == 'end' ? t('list_end') : status == 'error' ? t('list_error') : ''}
++        </Text>
++      </View>
++    </ScrollView>
++  )
++})
+ 
+ const styles = createStyle({
+   container: {
      flex: 1,
--    paddingLeft: 10,
--    paddingRight: 10,
-+    paddingLeft: 12,
-+    paddingRight: 12,
-+    paddingTop: 2,
++    backgroundColor: '#f5f8f7',
++  },
++  content: {
++    paddingHorizontal: 18,
++    paddingBottom: 20,
++  },
++  empty: {
++    flex: 1,
++    paddingTop: 40,
++    alignItems: 'center',
++  },
++  hero: {
++    height: 168,
++    borderRadius: 18,
+     overflow: 'hidden',
++    marginTop: 4,
++    justifyContent: 'flex-end',
+   },
+-  list: {
++  heroImage: {
++    position: 'absolute',
++    left: 0,
++    top: 0,
++    width: '100%',
++    height: '100%',
++  },
++  heroMask: {
++    position: 'absolute',
++    left: 0,
++    top: 0,
++    right: 0,
++    bottom: 0,
++    backgroundColor: 'rgba(0, 0, 0, .36)',
++  },
++  heroContent: {
++    padding: 16,
++    paddingRight: 70,
++  },
++  heroBadge: {
++    alignSelf: 'flex-start',
++    paddingHorizontal: 8,
++    paddingVertical: 3,
++    borderRadius: 999,
++    backgroundColor: 'rgba(255, 255, 255, .24)',
++    marginBottom: 8,
++  },
++  heroTitle: {
++    fontWeight: '600',
++    marginBottom: 4,
++  },
++  heroPlay: {
++    position: 'absolute',
++    right: 16,
++    bottom: 16,
++    width: 42,
++    height: 42,
++    borderRadius: 21,
++    backgroundColor: '#16b89b',
++    alignItems: 'center',
++    justifyContent: 'center',
++  },
++  sectionHead: {
++    flexDirection: 'row',
++    alignItems: 'center',
++    justifyContent: 'space-between',
++    marginTop: 20,
++    marginBottom: 10,
++  },
++  sectionTitle: {
++    fontWeight: '600',
++  },
++  hotRow: {
++    paddingRight: 6,
++  },
++  hotTitle: {
++    marginTop: 7,
++    marginBottom: 3,
++    fontWeight: '600',
++    lineHeight: 16,
++  },
++  recentItem: {
++    flexDirection: 'row',
++    alignItems: 'center',
++    paddingVertical: 7,
++  },
++  recentCover: {
++    width: 42,
++    height: 42,
++    borderRadius: 10,
++  },
++  recentInfo: {
+     flex: 1,
++    minWidth: 0,
+     paddingLeft: 10,
+     paddingRight: 10,
    },
    footer: {
-     textAlign: 'center',
+-    textAlign: 'center',
+-    padding: 10,
++    alignItems: 'center',
++    paddingVertical: 16,
++  },
++  sourceLabel: {
++    position: 'absolute',
++    top: 0,
++    right: 0,
++    paddingHorizontal: 4,
++    paddingBottom: 2,
++    borderBottomLeftRadius: 3,
++    backgroundColor: 'rgba(0, 0, 0, 0.3)',
+   },
+ })
 diff --git a/src/screens/Home/Views/SongList/components/Songlist/ListItem.tsx b/src/screens/Home/Views/SongList/components/Songlist/ListItem.tsx
 index 156233e..d26ed82 100644
 --- a/src/screens/Home/Views/SongList/components/Songlist/ListItem.tsx
