@@ -1,0 +1,1011 @@
+diff --git a/src/components/player/PlayerBar/components/ControlBtn.tsx b/src/components/player/PlayerBar/components/ControlBtn.tsx
+index e89b473..b0c220b 100644
+--- a/src/components/player/PlayerBar/components/ControlBtn.tsx
++++ b/src/components/player/PlayerBar/components/ControlBtn.tsx
+@@ -4,7 +4,6 @@ import { useIsPlay } from '@/store/player/hook'
+ import { useTheme } from '@/store/theme/hook'
+ import { playNext, playPrev, togglePlay } from '@/core/player/player'
+ import { createStyle } from '@/utils/tools'
+-import { useHorizontalMode } from '@/utils/hooks'
+ 
+ const BTN_SIZE = 24
+ const handlePlayPrev = () => {
+@@ -46,17 +45,9 @@ const TogglePlayBtn = () => {
+ }
+ 
+ export default () => {
+-  const isHorizontalMode = useHorizontalMode()
+   return (
+     <>
+-      {/* <TouchableOpacity activeOpacity={0.5} onPress={toggleNextPlayMode}>
+-        <Text style={{ ...styles.cotrolBtn }}>
+-          <Icon name={playModeIcon} style={{ color: theme.secondary10 }} size={18} />
+-        </Text>
+-      </TouchableOpacity>
+-    */}
+-      {/* {btnPrev} */}
+-      { isHorizontalMode ? <PlayPrevBtn /> : null }
++      <PlayPrevBtn />
+       <TogglePlayBtn />
+       <PlayNextBtn />
+     </>
+@@ -66,12 +57,10 @@ export default () => {
+ 
+ const styles = createStyle({
+   cotrolBtn: {
+-    width: 46,
++    width: 38,
+     height: 46,
+     justifyContent: 'center',
+     alignItems: 'center',
+-
+-    // backgroundColor: '#ccc',
+     shadowOpacity: 1,
+     textShadowRadius: 1,
+   },
+diff --git a/src/components/player/PlayerBar/components/Pic.tsx b/src/components/player/PlayerBar/components/Pic.tsx
+index 1a14181..19b08aa 100644
+--- a/src/components/player/PlayerBar/components/Pic.tsx
++++ b/src/components/player/PlayerBar/components/Pic.tsx
+@@ -15,7 +15,7 @@ const styles = StyleSheet.create({
+   image: {
+     width: PIC_HEIGHT,
+     height: PIC_HEIGHT,
+-    borderRadius: 2,
++    borderRadius: 10,
+   },
+ })
+ 
+diff --git a/src/components/player/PlayerBar/components/Title.tsx b/src/components/player/PlayerBar/components/Title.tsx
+index 267d262..f62b4a9 100644
+--- a/src/components/player/PlayerBar/components/Title.tsx
++++ b/src/components/player/PlayerBar/components/Title.tsx
+@@ -40,7 +40,7 @@ export default ({ isHome }: { isHome: boolean }) => {
+   // console.log(playMusicInfo)
+   return (
+     <TouchableOpacity style={styles.container} onLongPress={handleLongPress} onPress={handlePress} activeOpacity={0.7} >
+-      <Text color={theme['c-font-label']} numberOfLines={1}>{title}</Text>
++      <Text style={styles.title} size={13} color={theme['c-font']} numberOfLines={1}>{title}</Text>
+     </TouchableOpacity>
+   )
+ }
+@@ -69,8 +69,8 @@ const styles = createStyle({
+   container: {
+     width: '100%',
+     paddingHorizontal: 2,
+-    // paddingBottom: 4,
+-    // height: '50%',
+-    // backgroundColor: 'rgba(0, 0, 0, .1)',
++  },
++  title: {
++    fontWeight: '600',
+   },
+ })
+diff --git a/src/components/player/PlayerBar/index.tsx b/src/components/player/PlayerBar/index.tsx
+index 610ffda..e6f0c4d 100644
+--- a/src/components/player/PlayerBar/index.tsx
++++ b/src/components/player/PlayerBar/index.tsx
+@@ -19,7 +19,7 @@ export default memo(({ isHome = false }: { isHome?: boolean }) => {
+   const autoHidePlayBar = useSettingValue('common.autoHidePlayBar')
+ 
+   const playerComponent = useMemo(() => (
+-    <View style={{ ...styles.container, backgroundColor: theme['c-content-background'] }}>
++    <View style={{ ...styles.container, backgroundColor: theme['c-content-background'], borderColor: theme['c-border-background'] }}>
+       <Pic isHome={isHome} />
+       <View style={styles.center}>
+         <Title isHome={isHome} />
+@@ -42,21 +42,20 @@ export default memo(({ isHome = false }: { isHome?: boolean }) => {
+ 
+ const styles = createStyle({
+   container: {
+-    width: '100%',
+-    // height: 100,
+-    // paddingTop: progressContentPadding,
+-    // marginTop: -progressContentPadding,
+-    // backgroundColor: 'rgba(0, 0, 0, .1)',
+-    // borderTopWidth: BorderWidths.normal2,
+-    paddingVertical: 5,
+-    paddingLeft: 5,
+-    // backgroundColor: AppColors.primary,
+-    // backgroundColor: 'red',
+-    borderTopLeftRadius: 6,
+-    borderTopRightRadius: 6,
++    marginHorizontal: 8,
++    marginBottom: 6,
++    paddingVertical: 6,
++    paddingLeft: 8,
++    paddingRight: 6,
++    borderRadius: 16,
++    borderWidth: 1,
+     flexDirection: 'row',
+     alignItems: 'center',
+-    elevation: 10,
++    elevation: 8,
++    shadowColor: '#000',
++    shadowOffset: { width: 0, height: 3 },
++    shadowOpacity: 0.14,
++    shadowRadius: 8,
+   },
+   left: {
+     // borderRadius: 3,
+@@ -67,7 +66,7 @@ const styles = createStyle({
+     flexDirection: 'column',
+     flexGrow: 1,
+     flexShrink: 1,
+-    paddingLeft: 5,
++    paddingLeft: 8,
+     height: '100%',
+     // justifyContent: 'space-evenly',
+     // height: 48,
+diff --git a/src/config/constant.ts b/src/config/constant.ts
+index b70b252..2abf196 100644
+--- a/src/config/constant.ts
++++ b/src/config/constant.ts
+@@ -99,8 +99,8 @@ export const APP_PROVIDER_NAME = 'cn.toside.music.mobile.provider'
+ 
+ 
+ export const NAV_MENUS = [
+-  { id: 'nav_search', icon: 'search-2' },
+   { id: 'nav_songlist', icon: 'album' },
++  { id: 'nav_search', icon: 'search-2' },
+   { id: 'nav_top', icon: 'leaderboard' },
+   { id: 'nav_love', icon: 'love' },
+   // { id: 'download', icon: 'download-2' },
+diff --git a/src/lang/en-us.json b/src/lang/en-us.json
+index 3d9be61..30289d0 100644
+--- a/src/lang/en-us.json
++++ b/src/lang/en-us.json
+@@ -167,7 +167,7 @@
+   "nav_love": "Your Library",
+   "nav_search": "Search",
+   "nav_setting": "Settings",
+-  "nav_songlist": "Playlists",
++  "nav_songlist": "Discover",
+   "nav_top": "Charts",
+   "never_show": "Never show again",
+   "no_item": "The list is empty...",
+diff --git a/src/lang/zh-cn.json b/src/lang/zh-cn.json
+index 683d8bf..24f673b 100644
+--- a/src/lang/zh-cn.json
++++ b/src/lang/zh-cn.json
+@@ -167,7 +167,7 @@
+   "nav_love": "我的列表",
+   "nav_search": "搜索",
+   "nav_setting": "设置",
+-  "nav_songlist": "歌单",
++  "nav_songlist": "发现",
+   "nav_top": "排行榜",
+   "never_show": "不再提醒",
+   "no_item": "列表竟然是空的...",
+diff --git a/src/lang/zh-tw.json b/src/lang/zh-tw.json
+index 2bec8f5..31b6b69 100644
+--- a/src/lang/zh-tw.json
++++ b/src/lang/zh-tw.json
+@@ -167,7 +167,7 @@
+   "nav_love": "我的清單",
+   "nav_search": "搜尋",
+   "nav_setting": "設定",
+-  "nav_songlist": "歌單",
++  "nav_songlist": "發現",
+   "nav_top": "排行榜",
+   "never_show": "不再提醒",
+   "no_item": "清單竟然是空的...",
+diff --git a/src/screens/Home/Vertical/DrawerNav.tsx b/src/screens/Home/Vertical/DrawerNav.tsx
+index 0c1a2aa..9d01aa8 100644
+--- a/src/screens/Home/Vertical/DrawerNav.tsx
++++ b/src/screens/Home/Vertical/DrawerNav.tsx
+@@ -16,20 +16,29 @@ import { useSettingValue } from '@/store/setting/hook'
+ const styles = createStyle({
+   container: {
+     flex: 1,
+-    // alignItems: 'center',
+-    // justifyContent: 'center',
+-    // padding: 10,
+   },
+   header: {
+-    paddingTop: 40,
+-    paddingBottom: 50,
++    paddingTop: 20,
++    paddingBottom: 20,
++    paddingLeft: 18,
++    paddingRight: 18,
+     flexDirection: 'row',
+-    justifyContent: 'center',
+     alignItems: 'center',
+   },
+-  headerText: {
+-    textAlign: 'center',
+-    marginLeft: 16,
++  brandMark: {
++    width: 38,
++    height: 38,
++    borderRadius: 12,
++    alignItems: 'center',
++    justifyContent: 'center',
++    marginRight: 12,
++  },
++  brandName: {
++    fontWeight: '600',
++  },
++  brandSub: {
++    marginTop: 3,
++    letterSpacing: 1.2,
+   },
+   menus: {
+     flex: 1,
+@@ -40,20 +49,51 @@ const styles = createStyle({
+   },
+   menuItem: {
+     flexDirection: 'row',
+-    paddingTop: 13,
+-    paddingBottom: 13,
+-    paddingLeft: 25,
+-    paddingRight: 25,
++    height: 44,
++    marginHorizontal: 12,
++    marginBottom: 3,
++    paddingLeft: 14,
++    paddingRight: 14,
++    borderRadius: 10,
+     alignItems: 'center',
+-    // backgroundColor: 'rgba(0, 0, 0, 0.2)',
+   },
+-  iconContent: {
+-    width: 24,
++  menuItemActive: {
++    shadowColor: '#000',
++    shadowOffset: { width: 0, height: 3 },
++    shadowOpacity: 0.12,
++    shadowRadius: 8,
++    elevation: 3,
++  },
++  menuText: {
++    marginLeft: 12,
++    fontWeight: '500',
++  },
++  menuTextActive: {
++    marginLeft: 12,
++    fontWeight: '600',
++  },
++  themeCard: {
++    marginHorizontal: 16,
++    marginBottom: 8,
++    padding: 12,
++    borderRadius: 12,
++    borderWidth: 1,
++    flexDirection: 'row',
+     alignItems: 'center',
+   },
+-  text: {
+-    paddingLeft: 20,
+-    // fontWeight: '500',
++  themeAccent: {
++    width: 4,
++    height: 34,
++    borderRadius: 2,
++    marginRight: 10,
++  },
++  themeCopy: {
++    flex: 1,
++  },
++  themeTitle: {
++    marginTop: 3,
++    marginBottom: 2,
++    fontWeight: '600',
+   },
+ })
+ 
+@@ -61,10 +101,20 @@ const Header = () => {
+   const theme = useTheme()
+   const statusBarHeight = useStatusbarHeight()
+   return (
+-    <View style={{ paddingTop: statusBarHeight, backgroundColor: theme['c-primary-light-700-alpha-500'] }}>
++    <View style={{
++      paddingTop: statusBarHeight,
++      backgroundColor: theme['c-primary-light-700-alpha-500'],
++      borderBottomWidth: 1,
++      borderBottomColor: theme['c-border-background'],
++    }}>
+       <View style={styles.header}>
+-        <Icon name="logo" color={theme['c-primary-dark-100-alpha-300']} size={28} />
+-        <Text style={styles.headerText} size={28} color={theme['c-primary-dark-100-alpha-300']}>LX Music</Text>
++        <View style={[styles.brandMark, { backgroundColor: theme['c-primary'] }]}>
++          <Icon name="logo" color="#fff" size={22} />
++        </View>
++        <View>
++          <Text style={styles.brandName} size={18} color={theme['c-font']}>LX Music</Text>
++          <Text style={styles.brandSub} size={9} color={theme['c-font-label']}>青瓷 · CERU JADE</Text>
++        </View>
+       </View>
+     </View>
+   )
+@@ -82,17 +132,13 @@ const MenuItem = ({ id, icon, onPress }: {
+   const theme = useTheme()
+ 
+   return activeId == id
+-    ? <View style={styles.menuItem}>
+-        <View style={styles.iconContent}>
+-          <Icon name={icon} size={20} color={theme['c-primary-font-active']} />
+-        </View>
+-        <Text style={styles.text} color={theme['c-primary-font']}>{t(id)}</Text>
++    ? <View style={[styles.menuItem, styles.menuItemActive, { backgroundColor: theme['c-primary'] }]}>
++        <Icon name={icon} size={20} color="#fff" />
++        <Text style={styles.menuTextActive} size={14} color="#fff">{t(id)}</Text>
+       </View>
+     : <TouchableOpacity style={styles.menuItem} onPress={() => { onPress(id) }}>
+-        <View style={styles.iconContent}>
+-          <Icon name={icon} size={20} color={theme['c-font-label']} />
+-        </View>
+-        <Text style={styles.text}>{t(id)}</Text>
++        <Icon name={icon} size={20} color={theme['c-font-label']} />
++        <Text style={styles.menuText} size={14} color={theme['c-font']}>{t(id)}</Text>
+       </TouchableOpacity>
+ }
+ 
+@@ -132,6 +178,15 @@ export default memo(() => {
+         </View>
+       </ScrollView>
+ 
++      <View style={[styles.themeCard, { backgroundColor: theme['c-primary-light-700-alpha-500'], borderColor: theme['c-border-background'] }]}>
++        <View style={[styles.themeAccent, { backgroundColor: theme['c-primary'] }]} />
++        <View style={styles.themeCopy}>
++          <Text size={9} color={theme['c-font-label']}>青瓷主题</Text>
++          <Text style={styles.themeTitle} size={14} color={theme['c-font']}>每日精选</Text>
++          <Text size={9} color={theme['c-font-label']}>发现好音乐</Text>
++        </View>
++      </View>
++
+       {
+         showBackBtn ? <MenuItem id="back_home" icon="home" onPress={handlePress} /> : null
+       }
+diff --git a/src/screens/Home/Vertical/Header.tsx b/src/screens/Home/Vertical/Header.tsx
+index f2a89b4..4268584 100644
+--- a/src/screens/Home/Vertical/Header.tsx
++++ b/src/screens/Home/Vertical/Header.tsx
+@@ -41,13 +41,18 @@ const LeftHeader = () => {
+       ...styles.container,
+       height: scaleSizeH(HEADER_HEIGHT) + statusBarHeight,
+       paddingTop: statusBarHeight,
++      backgroundColor: theme['c-content-background'],
++      borderBottomColor: theme['c-border-background'],
+     }}>
+       <View style={styles.left}>
+-        <TouchableOpacity style={styles.btn} onPress={openMenu}>
+-          <Icon color={theme['c-font']} name="menu" size={18} />
++        <TouchableOpacity style={[styles.btn, { backgroundColor: theme['c-primary-light-700-alpha-500'] }]} onPress={openMenu}>
++          <Icon color={theme['c-primary']} name="menu" size={18} />
+         </TouchableOpacity>
++        <View style={[styles.brandMark, { backgroundColor: theme['c-primary'] }]}>
++          <Icon color="#fff" name="logo" size={14} />
++        </View>
+         <TouchableOpacity style={styles.titleBtn} onPress={openMenu}>
+-          <Text style={styles.leftTitle} size={18}>{t(id)}</Text>
++          <Text style={styles.leftTitle} size={20} color={theme['c-font']}>{t(id)}</Text>
+         </TouchableOpacity>
+       </View>
+       {headerComponents[id] ?? null}
+@@ -80,15 +85,20 @@ const RightHeader = () => {
+       ...styles.container,
+       height: scaleSizeH(HEADER_HEIGHT) + statusBarHeight,
+       paddingTop: statusBarHeight,
++      backgroundColor: theme['c-content-background'],
++      borderBottomColor: theme['c-border-background'],
+     }}>
+       <View style={styles.left}>
++        <View style={[styles.brandMark, { backgroundColor: theme['c-primary'] }]}>
++          <Icon color="#fff" name="logo" size={14} />
++        </View>
+         <TouchableOpacity style={styles.titleBtn} onPress={openMenu}>
+-          <Text style={styles.rightTitle} size={18}>{t(id)}</Text>
++          <Text style={styles.rightTitle} size={20} color={theme['c-font']}>{t(id)}</Text>
+         </TouchableOpacity>
+       </View>
+       {headerComponents[id] ?? null}
+-      <TouchableOpacity style={styles.btn} onPress={openMenu}>
+-        <Icon color={theme['c-font']} name="menu" size={18} />
++      <TouchableOpacity style={[styles.btn, { backgroundColor: theme['c-primary-light-700-alpha-500'] }]} onPress={openMenu}>
++        <Icon color={theme['c-primary']} name="menu" size={18} />
+       </TouchableOpacity>
+       {/* <TouchableOpacity style={styles.btn} onPress={openSetting}>
+         <Icon style={{ ...styles.btnText, color: theme['c-font'] }} name="setting" size={styles.btnText.fontSize} />
+@@ -116,42 +126,51 @@ const Header = () => {
+ 
+ const styles = createStyle({
+   container: {
+-    // width: '100%',
+     paddingRight: 5,
++    borderBottomWidth: 1,
+     flexDirection: 'row',
+     justifyContent: 'center',
+     alignItems: 'center',
+-    // backgroundColor: 'rgba(0,0,0,0.1)',
+     zIndex: 10,
+   },
+   left: {
+     flex: 1,
+     flexDirection: 'row',
+-    paddingLeft: 5,
+     alignItems: 'center',
+     height: '100%',
+   },
+   btn: {
+-    // flex: 1,
+-    width: HEADER_HEIGHT,
+-    // backgroundColor: 'rgba(0,0,0,0.1)',
++    width: 34,
++    height: 34,
++    borderRadius: 10,
+     alignItems: 'center',
+     justifyContent: 'center',
+-    height: '100%',
++    marginLeft: 8,
++  },
++  brandMark: {
++    width: 26,
++    height: 26,
++    borderRadius: 8,
++    alignItems: 'center',
++    justifyContent: 'center',
++    marginLeft: 8,
+   },
+   titleBtn: {
+     flex: 1,
+-    // backgroundColor: 'rgba(0,0,0,0.1)',
+     height: '100%',
+     justifyContent: 'center',
+   },
+   leftTitle: {
+-    paddingLeft: 14,
++    paddingLeft: 8,
+     paddingRight: 16,
++    fontWeight: '600',
++    letterSpacing: -0.3,
+   },
+   rightTitle: {
+-    paddingLeft: 16,
++    paddingLeft: 8,
+     paddingRight: 16,
++    fontWeight: '600',
++    letterSpacing: -0.3,
+   },
+ })
+ 
+diff --git a/src/screens/Home/Views/Search/BlankView/index.tsx b/src/screens/Home/Views/Search/BlankView/index.tsx
+index 838474d..f53974d 100644
+--- a/src/screens/Home/Views/Search/BlankView/index.tsx
++++ b/src/screens/Home/Views/Search/BlankView/index.tsx
+@@ -1,4 +1,5 @@
+ import Text from '@/components/common/Text'
++import { Icon } from '@/components/common/Icon'
+ import { useI18n } from '@/lang'
+ import { useSettingValue } from '@/store/setting/hook'
+ import { useTheme } from '@/store/theme/hook'
+@@ -57,7 +58,11 @@ export default forwardRef<BlankViewType, BlankViewProps>(({ onSearch }, ref) =>
+           )
+         : (
+             <View style={styles.welcome}>
+-              <Text size={22} color={theme['c-font-label']}>{t('search__welcome')}</Text>
++              <View style={[styles.welcomeMark, { backgroundColor: theme['c-primary-light-700-alpha-500'] }]}>
++                <Icon name="search-2" color={theme['c-primary']} size={30} />
++              </View>
++              <Text size={20} color={theme['c-font']} style={styles.welcomeTitle}>{t('search__welcome')}</Text>
++              <Text size={11} color={theme['c-font-label']} style={styles.welcomeSub}>搜索歌曲、歌手或歌单</Text>
+             </View>
+           )
+       : null
+@@ -77,5 +82,20 @@ const styles = createStyle({
+     flex: 1,
+     alignItems: 'center',
+     justifyContent: 'center',
++    paddingBottom: 60,
++  },
++  welcomeMark: {
++    width: 64,
++    height: 64,
++    borderRadius: 20,
++    alignItems: 'center',
++    justifyContent: 'center',
++    marginBottom: 16,
++  },
++  welcomeTitle: {
++    fontWeight: '600',
++  },
++  welcomeSub: {
++    marginTop: 6,
+   },
+ })
+diff --git a/src/screens/Home/Views/Search/SearchTypeSelector.tsx b/src/screens/Home/Views/Search/SearchTypeSelector.tsx
+index 7a55d82..c36a6cf 100644
+--- a/src/screens/Home/Views/Search/SearchTypeSelector.tsx
++++ b/src/screens/Home/Views/Search/SearchTypeSelector.tsx
+@@ -7,7 +7,6 @@ import { useI18n } from '@/lang'
+ import Text from '@/components/common/Text'
+ import { useTheme } from '@/store/theme/hook'
+ import { getSearchSetting } from '@/utils/data'
+-import { BorderWidths } from '@/theme'
+ 
+ const SEARCH_TYPE_LIST = [
+   'music',
+@@ -35,11 +34,15 @@ export default () => {
+   }
+ 
+   return (
+-    <ScrollView style={styles.container} keyboardShouldPersistTaps={'always'} horizontal={true}>
++    <ScrollView style={styles.container} contentContainerStyle={styles.content} keyboardShouldPersistTaps={'always'} horizontal={true}>
+       {
+         list.map(t => (
+-          <TouchableOpacity style={styles.button} onPress={() => { handleTypeChange(t.id) }} key={t.id}>
+-            <Text style={{ ...styles.buttonText, borderBottomColor: type == t.id ? theme['c-primary-background-active'] : 'transparent' }} color={type == t.id ? theme['c-primary-font-active'] : theme['c-font']}>{t.label}</Text>
++          <TouchableOpacity
++            style={[styles.button, type == t.id && { backgroundColor: theme['c-primary'] }]}
++            onPress={() => { handleTypeChange(t.id) }}
++            key={t.id}
++          >
++            <Text size={11} style={styles.buttonText} color={type == t.id ? '#fff' : theme['c-font-label']}>{t.label}</Text>
+           </TouchableOpacity>
+         ))
+       }
+@@ -52,29 +55,19 @@ const styles = createStyle({
+     height: '100%',
+     flexGrow: 0,
+     flexShrink: 1,
+-    // paddingLeft: 5,
+-    // paddingRight: 5,
+-    // backgroundColor: 'rgba(0,0,0,0.1)',
++  },
++  content: {
++    alignItems: 'center',
+   },
+   button: {
+-    // height: 38,
+-    // lineHeight: 38,
++    height: 30,
++    borderRadius: 999,
+     justifyContent: 'center',
+-    paddingLeft: 8,
+-    paddingRight: 8,
+-    // width: 80,
+-    // backgroundColor: 'rgba(0,0,0,0.1)',
++    paddingLeft: 10,
++    paddingRight: 10,
++    marginRight: 6,
+   },
+   buttonText: {
+-    // height: 38,
+-    // lineHeight: 38,
+     textAlign: 'center',
+-    paddingLeft: 2,
+-    paddingRight: 2,
+-    // paddingTop: 10,
+-    paddingTop: 3,
+-    paddingBottom: 3,
+-    borderBottomWidth: BorderWidths.normal3,
+-    // width: 80,
+   },
+ })
+diff --git a/src/screens/Home/Views/SongList/Content.tsx b/src/screens/Home/Views/SongList/Content.tsx
+index 7764f06..6ea9f68 100644
+--- a/src/screens/Home/Views/SongList/Content.tsx
++++ b/src/screens/Home/Views/SongList/Content.tsx
+@@ -6,6 +6,8 @@ import { StyleSheet, View } from 'react-native'
+ import HeaderBar, { type HeaderBarProps, type HeaderBarType } from './HeaderBar'
+ import songlistState, { type InitState, type SortInfo } from '@/store/songlist/state'
+ import List, { type ListType } from './List'
++import Text from '@/components/common/Text'
++import { useTheme } from '@/store/theme/hook'
+ 
+ 
+ interface SonglistInfo {
+@@ -17,6 +19,7 @@ interface SonglistInfo {
+ export default () => {
+   const headerBarRef = useRef<HeaderBarType>(null)
+   const listRef = useRef<ListType>(null)
++  const theme = useTheme()
+   const songlistInfo = useRef<SonglistInfo>({ source: 'kw', sortId: '5', tagId: '' })
+ 
+   useEffect(() => {
+@@ -52,12 +55,26 @@ export default () => {
+ 
+   return (
+     <View style={styles.container}>
++      <View style={[styles.hero, { backgroundColor: theme['c-primary-light-700-alpha-500'], borderColor: theme['c-border-background'] }]}>
++        <View style={styles.heroTop}>
++          <Text size={10} color={theme['c-primary']} style={styles.eyebrow}>发现音乐</Text>
++          <View style={[styles.badge, { backgroundColor: theme['c-content-background'] }]}>
++            <Text size={9} color={theme['c-primary-font']}>青瓷 · 每日精选</Text>
++          </View>
++        </View>
++        <Text size={22} color={theme['c-font']} style={styles.title}>探索最新最热的音乐内容</Text>
++        <Text size={11} color={theme['c-font-label']} style={styles.subtitle}>精选歌单、排行榜与每日推荐，找到下一首循环。</Text>
++      </View>
+       <HeaderBar
+         ref={headerBarRef}
+         onSortChange={handleSortChange}
+         onTagChange={handleTagChange}
+         onSourceChange={handleSourceChange}
+       />
++      <View style={styles.sectionHead}>
++        <Text size={13} color={theme['c-font']} style={styles.sectionTitle}>热门歌单</Text>
++        <Text size={9} color={theme['c-font-label']}>每天更新</Text>
++      </View>
+       <List ref={listRef} />
+     </View>
+   )
+@@ -68,5 +85,48 @@ const styles = StyleSheet.create({
+     position: 'relative',
+     flex: 1,
+   },
++  hero: {
++    marginHorizontal: 12,
++    marginTop: 8,
++    marginBottom: 6,
++    padding: 14,
++    borderRadius: 16,
++    borderWidth: 1,
++  },
++  heroTop: {
++    flexDirection: 'row',
++    alignItems: 'center',
++    justifyContent: 'space-between',
++  },
++  eyebrow: {
++    fontWeight: '700',
++    letterSpacing: 1.5,
++  },
++  badge: {
++    paddingHorizontal: 8,
++    paddingVertical: 4,
++    borderRadius: 999,
++  },
++  title: {
++    marginTop: 6,
++    fontWeight: '600',
++    letterSpacing: -0.5,
++    lineHeight: 27,
++  },
++  subtitle: {
++    marginTop: 5,
++    lineHeight: 16,
++  },
++  sectionHead: {
++    flexDirection: 'row',
++    alignItems: 'baseline',
++    justifyContent: 'space-between',
++    paddingHorizontal: 16,
++    marginTop: 8,
++    marginBottom: 2,
++  },
++  sectionTitle: {
++    fontWeight: '600',
++  },
+ })
+ 
+diff --git a/src/screens/Home/Views/SongList/HeaderBar/OpenList/index.tsx b/src/screens/Home/Views/SongList/HeaderBar/OpenList/index.tsx
+index df19114..5161782 100644
+--- a/src/screens/Home/Views/SongList/HeaderBar/OpenList/index.tsx
++++ b/src/screens/Home/Views/SongList/HeaderBar/OpenList/index.tsx
+@@ -7,6 +7,7 @@ import { type Source } from '@/store/songlist/state'
+ import { createStyle } from '@/utils/tools'
+ import Text from '@/components/common/Text'
+ import { useI18n } from '@/lang'
++import { useTheme } from '@/store/theme/hook'
+ import { navigations } from '@/navigation'
+ import commonState from '@/store/common/state'
+ 
+@@ -20,6 +21,7 @@ export interface OpenListType {
+ 
+ export default forwardRef<OpenListType, {}>((props, ref) => {
+   const t = useI18n()
++  const theme = useTheme()
+   const modalRef = useRef<ModalType>(null)
+   const songlistInfoRef = useRef<{ source: Source }>({ source: 'kw' })
+ 
+@@ -49,8 +51,8 @@ export default forwardRef<OpenListType, {}>((props, ref) => {
+ 
+   return (
+     <>
+-      <Button style={styles.button} onPress={() => modalRef.current?.show(songlistInfoRef.current.source)}>
+-        <Text>{t('songlist_open')}</Text>
++      <Button style={[styles.button, { backgroundColor: theme['c-button-background'] }]} onPress={() => modalRef.current?.show(songlistInfoRef.current.source)}>
++        <Text size={10} color={theme['c-font']}>{t('songlist_open')}</Text>
+       </Button>
+       <Modal ref={modalRef} onOpenId={handleOpenSonglist} />
+     </>
+@@ -59,10 +61,12 @@ export default forwardRef<OpenListType, {}>((props, ref) => {
+ 
+ const styles = createStyle({
+   button: {
+-    // backgroundColor: '#ccc',
++    height: 30,
++    borderRadius: 999,
+     alignItems: 'center',
+     justifyContent: 'center',
+-    paddingLeft: 12,
+-    paddingRight: 12,
++    paddingLeft: 8,
++    paddingRight: 8,
++    marginLeft: 2,
+   },
+ })
+diff --git a/src/screens/Home/Views/SongList/HeaderBar/SortTab.tsx b/src/screens/Home/Views/SongList/HeaderBar/SortTab.tsx
+index 57b3dd5..6510377 100644
+--- a/src/screens/Home/Views/SongList/HeaderBar/SortTab.tsx
++++ b/src/screens/Home/Views/SongList/HeaderBar/SortTab.tsx
+@@ -5,7 +5,6 @@ import { useI18n } from '@/lang'
+ import { useTheme } from '@/store/theme/hook'
+ import Text from '@/components/common/Text'
+ import { createStyle } from '@/utils/tools'
+-import { BorderWidths } from '@/theme'
+ 
+ export interface SortTabProps {
+   onSortChange: (id: string) => void
+@@ -41,11 +40,15 @@ export default forwardRef<SortTabType, SortTabProps>(({ onSortChange }, ref) =>
+   }
+ 
+   return (
+-    <ScrollView ref={scrollViewRef} style={styles.container} keyboardShouldPersistTaps={'always'} horizontal>
++    <ScrollView ref={scrollViewRef} style={styles.container} contentContainerStyle={styles.content} keyboardShouldPersistTaps={'always'} horizontal>
+       {
+         sorts.map(s => (
+-          <TouchableOpacity style={styles.button} onPress={() => { handleSortChange(s.id) }} key={s.id}>
+-            <Text style={{ ...styles.buttonText, borderBottomColor: activeId == s.id ? theme['c-primary-background-active'] : 'transparent' }} color={activeId == s.id ? theme['c-primary-font-active'] : theme['c-font']}>{s.label}</Text>
++          <TouchableOpacity
++            style={[styles.button, activeId == s.id && { backgroundColor: theme['c-primary'] }]}
++            onPress={() => { handleSortChange(s.id) }}
++            key={s.id}
++          >
++            <Text size={11} style={styles.buttonText} color={activeId == s.id ? '#fff' : theme['c-font-label']}>{s.label}</Text>
+           </TouchableOpacity>
+         ))
+       }
+@@ -58,24 +61,19 @@ const styles = createStyle({
+   container: {
+     flexGrow: 1,
+     flexShrink: 1,
+-    // paddingLeft: 5,
+-    // paddingRight: 5,
++  },
++  content: {
++    alignItems: 'center',
+   },
+   button: {
+-    // height: 38,
+-    // lineHeight: 38,
++    height: 30,
++    borderRadius: 999,
+     justifyContent: 'center',
+-    paddingLeft: 14,
+-    paddingRight: 14,
+-    // width: 80,
+-    // backgroundColor: 'rgba(0,0,0,0.1)',
++    paddingLeft: 12,
++    paddingRight: 12,
++    marginRight: 6,
+   },
+   buttonText: {
+-    // height: 38,
+-    // lineHeight: 38,
+     textAlign: 'center',
+-    paddingHorizontal: 2,
+-    paddingVertical: 3,
+-    borderBottomWidth: BorderWidths.normal3,
+   },
+ })
+diff --git a/src/screens/Home/Views/SongList/HeaderBar/SourceSelector.tsx b/src/screens/Home/Views/SongList/HeaderBar/SourceSelector.tsx
+index 950b33e..63b7c4f 100644
+--- a/src/screens/Home/Views/SongList/HeaderBar/SourceSelector.tsx
++++ b/src/screens/Home/Views/SongList/HeaderBar/SourceSelector.tsx
+@@ -1,7 +1,8 @@
+ import { forwardRef, useImperativeHandle, useRef } from 'react'
+-import { StyleSheet, View, type ViewStyle } from 'react-native'
++import { View, type ViewStyle } from 'react-native'
+ 
+ import { createStyle } from '@/utils/tools'
++import { useTheme } from '@/store/theme/hook'
+ import SourceSelector, {
+   type SourceSelectorType as _SourceSelectorType,
+   type SourceSelectorProps as _SourceSelectorProps,
+@@ -23,6 +24,7 @@ export interface SourceSelectorType {
+ 
+ export default forwardRef<SourceSelectorType, SourceSelectorProps>(({ style, onSourceChange }, ref) => {
+   const sourceSelectorRef = useRef<SourceSelectorCommonType>(null)
++  const theme = useTheme()
+ 
+   useImperativeHandle(ref, () => ({
+     setSource(source) {
+@@ -32,14 +34,19 @@ export default forwardRef<SourceSelectorType, SourceSelectorProps>(({ style, onS
+ 
+ 
+   return (
+-    <View style={StyleSheet.compose<ViewStyle>(styles.selector, style)}>
+-      <SourceSelector ref={sourceSelectorRef} onSourceChange={onSourceChange} center />
++    <View style={[styles.selector, { backgroundColor: theme['c-button-background'] }, style]}>
++      <SourceSelector ref={sourceSelectorRef} onSourceChange={onSourceChange} center fontSize={11} />
+     </View>
+   )
+ })
+ 
+ const styles = createStyle({
+   selector: {
+-    // width: 86,
++    height: 30,
++    borderRadius: 999,
++    justifyContent: 'center',
++    paddingLeft: 4,
++    paddingRight: 4,
++    marginLeft: 2,
+   },
+ })
+diff --git a/src/screens/Home/Views/SongList/HeaderBar/Tag/CurrentTagBtn.tsx b/src/screens/Home/Views/SongList/HeaderBar/Tag/CurrentTagBtn.tsx
+index a75adc0..f2d671a 100644
+--- a/src/screens/Home/Views/SongList/HeaderBar/Tag/CurrentTagBtn.tsx
++++ b/src/screens/Home/Views/SongList/HeaderBar/Tag/CurrentTagBtn.tsx
+@@ -1,6 +1,7 @@
+ import Button from '@/components/common/Button'
+ import Text from '@/components/common/Text'
+ import { useI18n } from '@/lang'
++import { useTheme } from '@/store/theme/hook'
+ import { createStyle } from '@/utils/tools'
+ import { forwardRef, useImperativeHandle, useState } from 'react'
+ 
+@@ -15,6 +16,7 @@ export interface CurrentTagBtnType {
+ 
+ export default forwardRef<CurrentTagBtnType, CurrentTagBtnProps>(({ onShowList }, ref) => {
+   const t = useI18n()
++  const theme = useTheme()
+   const [name, setName] = useState('')
+ 
+   useImperativeHandle(ref, () => ({
+@@ -25,8 +27,8 @@ export default forwardRef<CurrentTagBtnType, CurrentTagBtnProps>(({ onShowList }
+   }))
+ 
+   return (
+-    <Button style={styles.btn} onPress={onShowList}>
+-      <Text style={styles.sourceMenu}>{name}</Text>
++    <Button style={[styles.btn, { backgroundColor: theme['c-button-background'] }]} onPress={onShowList}>
++      <Text style={styles.sourceMenu} size={11} color={theme['c-font']}>{name}</Text>
+     </Button>
+   )
+ })
+@@ -34,16 +36,14 @@ export default forwardRef<CurrentTagBtnType, CurrentTagBtnProps>(({ onShowList }
+ 
+ const styles = createStyle({
+   btn: {
+-    paddingLeft: 15,
+-    paddingRight: 15,
++    height: 30,
++    borderRadius: 999,
++    paddingLeft: 10,
++    paddingRight: 10,
++    marginRight: 6,
+     justifyContent: 'center',
+   },
+   sourceMenu: {
+-    // height: 38,
+-    // lineHeight: 38,
+     textAlign: 'center',
+-    // minWidth: 70,
+-    // paddingTop: 10,
+-    // paddingBottom: 10,
+   },
+ })
+diff --git a/src/screens/Home/Views/SongList/HeaderBar/index.tsx b/src/screens/Home/Views/SongList/HeaderBar/index.tsx
+index 0561e0c..6594b8c 100644
+--- a/src/screens/Home/Views/SongList/HeaderBar/index.tsx
++++ b/src/screens/Home/Views/SongList/HeaderBar/index.tsx
+@@ -58,10 +58,12 @@ export default forwardRef<HeaderBarType, HeaderBarProps>(({ onSortChange, onTagC
+ const styles = createStyle({
+   searchBar: {
+     flexDirection: 'row',
+-    height: 38,
++    height: 40,
++    alignItems: 'center',
++    paddingHorizontal: 12,
++    paddingTop: 2,
++    paddingBottom: 2,
+     zIndex: 2,
+-    // paddingRight: 10,
+-    // borderBottomWidth: BorderWidths.normal,
+   },
+   selector: {
+     width: 86,
+diff --git a/src/screens/Home/Views/SongList/components/Songlist/List.tsx b/src/screens/Home/Views/SongList/components/Songlist/List.tsx
+index 926452b..f19677b 100644
+--- a/src/screens/Home/Views/SongList/components/Songlist/List.tsx
++++ b/src/screens/Home/Views/SongList/components/Songlist/List.tsx
+@@ -207,8 +207,9 @@ const styles = createStyle({
+   },
+   list: {
+     flex: 1,
+-    paddingLeft: 10,
+-    paddingRight: 10,
++    paddingLeft: 12,
++    paddingRight: 12,
++    paddingTop: 2,
+   },
+   footer: {
+     textAlign: 'center',
+diff --git a/src/screens/Home/Views/SongList/components/Songlist/ListItem.tsx b/src/screens/Home/Views/SongList/components/Songlist/ListItem.tsx
+index 156233e..cc4450a 100644
+--- a/src/screens/Home/Views/SongList/components/Songlist/ListItem.tsx
++++ b/src/screens/Home/Views/SongList/components/Songlist/ListItem.tsx
+@@ -27,12 +27,14 @@ export default memo(({ item, index, width, showSource, onPress }: {
+           <View style={{ ...styles.listItem, width: itemWidth }}>
+             <View style={{ ...styles.listItemImg, backgroundColor: theme['c-content-background'] }}>
+               <TouchableOpacity activeOpacity={0.5} onPress={handlePress}>
+-                <Image url={item.img} nativeID={`${NAV_SHEAR_NATIVE_IDS.songlistDetail_pic}_from_${item.id}`} style={{ width: itemWidth, height: itemWidth, borderRadius: 4 }} />
++                <Image url={item.img} nativeID={`${NAV_SHEAR_NATIVE_IDS.songlistDetail_pic}_from_${item.id}`} style={{ width: itemWidth, height: itemWidth, borderRadius: 12 }} />
+                 { showSource ? <Text style={styles.sourceLabel} size={9} color="#fff" >{item.source}</Text> : null }
+               </TouchableOpacity>
+             </View>
+             <TouchableOpacity activeOpacity={0.5} onPress={handlePress}>
+-              <Text style={styles.listItemTitle} numberOfLines={ 2 }>{item.name}</Text>
++              <Text style={styles.listItemTitle} color={theme['c-font']} numberOfLines={2}>{item.name}</Text>
++              {item.author ? <Text style={styles.listItemAuthor} size={10} color={theme['c-font-label']} numberOfLines={1}>{item.author}</Text> : null}
++              {item.play_count ? <Text size={9} color={theme['c-font-label']}>{item.play_count}</Text> : null}
+             </TouchableOpacity>
+             {/* <Text>{JSON.stringify(item)}</Text> */}
+           </View>
+@@ -43,26 +45,24 @@ export default memo(({ item, index, width, showSource, onPress }: {
+ 
+ const styles = createStyle({
+   listItem: {
+-    // width: 90,
+-    margin: 10,
++    margin: 6,
+   },
+   listItemImg: {
+-    // backgroundColor: '#eee',
+-    borderRadius: 4,
+-    marginBottom: 5,
++    borderRadius: 12,
++    marginBottom: 7,
+     overflow: 'hidden',
+     ...Platform.select({
+       ios: {
+         shadowColor: '#000',
+         shadowOffset: {
+           width: 0,
+-          height: 1,
++          height: 2,
+         },
+-        shadowOpacity: 0.20,
+-        shadowRadius: 1.41,
++        shadowOpacity: 0.16,
++        shadowRadius: 6,
+       },
+       android: {
+-        elevation: 2,
++        elevation: 3,
+       },
+     }),
+   },
+@@ -78,7 +78,11 @@ const styles = createStyle({
+   },
+   listItemTitle: {
+     fontSize: 12,
+-    // overflow: 'hidden',
+-    marginBottom: 5,
++    fontWeight: '600',
++    lineHeight: 16,
++    marginBottom: 3,
++  },
++  listItemAuthor: {
++    marginBottom: 1,
+   },
+ })
+diff --git a/src/store/common/state.ts b/src/store/common/state.ts
+index b6893b3..90d9a8e 100644
+--- a/src/store/common/state.ts
++++ b/src/store/common/state.ts
+@@ -17,8 +17,8 @@ const state: InitState = {
+   fontSize: global.lx.fontSize,
+   statusbarHeight: 0,
+   componentIds: {},
+-  navActiveId: 'nav_search',
+-  lastNavActiveId: 'nav_search',
++  navActiveId: 'nav_songlist',
++  lastNavActiveId: 'nav_songlist',
+   sourceNames: initData as InitState['sourceNames'],
+   bgPic: null,
+ }
