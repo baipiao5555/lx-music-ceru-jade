@@ -2,13 +2,13 @@
 
 基于 [lyswhut/lx-music-desktop](https://github.com/lyswhut/lx-music-desktop) **v2.12.6** 与 [lyswhut/lx-music-mobile](https://github.com/lyswhut/lx-music-mobile) **v1.9.1** 的非官方 UI 改版。
 
-**当前版本：`v2.12.6-ceru.3`（青瓷改版 rev.3）**
+**当前版本：`v2.12.6-ceru.4`（青瓷改版 rev.4）**
 
 ![主界面](screenshots/主界面.png)
 
 ## 下载
 
-**Release：** https://github.com/baipiao5555/lx-music-ceru-jade/releases/tag/v2.12.6-ceru.3
+**Release：** https://github.com/baipiao5555/lx-music-ceru-jade/releases/tag/v2.12.6-ceru.4
 
 | 平台 | 文件 | 说明 |
 | --- | --- | --- |
@@ -18,11 +18,19 @@
 
 SHA-256：
 
-- Windows：`f7135c3c006ab26a2d199d7011c4b372d51b6a062939f381bd65c4667fbf5be9`
+- Windows：`15de7bb84cc23cfd14c187353c1ca2fcd0b2dd28e01e303e9c50607b9ea01e3b`
 - Android universal：`5d4b80904d45b7d65984009fe09b1798c7f812c8fb8366ed6cc7889c9a037dd2`
 - Android arm64：`55429d4ecc23d0ecedd54131bf22ccb2ae01744f4e414907766d056d0688052a`
 
 ## 版本记录
+
+### rev.4（`v2.12.6-ceru.4`）
+
+- 桌面端对齐在线预览：Ceru Music 品牌、发现 / 本地 / 最近导航、我的歌单圆点、底部迷你封面卡片、热门歌单 Top36。
+- 播放条改为悬浮圆角卡片，加入青绿圆形播放按钮。
+- 启动固定进入「发现」页，不再恢复上次的搜索页。
+- 重新打包 Windows 安装包，SHA-256 已更新。
+- 移动端 APK 与 rev.3 相同。
 
 ### rev.3（`v2.12.6-ceru.3`）
 
@@ -48,11 +56,11 @@ SHA-256：
 ### 桌面端（完整 UI 改版）
 
 - 新增「青瓷」主题：青绿主色、浅色玻璃主面板、柔和渐变背景，并设为默认主题。
-- 启动默认进入「歌单」青瓷首页，首次启动不再弹出版本更新日志。
-- 侧栏：品牌、图标 + 文字导航、我的歌单、底部主题卡片。
-- 首页：`发现音乐` Hero、胶囊筛选、四列歌单卡片、悬停上浮。
+- 启动固定进入「发现」页（原歌单页），不再恢复上次搜索页；首次启动不弹出版本更新日志。
+- 侧栏：Ceru Music 品牌（青瓷 · CERU JADE）、发现 / 本地 / 最近 / 搜索 / 排行榜 / 设置导航、我的歌单圆点、底部迷你封面卡片。
+- 首页：`发现音乐` Hero、胶囊筛选、热门歌单 Top36、四列歌单卡片、悬停上浮。
 - 顶栏搜索框、来源/类型 tab 胶囊化。
-- 悬浮玻璃播放条。
+- 悬浮圆角播放条，青绿圆形播放按钮。
 - 播放详情页：黑胶唱片 + 唱臂 + 玻璃歌词面板样式。
 - 主题名称的中/繁/英/韩翻译。
 
@@ -76,7 +84,7 @@ SHA-256：
 
 在线预览（GitHub Pages）：https://baipiao5555.github.io/lx-music-ceru-jade/design/preview.html
 
-> 说明：设计预览是概念稿；实际 APK rev.3 已落地第一版抽屉式移动 UI，底部导航等概念细节尚未全部实现。
+> 说明：桌面端 rev.4 已按概念稿落地（Ceru Music 品牌、发现/本地/最近、Top36、悬浮播放条）；移动端 rev.3 为第一版抽屉式 UI，底部导航 / 黑胶播放页尚未全部实现。
 
 ## 为什么是补丁仓库
 
