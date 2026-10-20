@@ -18,7 +18,7 @@
 
 SHA-256：
 
-- Windows：`2b8876063e46687d679685ab09dec33fd1667ac531bf9ab3be03a887926fb3f9`
+- Windows：`3d016a1ce9cae4866797e2be12839a2e6fc722cba69dc14142bed7443db8aa20`
 - Android universal：`4e3fb72a45c6503a945efe3f75fd0b689e0ab84e37fedb8724c90bf38fbf1b16`
 - Android arm64：`1695b1fef12bdfbdc038ec9b4501d5b66a45d02cbc31090da671e500fe283b3e`
 
@@ -27,7 +27,7 @@ SHA-256：
 ### rev.9（`v2.12.6-ceru.9`）
 
 - 侧栏移除「Ceru Music / 青瓷 · CERU JADE」品牌文字，只保留图标。
-- 侧栏新增「收藏」，放在「本地」上方。
+- 侧栏新增「收藏」，放在「本地」上方，并修正收藏图标尺寸。
 - 「最近」改为真实播放历史：最新在前，最多 200 首，本地持久化。
 - 「发现」页恢复「导入歌单」，支持粘贴完整分享文案。
 - 修复播放栏封面尺寸失控遮挡页面的问题。
