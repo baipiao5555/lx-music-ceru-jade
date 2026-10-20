@@ -19,8 +19,8 @@
 SHA-256：
 
 - Windows：`0c778c0a8fc6cd48f9a9b0d3e9694d87ad48d18593c7a2f7602f609de998a58a`
-- Android universal：`6a10192f50542c7cc3d51a518ad3eb10fe3fcc66d9cd106ccdd0eeb5cc53f1bd`
-- Android arm64：`8003f5bfb612f2a831618f3864a44ad698c0876e657cd790d97b7b83842c5b87`
+- Android universal：`53dd747945e51c8e4d46e05273c749cae87eb7bae807e13054dbf3e4b8736170`
+- Android arm64：`8a0ec9e068a3fed0e497fd569ae8fc8eebce5b8599939f0fc3f4419d43252451`
 
 ## 版本记录
 
@@ -33,6 +33,7 @@ SHA-256：
 - 播放详情页改为深色渐变 + 玻璃歌词面板。
 - 移动端同步切换为暗色主题（青瓷夜色），底部导航选中项加绿色胶囊高亮，页面背景统一为深色。
 - 构建标记更新为 `Ceru 构建 9 · 青瓷夜色 UI`。
+- 安全收拾：删除未使用的 SHA-1 原生桥、去掉发布脚本里的动态 require、同步用 RSA 密钥生成提升到 3072 位；MD5 与 RSA 仍保留，因为它们是自定义音源签名和手机↔电脑同步的协议要求。
 
 ### rev.11（`v2.12.6-ceru.11` + 移动端 `v1.9.1-ceru8`）
 
