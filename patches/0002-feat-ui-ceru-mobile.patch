@@ -31,6 +31,236 @@ index 40a9a4a..00a62f1 100644
 -  "displayName": "洛雪音乐助手"
 +  "displayName": "Ceru Music"
  }
+diff --git a/src/components/PlaylistImportModal/index.tsx b/src/components/PlaylistImportModal/index.tsx
+new file mode 100644
+index 0000000..abc9921
+--- /dev/null
++++ b/src/components/PlaylistImportModal/index.tsx
+@@ -0,0 +1,224 @@
++import { forwardRef, useImperativeHandle, useRef, useState } from 'react'
++import { ScrollView, TextInput, View } from 'react-native'
++
++import Popup, { type PopupType } from '@/components/common/Popup'
++import Button from '@/components/common/Button'
++import Text from '@/components/common/Text'
++import Loading from '@/components/common/Loading'
++import { useTheme } from '@/store/theme/hook'
++import { createStyle, toast } from '@/utils/tools'
++import { useI18n } from '@/lang'
++import { setActiveList } from '@/core/list'
++import {
++  PLAYLIST_IMPORT_SOURCES,
++  importPlaylist,
++  type PlaylistImportSource,
++} from '@/core/playlistImport'
++
++export interface PlaylistImportModalType {
++  show: () => void
++}
++
++export interface PlaylistImportModalProps {
++  onImported?: (listId: string) => void
++}
++
++export default forwardRef<PlaylistImportModalType, PlaylistImportModalProps>(({ onImported }, ref) => {
++  const t = useI18n()
++  const theme = useTheme()
++  const popupRef = useRef<PopupType>(null)
++  const [visible, setVisible] = useState(false)
++  const [source, setSource] = useState<PlaylistImportSource>('wy')
++  const [text, setText] = useState('')
++  const [importing, setImporting] = useState(false)
++  const [error, setError] = useState('')
++
++  useImperativeHandle(ref, () => ({
++    show() {
++      setError('')
++      if (visible) popupRef.current?.setVisible(true)
++      else {
++        setVisible(true)
++        requestAnimationFrame(() => {
++          popupRef.current?.setVisible(true)
++        })
++      }
++    },
++  }))
++
++  const selectedSource = PLAYLIST_IMPORT_SOURCES.find(item => item.id == source)!
++
++  const handleImport = async() => {
++    if (importing) return
++    const value = text.trim()
++    if (!value) {
++      setError(t('playlist_import_error_invalid'))
++      return
++    }
++    setImporting(true)
++    setError('')
++    try {
++      const result = await importPlaylist(source, value)
++      toast(t('playlist_import_success', { name: result.name, count: result.count }), 'long')
++      setText('')
++      popupRef.current?.setVisible(false)
++      setActiveList(result.listId)
++      onImported?.(result.listId)
++    } catch (err: any) {
++      setError(err?.message ?? t('playlist_import_error_failed'))
++    } finally {
++      setImporting(false)
++    }
++  }
++
++  return (
++    visible
++      ? <Popup
++          ref={popupRef}
++          title={t('playlist_import_title')}
++          position="bottom"
++          keyHide={!importing}
++          bgHide={!importing}
++          onHide={() => { if (!importing) setError('') }}
++        >
++          <ScrollView
++            keyboardShouldPersistTaps="handled"
++            style={{ maxHeight: '100%' }}
++            contentContainerStyle={styles.container}
++          >
++            <Text size={12} color={theme['c-font-label']} style={styles.desc}>{t('playlist_import_desc')}</Text>
++            <View style={styles.chips}>
++              {PLAYLIST_IMPORT_SOURCES.map(item => {
++                const active = item.id == source
++                return (
++                  <Button
++                    key={item.id}
++                    style={styles.chip}
++                    onPress={() => { setSource(item.id); setError('') }}
++                  >
++                    <View style={[styles.chipInner, {
++                      backgroundColor: active ? theme['c-primary'] : theme['c-primary-alpha-100'],
++                      borderColor: active ? theme['c-primary'] : theme['c-primary-alpha-200'],
++                    }]}>
++                      <Text size={12} color={active ? '#fff' : theme['c-primary-font']}>{item.name}</Text>
++                    </View>
++                  </Button>
++                )
++              })}
++            </View>
++            <TextInput
++              value={text}
++              onChangeText={text => { setText(text); if (error) setError('') }}
++              placeholder={t('playlist_import_placeholder')}
++              placeholderTextColor={theme['c-350']}
++              multiline
++              textAlignVertical="top"
++              style={{
++                ...styles.input,
++                backgroundColor: theme['c-primary-input-background'],
++                color: theme['c-font'],
++              }}
++            />
++            <Button style={styles.example} onPress={() => setText(selectedSource.example)}>
++              <Text size={11} color={theme['c-primary-font']} numberOfLines={1}>
++                {t('playlist_import_example') + '：' + selectedSource.example}
++              </Text>
++            </Button>
++            {error
++              ? <Text size={12} color="#e5484d" style={styles.error}>{error}</Text>
++              : null
++            }
++            <View style={styles.actions}>
++              <Button
++                style={[styles.actionBtn, { backgroundColor: theme['c-primary-alpha-100'] }]}
++                onPress={() => popupRef.current?.setVisible(false)}
++                disabled={importing}
++              >
++                <Text size={13} color={theme['c-primary-font']}>{t('playlist_import_cancel')}</Text>
++              </Button>
++              <Button
++                style={[styles.actionBtn, { backgroundColor: theme['c-primary'], marginLeft: 10 }]}
++                onPress={() => { void handleImport() }}
++                disabled={importing}
++              >
++                <View style={styles.confirmInner}>
++                  {importing
++                    ? <>
++                        <Loading size={12} color="#fff" />
++                        <Text size={13} color="#fff" style={styles.confirmText}>{t('playlist_import_importing')}</Text>
++                      </>
++                    : <Text size={13} color="#fff">{t('playlist_import_start')}</Text>
++                  }
++                </View>
++              </Button>
++            </View>
++          </ScrollView>
++        </Popup>
++      : null
++  )
++})
++
++const styles = createStyle({
++  container: {
++    paddingLeft: 14,
++    paddingRight: 14,
++    paddingBottom: 18,
++  },
++  desc: {
++    lineHeight: 18,
++    marginBottom: 12,
++  },
++  chips: {
++    flexDirection: 'row',
++    flexWrap: 'wrap',
++    marginBottom: 10,
++  },
++  chip: {
++    marginRight: 8,
++    marginBottom: 8,
++  },
++  chipInner: {
++    paddingLeft: 12,
++    paddingRight: 12,
++    paddingTop: 6,
++    paddingBottom: 6,
++    borderRadius: 999,
++    borderWidth: 1,
++  },
++  input: {
++    minHeight: 92,
++    borderRadius: 10,
++    paddingLeft: 12,
++    paddingRight: 12,
++    paddingTop: 10,
++    paddingBottom: 10,
++    fontSize: 13,
++    lineHeight: 19,
++  },
++  example: {
++    marginTop: 8,
++    marginBottom: 4,
++  },
++  error: {
++    marginTop: 8,
++    lineHeight: 18,
++  },
++  actions: {
++    flexDirection: 'row',
++    marginTop: 14,
++  },
++  actionBtn: {
++    flex: 1,
++    height: 42,
++    borderRadius: 10,
++    alignItems: 'center',
++    justifyContent: 'center',
++  },
++  confirmInner: {
++    flexDirection: 'row',
++    alignItems: 'center',
++  },
++  confirmText: {
++    marginLeft: 6,
++  },
++})
 diff --git a/src/components/common/Image.tsx b/src/components/common/Image.tsx
 index 9d94af2..8ea4e77 100644
 --- a/src/components/common/Image.tsx
@@ -265,8 +495,158 @@ index 238de11..33eb368 100644
    defaultSetting['desktopLyric.style.lyricPlayedColor'] = 'rgba(255, 18, 34, 1)'
  }
  
+diff --git a/src/core/playlistImport.ts b/src/core/playlistImport.ts
+new file mode 100644
+index 0000000..e53e7a2
+--- /dev/null
++++ b/src/core/playlistImport.ts
+@@ -0,0 +1,126 @@
++import { getListDetail, getListDetailAll } from '@/core/songlist'
++import { createList } from '@/core/list'
++import { deduplicationList } from '@/utils'
++
++/**
++ * 歌单导入：把其他平台的歌单链接 / 分享文案 / 纯 ID 解析成本地歌单
++ *
++ * 解析拿到的歌曲是 LX 标准的 MusicInfoOnline（source 为对应平台），
++ * 播放时仍然走用户自定义源，与在线列表里的歌曲完全一致。
++ */
++
++export type PlaylistImportSource = 'wy' | 'tx' | 'kg' | 'kw' | 'mg'
++
++export interface PlaylistImportSourceInfo {
++  id: PlaylistImportSource
++  name: string
++  example: string
++}
++
++export const PLAYLIST_IMPORT_SOURCES: PlaylistImportSourceInfo[] = [
++  {
++    id: 'wy',
++    name: '网易云音乐',
++    example: 'https://music.163.com/playlist?id=3778678',
++  },
++  {
++    id: 'tx',
++    name: 'QQ 音乐',
++    example: 'https://i.y.qq.com/n2/m/share/details/taoge.html?id=7011264340',
++  },
++  {
++    id: 'kg',
++    name: '酷狗音乐',
++    example: 'https://m.kugou.com/pllist/info/3102174',
++  },
++  {
++    id: 'kw',
++    name: '酷我音乐',
++    example: 'https://m.kuwo.cn/newh5app/playlist_detail/3720681210',
++  },
++  {
++    id: 'mg',
++    name: '咪咕音乐',
++    example: 'https://music.migu.cn/v5/#/playlist?playlistId=221573417',
++  },
++]
++
++const ID_RULES: Record<PlaylistImportSource, RegExp[]> = {
++  wy: [/[?&#]id=(\d+)/i, /playlist\/(\d+)/i, /^\d+$/],
++  tx: [/[?&](?:disstid|id)=(\d+)/i, /playlist\/(\d+)/i, /^\d+$/],
++  kg: [
++    /pllist\/info\/(\d+)/i,
++    /special\/single\/(\d+)/i,
++    /[?&](?:specialid|specialId)=(\d+)/i,
++    /^\d+$/,
++  ],
++  kw: [/playlist_detail\/(\d+)/i, /[?&]pid=(\d+)/i, /playlist\/(\d+)/i, /^\d+$/],
++  mg: [/[?&](?:playlistId|id)=(\d+)/i, /playlist\/(\d+)/i, /^\d+$/],
++}
++
++/**
++ * 从链接、整段分享文案或纯 ID 中提取歌单 ID
++ */
++export const extractPlaylistId = (source: PlaylistImportSource, text: string): string => {
++  const raw = text.trim()
++  if (!raw) return ''
++  for (const rule of ID_RULES[source]) {
++    const matched = raw.match(rule)
++    if (matched) return matched[1] ?? matched[0]
++  }
++  // 分享文案里没有能识别的链接时，退化为取最长的一段数字
++  const digits = raw.match(/\d{6,}/)
++  if (digits) return digits[0]
++  // 短链（如 163cn.tv）交给各平台 SDK 自己跟随跳转解析
++  const link = raw.match(/https?:\/\/[^\s，。；、）)】\]"']+/i)
++  return link ? link[0] : ''
++}
++
++// 酷狗 SDK 只有 id_ 前缀才会按 specialid 取歌单，纯数字会被当成酷狗码
++const toSdkId = (source: PlaylistImportSource, id: string) => {
++  return source == 'kg' && /^\d+$/.test(id) ? `id_${id}` : id
++}
++
++export interface PlaylistImportResult {
++  listId: string
++  name: string
++  count: number
++}
++
++/**
++ * 解析歌单并保存为本地列表
++ */
++export const importPlaylist = async(source: PlaylistImportSource, text: string): Promise<PlaylistImportResult> => {
++  const id = extractPlaylistId(source, text)
++  if (!id) throw new Error(global.i18n.t('playlist_import_error_invalid'))
++
++  const sdkId = toSdkId(source, id)
++  let detail
++  try {
++    detail = await getListDetail(sdkId, source, 1, true)
++  } catch (err) {
++    console.warn('import playlist failed', err)
++    throw new Error(global.i18n.t('playlist_import_error_failed'))
++  }
++
++  let list = detail.list
++  if (!list.length) throw new Error(global.i18n.t('playlist_import_error_empty'))
++  if (detail.total > list.length) {
++    try {
++      // 第一页已经缓存过，这里只补拉剩下的分页
++      const all = await getListDetailAll(source, sdkId, false)
++      if (all.length) list = all
++    } catch (err) {
++      console.warn('load rest of playlist failed', err)
++    }
++  }
++  list = deduplicationList(list)
++
++  const name = (detail.info?.name ?? '').trim() ||
++    global.i18n.t('playlist_import_default_name', { id })
++  const listId = `userlist_${Date.now()}`
++  // 存 SDK 能直接再次解析的形式，列表“同步”时才能正常刷新
++  await createList({ id: listId, name, list, source, sourceListId: sdkId })
++
++  return { listId, name, count: list.length }
++}
+diff --git a/src/event/appEvent.ts b/src/event/appEvent.ts
+index af3ce3d..105ea83 100644
+--- a/src/event/appEvent.ts
++++ b/src/event/appEvent.ts
+@@ -201,6 +201,13 @@ export class AppEvent extends Event {
+   selectSyncMode(mode: LX.Sync.ModeType) {
+     this.emit('selectSyncMode', mode)
+   }
++
++  /**
++   * 打开歌单导入弹窗
++   */
++  showPlaylistImport() {
++    this.emit('showPlaylistImport')
++  }
+ }
+ 
+ 
 diff --git a/src/lang/en-us.json b/src/lang/en-us.json
-index 3d9be61..20d1cda 100644
+index 3d9be61..38f36a8 100644
 --- a/src/lang/en-us.json
 +++ b/src/lang/en-us.json
 @@ -164,10 +164,10 @@
@@ -283,7 +663,23 @@ index 3d9be61..20d1cda 100644
    "nav_top": "Charts",
    "never_show": "Never show again",
    "no_item": "The list is empty...",
-@@ -216,6 +216,7 @@
+@@ -212,10 +212,23 @@
+   "player__loading": "Music loading...",
+   "player__refresh_url": "Music URL expired, refreshing...",
+   "player_cache_migrating": "Song cache is being migrated, please wait ⌛️",
++  "playlist_import_cancel": "Cancel",
++  "playlist_import_default_name": "Playlist {id}",
++  "playlist_import_desc": "Paste a playlist link, share text or playlist ID from another platform, then save it as a local playlist.",
++  "playlist_import_error_empty": "No songs found. Check the link or the playlist permissions.",
++  "playlist_import_error_failed": "Failed to parse the playlist, please try again later",
++  "playlist_import_error_invalid": "No valid playlist link or ID detected",
++  "playlist_import_example": "Example",
++  "playlist_import_importing": "Parsing...",
++  "playlist_import_placeholder": "Playlist link / share text / playlist ID",
++  "playlist_import_start": "Import",
++  "playlist_import_success": "Imported \"{name}\" ({count} songs)",
++  "playlist_import_title": "Import playlist",
+   "quality_high_quality": "HQ",
    "quality_lossless": "SQ",
    "quality_lossless_24bit": "24bit",
    "search__welcome": "Search what I want~~😉",
@@ -291,7 +687,7 @@ index 3d9be61..20d1cda 100644
    "search_history_search": "Search History",
    "search_hot_search": "Top Searches",
    "search_type_music": "Song",
-@@ -231,7 +232,7 @@
+@@ -231,7 +244,7 @@
    "setting__other_other_source_clear_btn": "Clear Song Cache of Changed Source",
    "setting__other_other_source_label": "Number of songs information that changed source: ",
    "setting__other_resource_cache": "Resource Cache Management",
@@ -300,7 +696,7 @@ index 3d9be61..20d1cda 100644
    "setting_backup": "Backup & Restore",
    "setting_backup_all": "All data (\"List\" data and \"Setting\" data)",
    "setting_backup_all_export": "Export",
-@@ -270,7 +271,7 @@
+@@ -270,7 +283,7 @@
    "setting_basic_font_size_130": "Oversize",
    "setting_basic_font_size_80": "Smaller",
    "setting_basic_font_size_90": "Small",
@@ -309,7 +705,7 @@ index 3d9be61..20d1cda 100644
    "setting_basic_home_page_scroll": "Allow horizontal scrolling on vertical homepage",
    "setting_basic_lang": "Language",
    "setting_basic_share_type": "Share",
-@@ -402,7 +403,7 @@
+@@ -402,7 +415,7 @@
    "songlist_tag_default": "Default",
    "songlist_tag_hot": "Top",
    "songlist_tags": "Playlist Category",
@@ -319,7 +715,7 @@ index 3d9be61..20d1cda 100644
    "source_alias_kg": "KG Music",
    "source_alias_kw": "KW Music",
 diff --git a/src/lang/zh-cn.json b/src/lang/zh-cn.json
-index 683d8bf..216262e 100644
+index 683d8bf..099f62d 100644
 --- a/src/lang/zh-cn.json
 +++ b/src/lang/zh-cn.json
 @@ -164,10 +164,10 @@
@@ -336,7 +732,23 @@ index 683d8bf..216262e 100644
    "nav_top": "排行榜",
    "never_show": "不再提醒",
    "no_item": "列表竟然是空的...",
-@@ -216,6 +216,7 @@
+@@ -212,10 +212,23 @@
+   "player__loading": "音乐加载中...",
+   "player__refresh_url": "URL 过期，正在刷新 URL...",
+   "player_cache_migrating": "歌曲缓存迁移中，请稍等 ⌛️",
++  "playlist_import_cancel": "取消",
++  "playlist_import_default_name": "歌单 {id}",
++  "playlist_import_desc": "粘贴其他平台的歌单链接、整段分享文案或歌单 ID，解析后保存为本地歌单。",
++  "playlist_import_error_empty": "没有解析到歌曲，请检查链接或歌单权限",
++  "playlist_import_error_failed": "解析失败，请稍后重试",
++  "playlist_import_error_invalid": "没有识别到有效的歌单链接或 ID",
++  "playlist_import_example": "示例",
++  "playlist_import_importing": "正在解析...",
++  "playlist_import_placeholder": "粘贴歌单链接 / 分享文案 / 歌单 ID",
++  "playlist_import_start": "开始导入",
++  "playlist_import_success": "已导入「{name}」，共 {count} 首",
++  "playlist_import_title": "导入歌单",
+   "quality_high_quality": "HQ",
    "quality_lossless": "SQ",
    "quality_lossless_24bit": "24bit",
    "search__welcome": "搜我所想~~😉",
@@ -344,7 +756,7 @@ index 683d8bf..216262e 100644
    "search_history_search": "历史搜索",
    "search_hot_search": "热门搜索",
    "search_type_music": "歌曲",
-@@ -231,7 +232,7 @@
+@@ -231,7 +244,7 @@
    "setting__other_other_source_clear_btn": "清理换源歌曲缓存",
    "setting__other_other_source_label": "换源歌曲信息数量：",
    "setting__other_resource_cache": "资源缓存管理（包括歌曲、图片缓存）",
@@ -353,7 +765,7 @@ index 683d8bf..216262e 100644
    "setting_backup": "备份与恢复",
    "setting_backup_all": "所有数据（列表数据与设置数据）",
    "setting_backup_all_export": "导出",
-@@ -270,7 +271,7 @@
+@@ -270,7 +283,7 @@
    "setting_basic_font_size_130": "非常大",
    "setting_basic_font_size_80": "更小",
    "setting_basic_font_size_90": "小",
@@ -362,7 +774,7 @@ index 683d8bf..216262e 100644
    "setting_basic_home_page_scroll": "启用竖屏首页横向滚动",
    "setting_basic_lang": "语言",
    "setting_basic_share_type": "分享方式",
-@@ -402,7 +403,7 @@
+@@ -402,7 +415,7 @@
    "songlist_tag_default": "默认",
    "songlist_tag_hot": "热门",
    "songlist_tags": "歌单类别",
@@ -372,7 +784,7 @@ index 683d8bf..216262e 100644
    "source_alias_kg": "小枸音乐",
    "source_alias_kw": "小蜗音乐",
 diff --git a/src/lang/zh-tw.json b/src/lang/zh-tw.json
-index 2bec8f5..c327acb 100644
+index 2bec8f5..1ffadc3 100644
 --- a/src/lang/zh-tw.json
 +++ b/src/lang/zh-tw.json
 @@ -164,10 +164,10 @@
@@ -389,7 +801,23 @@ index 2bec8f5..c327acb 100644
    "nav_top": "排行榜",
    "never_show": "不再提醒",
    "no_item": "清單竟然是空的...",
-@@ -216,6 +216,7 @@
+@@ -212,10 +212,23 @@
+   "player__loading": "音樂載入中...",
+   "player__refresh_url": "URL 過期，正在重新整理 URL...",
+   "player_cache_migrating": "歌曲快取遷移中，請稍等 ⌛️",
++  "playlist_import_cancel": "取消",
++  "playlist_import_default_name": "歌單 {id}",
++  "playlist_import_desc": "貼上其他平台的歌單連結、整段分享文案或歌單 ID，解析後儲存為本機歌單。",
++  "playlist_import_error_empty": "沒有解析到歌曲，請檢查連結或歌單權限",
++  "playlist_import_error_failed": "解析失敗，請稍後重試",
++  "playlist_import_error_invalid": "沒有識別到有效的歌單連結或 ID",
++  "playlist_import_example": "範例",
++  "playlist_import_importing": "正在解析...",
++  "playlist_import_placeholder": "貼上歌單連結 / 分享文案 / 歌單 ID",
++  "playlist_import_start": "開始匯入",
++  "playlist_import_success": "已匯入「{name}」，共 {count} 首",
++  "playlist_import_title": "匯入歌單",
+   "quality_high_quality": "HQ",
    "quality_lossless": "SQ",
    "quality_lossless_24bit": "24bit",
    "search__welcome": "搜我所想~~😉",
@@ -397,7 +825,7 @@ index 2bec8f5..c327acb 100644
    "search_history_search": "歷史搜尋",
    "search_hot_search": "熱門搜尋",
    "search_type_music": "歌曲",
-@@ -231,7 +232,7 @@
+@@ -231,7 +244,7 @@
    "setting__other_other_source_clear_btn": "清理變更來源歌曲快取",
    "setting__other_other_source_label": "變更來源歌曲資訊數量：",
    "setting__other_resource_cache": "資源快取管理（包括歌曲、圖片快取）",
@@ -406,7 +834,7 @@ index 2bec8f5..c327acb 100644
    "setting_backup": "備份與復原",
    "setting_backup_all": "所有資料（清單資料與設定資料）",
    "setting_backup_all_export": "匯出",
-@@ -270,7 +271,7 @@
+@@ -270,7 +283,7 @@
    "setting_basic_font_size_130": "非常大",
    "setting_basic_font_size_80": "更小",
    "setting_basic_font_size_90": "小",
@@ -415,7 +843,7 @@ index 2bec8f5..c327acb 100644
    "setting_basic_home_page_scroll": "啟用豎屏首頁橫向滾動",
    "setting_basic_lang": "語言",
    "setting_basic_share_type": "分享方式",
-@@ -402,7 +403,7 @@
+@@ -402,7 +415,7 @@
    "songlist_tag_default": "預設",
    "songlist_tag_hot": "熱門",
    "songlist_tags": "歌單類別",
@@ -424,6 +852,74 @@ index 2bec8f5..c327acb 100644
    "source_alias_bd": "小杜音樂",
    "source_alias_kg": "小枸音樂",
    "source_alias_kw": "小蝸音樂",
+diff --git a/src/screens/Home/Vertical/BottomNav.tsx b/src/screens/Home/Vertical/BottomNav.tsx
+new file mode 100644
+index 0000000..6285141
+--- /dev/null
++++ b/src/screens/Home/Vertical/BottomNav.tsx
+@@ -0,0 +1,62 @@
++import { memo } from 'react'
++import { View, TouchableOpacity } from 'react-native'
++
++import { Icon } from '@/components/common/Icon'
++import Text from '@/components/common/Text'
++import { useTheme } from '@/store/theme/hook'
++import { useNavActiveId } from '@/store/common/hook'
++import { setNavActiveId } from '@/core/common'
++import { useI18n } from '@/lang'
++import { createStyle } from '@/utils/tools'
++
++const TABS = [
++  { id: 'nav_songlist', icon: 'album' },
++  { id: 'nav_search', icon: 'search-2' },
++  { id: 'nav_love', icon: 'love' },
++  { id: 'nav_setting', icon: 'setting' },
++] as const
++
++export default memo(() => {
++  const theme = useTheme()
++  const activeId = useNavActiveId()
++  const t = useI18n()
++
++  return (
++    <View style={[styles.bar, { backgroundColor: theme['c-content-background'], borderTopColor: theme['c-border-background'] }]}>
++      {TABS.map(tab => {
++        const active = activeId == tab.id
++        return (
++          <TouchableOpacity
++            key={tab.id}
++            style={styles.item}
++            activeOpacity={0.7}
++            onPress={() => setNavActiveId(tab.id)}
++          >
++            <Icon name={tab.icon} size={21} color={active ? theme['c-primary'] : theme['c-font-label']} />
++            <Text style={styles.label} size={9} color={active ? theme['c-primary'] : theme['c-font-label']}>{t(tab.id)}</Text>
++          </TouchableOpacity>
++        )
++      })}
++    </View>
++  )
++})
++
++const styles = createStyle({
++  bar: {
++    height: 56,
++    paddingTop: 5,
++    paddingBottom: 4,
++    paddingHorizontal: 8,
++    borderTopWidth: 1,
++    flexDirection: 'row',
++    alignItems: 'stretch',
++  },
++  item: {
++    flex: 1,
++    alignItems: 'center',
++    justifyContent: 'center',
++  },
++  label: {
++    marginTop: 2,
++  },
++})
 diff --git a/src/screens/Home/Vertical/Content.tsx b/src/screens/Home/Vertical/Content.tsx
 index 801bb64..3e0dfb7 100644
 --- a/src/screens/Home/Vertical/Content.tsx
@@ -644,18 +1140,19 @@ index 0c1a2aa..394b15e 100644
  }
  
 diff --git a/src/screens/Home/Vertical/Header.tsx b/src/screens/Home/Vertical/Header.tsx
-index f2a89b4..87ec741 100644
+index f2a89b4..80a7330 100644
 --- a/src/screens/Home/Vertical/Header.tsx
 +++ b/src/screens/Home/Vertical/Header.tsx
-@@ -1,7 +1,4 @@
+@@ -1,7 +1,5 @@
  import { View, TouchableOpacity } from 'react-native'
 -// import Button from '@/components/common/Button'
 -// import { navigations } from '@/navigation'
 -// import { BorderWidths } from '@/theme'
++import { useEffect, useRef } from 'react'
  import { useTheme } from '@/store/theme/hook'
  import { useNavActiveId, useStatusbarHeight } from '@/store/common/hook'
  import { useI18n } from '@/lang'
-@@ -9,149 +6,99 @@ import { createStyle } from '@/utils/tools'
+@@ -9,149 +7,131 @@ import { createStyle } from '@/utils/tools'
  import { Icon } from '@/components/common/Icon'
  import Text from '@/components/common/Text'
  import StatusBar from '@/components/common/StatusBar'
@@ -665,6 +1162,7 @@ index f2a89b4..87ec741 100644
  import { type InitState as CommonState } from '@/store/common/state'
  import SearchTypeSelector from '@/screens/Home/Views/Search/SearchTypeSelector'
 +import { setNavActiveId } from '@/core/common'
++import PlaylistImportModal, { type PlaylistImportModalType } from '@/components/PlaylistImportModal'
  
  const headerComponents: Partial<Record<CommonState['navActiveId'], React.ReactNode>> = {
    nav_search: <SearchTypeSelector />,
@@ -683,7 +1181,9 @@ index f2a89b4..87ec741 100644
    const id = useNavActiveId()
    const t = useI18n()
    const statusBarHeight = useStatusbarHeight()
--
++  const isFind = id == 'nav_songlist'
++  const importModalRef = useRef<PlaylistImportModalType>(null)
+ 
 -  const openMenu = () => {
 -    global.app_event.changeMenuVisible(true)
 -  }
@@ -751,7 +1251,13 @@ index f2a89b4..87ec741 100644
 -
 -const Header = () => {
 -  const drawerLayoutPosition = useSettingValue('common.drawerLayoutPosition')
-+  const isFind = id == 'nav_songlist'
++  useEffect(() => {
++    const showImport = () => importModalRef.current?.show()
++    global.app_event.on('showPlaylistImport', showImport)
++    return () => {
++      global.app_event.off('showPlaylistImport', showImport)
++    }
++  }, [])
  
    return (
      <>
@@ -781,6 +1287,15 @@ index f2a89b4..87ec741 100644
 +            <TouchableOpacity style={styles.iconBtn} onPress={() => setNavActiveId('nav_top')}>
 +              <Icon name="leaderboard" size={18} color={theme['c-font-label']} />
 +            </TouchableOpacity>
++            {(id == 'nav_love' || id == 'nav_songlist') ? (
++              <TouchableOpacity
++                style={[styles.importBtn, { backgroundColor: theme['c-primary-alpha-100'] }]}
++                onPress={() => global.app_event.showPlaylistImport()}
++              >
++                <Icon name="download-2" size={12} color={theme['c-primary-font']} />
++                <Text size={12} color={theme['c-primary-font']} style={styles.importText}>{t('list_import')}</Text>
++              </TouchableOpacity>
++            ) : null}
 +            <TouchableOpacity style={styles.iconBtn} onPress={() => setNavActiveId('nav_search')}>
 +              <Icon name="search-2" size={18} color={theme['c-font-label']} />
 +            </TouchableOpacity>
@@ -790,6 +1305,7 @@ index f2a89b4..87ec741 100644
 +          </>
 +        ) : null}
 +      </View>
++      <PlaylistImportModal ref={importModalRef} />
      </>
    )
  }
@@ -824,31 +1340,27 @@ index f2a89b4..87ec741 100644
      alignItems: 'center',
      justifyContent: 'center',
 -    height: '100%',
--  },
++    marginLeft: 10,
+   },
 -  titleBtn: {
 -    flex: 1,
 -    // backgroundColor: 'rgba(0,0,0,0.1)',
 -    height: '100%',
--    justifyContent: 'center',
-+    marginLeft: 10,
-   },
-   leftTitle: {
--    paddingLeft: 14,
--    paddingRight: 16,
++  leftTitle: {
 +    paddingLeft: 8,
 +    paddingRight: 8,
 +    fontWeight: '600',
 +    letterSpacing: -0.3,
-   },
--  rightTitle: {
--    paddingLeft: 16,
--    paddingRight: 16,
++  },
 +  iconBtn: {
 +    width: 32,
 +    height: 32,
 +    alignItems: 'center',
-+    justifyContent: 'center',
-+  },
+     justifyContent: 'center',
+   },
+-  leftTitle: {
+-    paddingLeft: 14,
+-    paddingRight: 16,
 +  avatar: {
 +    width: 28,
 +    height: 28,
@@ -857,6 +1369,21 @@ index f2a89b4..87ec741 100644
 +    justifyContent: 'center',
 +    marginLeft: 2,
 +    marginRight: 4,
++  },
++  importBtn: {
++    height: 26,
++    flexDirection: 'row',
++    alignItems: 'center',
++    paddingLeft: 9,
++    paddingRight: 9,
++    borderRadius: 13,
++    marginRight: 2,
+   },
+-  rightTitle: {
+-    paddingLeft: 16,
+-    paddingRight: 16,
++  importText: {
++    marginLeft: 3,
    },
  })
  
@@ -878,6 +1405,85 @@ index 1c04f1e..8055145 100644
      </>
    )
  }
+diff --git a/src/screens/Home/Views/Mylist/MusicList/ActiveList.tsx b/src/screens/Home/Views/Mylist/MusicList/ActiveList.tsx
+index 02fabe3..fb91cae 100644
+--- a/src/screens/Home/Views/Mylist/MusicList/ActiveList.tsx
++++ b/src/screens/Home/Views/Mylist/MusicList/ActiveList.tsx
+@@ -13,17 +13,20 @@ import Text from '@/components/common/Text'
+ import { LIST_IDS } from '@/config/constant'
+ import Loading from '@/components/common/Loading'
+ import { useSettingValue } from '@/store/setting/hook'
++import { useI18n } from '@/lang'
+ 
+ export interface ActiveListProps {
+   onShowSearchBar: () => void
++  onShowImport: () => void
+   onScrollToTop: () => void
+ }
+ export interface ActiveListType {
+   setVisibleBar: (visible: boolean) => void
+ }
+ 
+-export default forwardRef<ActiveListType, ActiveListProps>(({ onShowSearchBar, onScrollToTop }, ref) => {
++export default forwardRef<ActiveListType, ActiveListProps>(({ onShowSearchBar, onShowImport, onScrollToTop }, ref) => {
+   const theme = useTheme()
++  const t = useI18n()
+   const currentListId = useActiveListId()
+   const fetching = useListFetching(currentListId)
+   const langId = useSettingValue('common.langId')
+@@ -63,6 +66,10 @@ export default forwardRef<ActiveListType, ActiveListProps>(({ onShowSearchBar, o
+       <Icon style={styles.currentListIcon} color={theme['c-button-font']} name="chevron-right" size={12} />
+       { fetching ? <Loading color={theme['c-button-font']} style={styles.loading} /> : null }
+       <Text style={styles.currentListText} numberOfLines={1} color={theme['c-button-font']}>{currentListName}</Text>
++      <TouchableOpacity style={styles.importBtn} onPress={onShowImport}>
++        <Icon color={theme['c-button-font']} name="download-2" size={12} />
++        <Text size={11} color={theme['c-button-font']} style={styles.importText}>{t('list_import')}</Text>
++      </TouchableOpacity>
+       <TouchableOpacity style={styles.currentListBtns} onPress={onShowSearchBar}>
+         <Icon color={theme['c-button-font']} name="search-2" />
+       </TouchableOpacity>
+@@ -98,10 +105,20 @@ const styles = createStyle({
+     marginRight: 5,
+   },
+   currentListBtns: {
+-    width: 46,
++    width: 38,
+     justifyContent: 'center',
+     alignItems: 'center',
+     height: '100%',
+     // backgroundColor: 'rgba(0,0,0,0.2)',
+   },
++  importBtn: {
++    height: '100%',
++    flexDirection: 'row',
++    alignItems: 'center',
++    paddingLeft: 8,
++    paddingRight: 6,
++  },
++  importText: {
++    marginLeft: 3,
++  },
+ })
+diff --git a/src/screens/Home/Views/Mylist/MusicList/index.tsx b/src/screens/Home/Views/Mylist/MusicList/index.tsx
+index ff9f784..1ee6420 100644
+--- a/src/screens/Home/Views/Mylist/MusicList/index.tsx
++++ b/src/screens/Home/Views/Mylist/MusicList/index.tsx
+@@ -119,10 +119,14 @@ export default () => {
+   }, [])
+ 
+ 
++  const handleShowImport = useCallback(() => {
++    global.app_event.showPlaylistImport()
++  }, [])
++
+   return (
+     <View style={styles.container}>
+       <View style={{ zIndex: 2 }}>
+-        <ActiveList ref={activeListRef} onShowSearchBar={handleShowSearch} onScrollToTop={hancelScrollToTop} />
++        <ActiveList ref={activeListRef} onShowSearchBar={handleShowSearch} onShowImport={handleShowImport} onScrollToTop={hancelScrollToTop} />
+         <MultipleModeBar
+           ref={multipleModeBarRef}
+           onSwitchMode={hancelSwitchSelectMode}
 diff --git a/src/screens/Home/Views/Search/BlankView/index.tsx b/src/screens/Home/Views/Search/BlankView/index.tsx
 index 838474d..f53974d 100644
 --- a/src/screens/Home/Views/Search/BlankView/index.tsx
@@ -1186,6 +1792,18 @@ index 2f9cb30..b6f62dd 100644
 -    // lineHeight: 16,
    },
  })
+diff --git a/src/screens/Home/Views/Setting/settings/Version.tsx b/src/screens/Home/Views/Setting/settings/Version.tsx
+index e58f783..35e77ab 100644
+--- a/src/screens/Home/Views/Setting/settings/Version.tsx
++++ b/src/screens/Home/Views/Setting/settings/Version.tsx
+@@ -69,6 +69,7 @@ export default memo(() => {
+         <View style={styles.desc}>
+           <Text size={14}>{t('version_label_latest_ver')}{versionInfo.newVersion?.version}</Text>
+           <Text size={14}>{t('version_label_current_ver')}{currentVer}</Text>
++          <Text size={14}>Ceru 构建 7 · 已内置歌单导入</Text>
+           {
+             tip ? <Text size={14}>{tip}</Text> : null
+           }
 diff --git a/src/screens/Home/Views/SongList/Content.tsx b/src/screens/Home/Views/SongList/Content.tsx
 index 7764f06..05092b1 100644
 --- a/src/screens/Home/Views/SongList/Content.tsx

@@ -2,27 +2,36 @@
 
 基于 [lyswhut/lx-music-desktop](https://github.com/lyswhut/lx-music-desktop) **v2.12.6** 与 [lyswhut/lx-music-mobile](https://github.com/lyswhut/lx-music-mobile) **v1.9.1** 的非官方 UI 改版。
 
-**当前版本：`v2.12.6-ceru.9`（青瓷改版 rev.9）**
+**当前版本：`v2.12.6-ceru.10`（青瓷改版 rev.10，移动端 `v1.9.1-ceru7`）**
 
 ![主界面](screenshots/主界面.png)
 
 ## 下载
 
-**Release：** https://github.com/baipiao5555/lx-music-ceru-jade/releases/tag/v2.12.6-ceru.9
+**Release：** https://github.com/baipiao5555/lx-music-ceru-jade/releases/tag/v2.12.6-ceru.10
 
 | 平台 | 文件 | 说明 |
 | --- | --- | --- |
-| Windows x64 | `lx-music-desktop-v2.12.6-x64-Setup.exe` | NSIS 安装包，116 MB，未做商业签名 |
-| Android arm64 | `lx-music-mobile-v1.9.1-ceru5-universal.apk` | 28 MB，推荐，含澜音 v1 布局移动端 UI |
-| Android arm64 | `lx-music-mobile-v1.9.1-ceru5-arm64.apk` | 14 MB，体积更小，含澜音 v1 布局移动端 UI |
+| Windows x64 | `lx-music-desktop-v2.12.6-x64-Setup.exe` | NSIS 安装包，116 MB，未做商业签名（与 ceru.9 相同） |
+| Android arm64 | `lx-music-mobile-v1.9.1-ceru7-universal.apk` | 28 MB，推荐，含澜音 v1 布局 + 歌单导入 |
+| Android arm64 | `lx-music-mobile-v1.9.1-ceru7-arm64.apk` | 14 MB，体积更小，含澜音 v1 布局 + 歌单导入 |
 
 SHA-256：
 
 - Windows：`3d016a1ce9cae4866797e2be12839a2e6fc722cba69dc14142bed7443db8aa20`
-- Android universal：`4e3fb72a45c6503a945efe3f75fd0b689e0ab84e37fedb8724c90bf38fbf1b16`
-- Android arm64：`1695b1fef12bdfbdc038ec9b4501d5b66a45d02cbc31090da671e500fe283b3e`
+- Android universal：`614ada44d8cf3ec1a07b1b8b647d2c1616427505446d0a58e98d73274828a3c3`
+- Android arm64：`b8898ebdc5f9283c7733127ccd76410d41ef98c2972e1a98eb77418201e54cc3`
 
 ## 版本记录
+
+### rev.10（`v2.12.6-ceru.10` + 移动端 `v1.9.1-ceru7`）
+
+- 移动端新增内置歌单导入，不依赖澜音插件：支持网易云、QQ 音乐、酷狗、酷我、咪咕。
+- 支持粘贴歌单链接、整段分享文案或纯歌单 ID；短链交给各平台 SDK 跟随跳转解析。
+- 导入后自动新建同名本地歌单并切换过去；列表保留来源信息，可继续「同步」刷新。
+- 入口放在「发现」和「音乐库」页右上角的「导入」胶囊按钮，音乐库列表栏也保留一个。
+- 「我的 → 版本」增加构建标记 `Ceru 构建 7 · 已内置歌单导入`，用于确认安装的是新包。
+- 桌面端安装包与 ceru.9 相同，未重新打包。
 
 ### rev.9（`v2.12.6-ceru.9`）
 
@@ -150,7 +159,7 @@ Mimosa 的 Git 安全门禁在提交前扫描到上游源码中的 12 个既有�
 ## 补丁文件
 
 - `patches/0001-feat-ui-ceru-jade.patch`：桌面端青瓷 UI，基于官方 v2.12.6。
-- `patches/0002-feat-ui-ceru-mobile.patch`：移动端青瓷主题 + 澜音 v1 布局，基于官方 v1.9.1。
+- `patches/0002-feat-ui-ceru-mobile.patch`：移动端青瓷主题 + 澜音 v1 布局 + 歌单导入，基于官方 v1.9.1。
 
 ## 应用补丁
 
