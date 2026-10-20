@@ -1,3 +1,55 @@
+diff --git a/android/app/src/main/java/cn/toside/music/mobile/crypto/CryptoModule.java b/android/app/src/main/java/cn/toside/music/mobile/crypto/CryptoModule.java
+index ea9c526..83b6649 100644
+--- a/android/app/src/main/java/cn/toside/music/mobile/crypto/CryptoModule.java
++++ b/android/app/src/main/java/cn/toside/music/mobile/crypto/CryptoModule.java
+@@ -12,7 +12,6 @@ import com.facebook.react.bridge.WritableMap;
+ import java.security.Key;
+ import java.security.KeyFactory;
+ import java.security.KeyPair;
+-import java.security.MessageDigest;
+ import java.security.NoSuchAlgorithmException;
+ import java.security.spec.InvalidKeySpecException;
+ import java.security.spec.KeySpec;
+@@ -138,26 +137,5 @@ public class CryptoModule extends ReactContextBaseJavaModule {
+     return AES.decrypt(text, key, iv, mode);
+   }
+ 
+-  @ReactMethod
+-  public void sha1(String input, Promise promise) {
+-    try {
+-      MessageDigest md = MessageDigest.getInstance("SHA-1");
+-      byte[] messageDigest = md.digest(input.getBytes("UTF-8"));
+-
+-      StringBuilder hexString = new StringBuilder();
+-      for (byte b : messageDigest) {
+-        String hex = Integer.toHexString(0xFF & b);
+-        if (hex.length() == 1) {
+-          hexString.append('0');
+-        }
+-        hexString.append(hex);
+-      }
+-
+-      promise.resolve(hexString.toString());
+-    } catch (Exception e) {
+-      promise.reject("SHA1_ERROR", "哈希计算失败", e);
+-    }
+-  }
+-
+ }
+ 
+diff --git a/android/app/src/main/java/cn/toside/music/mobile/crypto/RSA.java b/android/app/src/main/java/cn/toside/music/mobile/crypto/RSA.java
+index 4bb8f6f..b866294 100644
+--- a/android/app/src/main/java/cn/toside/music/mobile/crypto/RSA.java
++++ b/android/app/src/main/java/cn/toside/music/mobile/crypto/RSA.java
+@@ -58,7 +58,7 @@ public class RSA {
+     KeyPair kp = null;
+     try {
+       KeyPairGenerator kpg = KeyPairGenerator.getInstance("RSA");
+-      kpg.initialize(2048);
++      kpg.initialize(3072);
+       kp = kpg.generateKeyPair();
+     } catch (Exception e) {
+       e.printStackTrace();
 diff --git a/android/app/src/main/res/values/strings.xml b/android/app/src/main/res/values/strings.xml
 index b80075c..fef632a 100644
 --- a/android/app/src/main/res/values/strings.xml
@@ -31,6 +83,19 @@ index 40a9a4a..00a62f1 100644
 -  "displayName": "洛雪音乐助手"
 +  "displayName": "Ceru Music"
  }
+diff --git a/publish/utils/updateChangeLog.js b/publish/utils/updateChangeLog.js
+index 7d350fa..46df5f4 100644
+--- a/publish/utils/updateChangeLog.js
++++ b/publish/utils/updateChangeLog.js
+@@ -1,7 +1,6 @@
+ const fs = require('fs')
+ const { jp, formatTime } = require('./index')
+-const pkgDir = '../../package.json'
+-const pkg = require(pkgDir)
++const pkg = require('../../package.json')
+ const version = require('../version.json')
+ const chalk = require('chalk')
+ const pkg_bak = JSON.stringify(pkg, null, 2)
 diff --git a/src/components/PlaylistImportModal/index.tsx b/src/components/PlaylistImportModal/index.tsx
 new file mode 100644
 index 0000000..46cf095
@@ -854,10 +919,10 @@ index 2bec8f5..1ffadc3 100644
    "source_alias_kw": "小蝸音樂",
 diff --git a/src/screens/Home/Vertical/BottomNav.tsx b/src/screens/Home/Vertical/BottomNav.tsx
 new file mode 100644
-index 0000000..6285141
+index 0000000..3dea855
 --- /dev/null
 +++ b/src/screens/Home/Vertical/BottomNav.tsx
-@@ -0,0 +1,62 @@
+@@ -0,0 +1,71 @@
 +import { memo } from 'react'
 +import { View, TouchableOpacity } from 'react-native'
 +
@@ -892,7 +957,9 @@ index 0000000..6285141
 +            activeOpacity={0.7}
 +            onPress={() => setNavActiveId(tab.id)}
 +          >
-+            <Icon name={tab.icon} size={21} color={active ? theme['c-primary'] : theme['c-font-label']} />
++            <View style={[styles.iconWrap, active && { backgroundColor: theme['c-primary-alpha-900'] }]}>
++              <Icon name={tab.icon} size={21} color={active ? theme['c-primary'] : theme['c-font-label']} />
++            </View>
 +            <Text style={styles.label} size={9} color={active ? theme['c-primary'] : theme['c-font-label']}>{t(tab.id)}</Text>
 +          </TouchableOpacity>
 +        )
@@ -903,9 +970,9 @@ index 0000000..6285141
 +
 +const styles = createStyle({
 +  bar: {
-+    height: 56,
++    height: 60,
 +    paddingTop: 5,
-+    paddingBottom: 4,
++    paddingBottom: 5,
 +    paddingHorizontal: 8,
 +    borderTopWidth: 1,
 +    flexDirection: 'row',
@@ -916,8 +983,15 @@ index 0000000..6285141
 +    alignItems: 'center',
 +    justifyContent: 'center',
 +  },
++  iconWrap: {
++    width: 46,
++    height: 26,
++    borderRadius: 13,
++    alignItems: 'center',
++    justifyContent: 'center',
++  },
 +  label: {
-+    marginTop: 2,
++    marginTop: 3,
 +  },
 +})
 diff --git a/src/screens/Home/Vertical/Content.tsx b/src/screens/Home/Vertical/Content.tsx
@@ -1140,7 +1214,7 @@ index 0c1a2aa..394b15e 100644
  }
  
 diff --git a/src/screens/Home/Vertical/Header.tsx b/src/screens/Home/Vertical/Header.tsx
-index f2a89b4..08c6907 100644
+index f2a89b4..93dcab0 100644
 --- a/src/screens/Home/Vertical/Header.tsx
 +++ b/src/screens/Home/Vertical/Header.tsx
 @@ -1,7 +1,5 @@
@@ -1272,7 +1346,7 @@ index f2a89b4..08c6907 100644
 +        ...styles.container,
 +        height: scaleSizeH(HEADER_HEIGHT) + statusBarHeight,
 +        paddingTop: statusBarHeight,
-+        backgroundColor: '#f5f8f7',
++        backgroundColor: theme['c-app-background'],
 +        borderBottomColor: theme['c-border-background'],
 +      }}>
 +        <View style={styles.left}>
@@ -1562,7 +1636,7 @@ index eb8c81f..df560af 100644
        onChangeText={handleChangeText}
        // style={{ ...styles.input, backgroundColor: theme['c-primary-input-background'] }}
 diff --git a/src/screens/Home/Views/Search/HeaderBar/index.tsx b/src/screens/Home/Views/Search/HeaderBar/index.tsx
-index 68e153e..1d9594d 100644
+index 68e153e..e81046b 100644
 --- a/src/screens/Home/Views/Search/HeaderBar/index.tsx
 +++ b/src/screens/Home/Views/Search/HeaderBar/index.tsx
 @@ -2,7 +2,6 @@ import { useRef, forwardRef, useImperativeHandle } from 'react'
@@ -1610,7 +1684,7 @@ index 68e153e..1d9594d 100644
 +    height: 52,
 +    alignItems: 'center',
 +    paddingHorizontal: 12,
-+    backgroundColor: '#f5f8f7',
++    backgroundColor: 'transparent',
      zIndex: 2,
 -    paddingRight: 10,
 -    borderBottomWidth: BorderWidths.normal,
@@ -1702,7 +1776,7 @@ index 7a55d82..c36a6cf 100644
    },
  })
 diff --git a/src/screens/Home/Views/Setting/Vertical/Main.tsx b/src/screens/Home/Views/Setting/Vertical/Main.tsx
-index 8e7f1a9..3e76329 100644
+index 8e7f1a9..49a02fe 100644
 --- a/src/screens/Home/Views/Setting/Vertical/Main.tsx
 +++ b/src/screens/Home/Views/Setting/Vertical/Main.tsx
 @@ -19,10 +19,10 @@ type FlatListType = FlatListProps<SettingScreenIds>
@@ -1724,7 +1798,7 @@ index 8e7f1a9..3e76329 100644
    return (
      <FlatList
        data={SETTING_SCREENS}
-+      style={{ flex: 1, backgroundColor: '#f5f8f7' }}
++      style={{ flex: 1, backgroundColor: 'transparent' }}
        keyboardShouldPersistTaps={'always'}
        renderItem={renderItem}
        keyExtractor={getkey}
@@ -1797,19 +1871,19 @@ index 2f9cb30..b6f62dd 100644
    },
  })
 diff --git a/src/screens/Home/Views/Setting/settings/Version.tsx b/src/screens/Home/Views/Setting/settings/Version.tsx
-index e58f783..2859264 100644
+index e58f783..3b32f9d 100644
 --- a/src/screens/Home/Views/Setting/settings/Version.tsx
 +++ b/src/screens/Home/Views/Setting/settings/Version.tsx
 @@ -69,6 +69,7 @@ export default memo(() => {
          <View style={styles.desc}>
            <Text size={14}>{t('version_label_latest_ver')}{versionInfo.newVersion?.version}</Text>
            <Text size={14}>{t('version_label_current_ver')}{currentVer}</Text>
-+          <Text size={14}>Ceru 构建 8 · 已内置歌单导入</Text>
++          <Text size={14}>Ceru 构建 9 · 青瓷夜色 UI</Text>
            {
              tip ? <Text size={14}>{tip}</Text> : null
            }
 diff --git a/src/screens/Home/Views/SongList/Content.tsx b/src/screens/Home/Views/SongList/Content.tsx
-index 7764f06..05092b1 100644
+index 7764f06..b4c6f9c 100644
 --- a/src/screens/Home/Views/SongList/Content.tsx
 +++ b/src/screens/Home/Views/SongList/Content.tsx
 @@ -1,63 +1,32 @@
@@ -1896,7 +1970,7 @@ index 7764f06..05092b1 100644
    container: {
 -    position: 'relative',
      flex: 1,
-+    backgroundColor: '#f5f8f7',
++    backgroundColor: 'transparent',
 +  },
 +  pageHeader: {
 +    paddingHorizontal: 18,
@@ -2145,7 +2219,7 @@ index 0561e0c..6594b8c 100644
    selector: {
      width: 86,
 diff --git a/src/screens/Home/Views/SongList/components/Songlist/List.tsx b/src/screens/Home/Views/SongList/components/Songlist/List.tsx
-index 926452b..71c98d3 100644
+index 926452b..c6ca387 100644
 --- a/src/screens/Home/Views/SongList/components/Songlist/List.tsx
 +++ b/src/screens/Home/Views/SongList/components/Songlist/List.tsx
 @@ -1,21 +1,16 @@
@@ -2468,7 +2542,7 @@ index 926452b..71c98d3 100644
  const styles = createStyle({
    container: {
      flex: 1,
-+    backgroundColor: '#f5f8f7',
++    backgroundColor: 'transparent',
 +  },
 +  content: {
 +    paddingHorizontal: 18,
@@ -2718,7 +2792,7 @@ index b6893b3..90d9a8e 100644
    bgPic: null,
  }
 diff --git a/src/theme/themes/createThemes.js b/src/theme/themes/createThemes.js
-index 4ca4f5f..2563cdb 100644
+index 4ca4f5f..948bfed 100644
 --- a/src/theme/themes/createThemes.js
 +++ b/src/theme/themes/createThemes.js
 @@ -295,6 +295,24 @@ const defaultThemes = [
@@ -2727,20 +2801,20 @@ index 4ca4f5f..2563cdb 100644
    },
 +  {
 +    id: 'ceru',
-+    name: '青瓷',
-+    isDark: false,
++    name: '青瓷夜色',
++    isDark: true,
 +    config: {
-+      primary: 'rgb(22, 184, 155)',
-+      font: 'rgb(20, 35, 31)',
-+      'c-app-background': 'var(c-primary-light-600-alpha-700)',
-+      'c-main-background': 'rgba(255, 255, 255, 0.92)',
++      primary: 'rgb(52, 211, 153)',
++      font: 'rgb(226, 232, 240)',
++      'c-app-background': '#0b0d10',
++      'c-main-background': 'rgba(17, 20, 25, 0.96)',
 +      'bg-image': '',
 +      'bg-image-position': 'center',
 +      'bg-image-size': 'cover',
 +
 +      'c-badge-primary': 'var(c-primary)',
-+      'c-badge-secondary': '#5cbf9b',
-+      'c-badge-tertiary': '#8b7cff',
++      'c-badge-secondary': '#60a5fa',
++      'c-badge-tertiary': '#f472b6',
 +    },
 +  },
  ]
@@ -2760,7 +2834,7 @@ index d53103b..9343405 100644
      }
    }
 diff --git a/src/theme/themes/themes.ts b/src/theme/themes/themes.ts
-index bb92012..7fbee66 100644
+index bb92012..7126cda 100644
 --- a/src/theme/themes/themes.ts
 +++ b/src/theme/themes/themes.ts
 @@ -4033,5 +4033,257 @@ export default [
@@ -2770,255 +2844,271 @@ index bb92012..7fbee66 100644
 +  },
 +  {
 +    "id": "ceru",
-+    "name": "青瓷",
-+    "isDark": false,
++    "name": "青瓷夜色",
++    "isDark": true,
 +    "isCustom": false,
 +    "config": {
 +      "themeColors": {
-+        "c-primary": "rgb(22, 184, 155)",
-+        "c-primary-dark-100": "rgb(20,166,140)",
-+        "c-primary-dark-100-alpha-100": "rgba(20, 166, 140, 0.90)",
-+        "c-primary-alpha-100": "rgba(22, 184, 155, 0.90)",
-+        "c-primary-dark-100-alpha-200": "rgba(20, 166, 140, 0.80)",
-+        "c-primary-alpha-200": "rgba(22, 184, 155, 0.80)",
-+        "c-primary-dark-100-alpha-300": "rgba(20, 166, 140, 0.70)",
-+        "c-primary-alpha-300": "rgba(22, 184, 155, 0.70)",
-+        "c-primary-dark-100-alpha-400": "rgba(20, 166, 140, 0.60)",
-+        "c-primary-alpha-400": "rgba(22, 184, 155, 0.60)",
-+        "c-primary-dark-100-alpha-500": "rgba(20, 166, 140, 0.50)",
-+        "c-primary-alpha-500": "rgba(22, 184, 155, 0.50)",
-+        "c-primary-dark-100-alpha-600": "rgba(20, 166, 140, 0.40)",
-+        "c-primary-alpha-600": "rgba(22, 184, 155, 0.40)",
-+        "c-primary-dark-100-alpha-700": "rgba(20, 166, 140, 0.30)",
-+        "c-primary-alpha-700": "rgba(22, 184, 155, 0.30)",
-+        "c-primary-dark-100-alpha-800": "rgba(20, 166, 140, 0.20)",
-+        "c-primary-alpha-800": "rgba(22, 184, 155, 0.20)",
-+        "c-primary-dark-100-alpha-900": "rgba(20, 166, 140, 0.10)",
-+        "c-primary-alpha-900": "rgba(22, 184, 155, 0.10)",
-+        "c-primary-dark-200": "rgb(18,149,126)",
-+        "c-primary-dark-200-alpha-100": "rgba(18, 149, 126, 0.90)",
-+        "c-primary-dark-200-alpha-200": "rgba(18, 149, 126, 0.80)",
-+        "c-primary-dark-200-alpha-300": "rgba(18, 149, 126, 0.70)",
-+        "c-primary-dark-200-alpha-400": "rgba(18, 149, 126, 0.60)",
-+        "c-primary-dark-200-alpha-500": "rgba(18, 149, 126, 0.50)",
-+        "c-primary-dark-200-alpha-600": "rgba(18, 149, 126, 0.40)",
-+        "c-primary-dark-200-alpha-700": "rgba(18, 149, 126, 0.30)",
-+        "c-primary-dark-200-alpha-800": "rgba(18, 149, 126, 0.20)",
-+        "c-primary-dark-200-alpha-900": "rgba(18, 149, 126, 0.10)",
-+        "c-primary-dark-300": "rgb(16,134,113)",
-+        "c-primary-dark-300-alpha-100": "rgba(16, 134, 113, 0.90)",
-+        "c-primary-dark-300-alpha-200": "rgba(16, 134, 113, 0.80)",
-+        "c-primary-dark-300-alpha-300": "rgba(16, 134, 113, 0.70)",
-+        "c-primary-dark-300-alpha-400": "rgba(16, 134, 113, 0.60)",
-+        "c-primary-dark-300-alpha-500": "rgba(16, 134, 113, 0.50)",
-+        "c-primary-dark-300-alpha-600": "rgba(16, 134, 113, 0.40)",
-+        "c-primary-dark-300-alpha-700": "rgba(16, 134, 113, 0.30)",
-+        "c-primary-dark-300-alpha-800": "rgba(16, 134, 113, 0.20)",
-+        "c-primary-dark-300-alpha-900": "rgba(16, 134, 113, 0.10)",
-+        "c-primary-dark-400": "rgb(14,121,102)",
-+        "c-primary-dark-400-alpha-100": "rgba(14, 121, 102, 0.90)",
-+        "c-primary-dark-400-alpha-200": "rgba(14, 121, 102, 0.80)",
-+        "c-primary-dark-400-alpha-300": "rgba(14, 121, 102, 0.70)",
-+        "c-primary-dark-400-alpha-400": "rgba(14, 121, 102, 0.60)",
-+        "c-primary-dark-400-alpha-500": "rgba(14, 121, 102, 0.50)",
-+        "c-primary-dark-400-alpha-600": "rgba(14, 121, 102, 0.40)",
-+        "c-primary-dark-400-alpha-700": "rgba(14, 121, 102, 0.30)",
-+        "c-primary-dark-400-alpha-800": "rgba(14, 121, 102, 0.20)",
-+        "c-primary-dark-400-alpha-900": "rgba(14, 121, 102, 0.10)",
-+        "c-primary-dark-500": "rgb(13,109,92)",
-+        "c-primary-dark-500-alpha-100": "rgba(13, 109, 92, 0.90)",
-+        "c-primary-dark-500-alpha-200": "rgba(13, 109, 92, 0.80)",
-+        "c-primary-dark-500-alpha-300": "rgba(13, 109, 92, 0.70)",
-+        "c-primary-dark-500-alpha-400": "rgba(13, 109, 92, 0.60)",
-+        "c-primary-dark-500-alpha-500": "rgba(13, 109, 92, 0.50)",
-+        "c-primary-dark-500-alpha-600": "rgba(13, 109, 92, 0.40)",
-+        "c-primary-dark-500-alpha-700": "rgba(13, 109, 92, 0.30)",
-+        "c-primary-dark-500-alpha-800": "rgba(13, 109, 92, 0.20)",
-+        "c-primary-dark-500-alpha-900": "rgba(13, 109, 92, 0.10)",
-+        "c-primary-dark-600": "rgb(12,98,83)",
-+        "c-primary-dark-600-alpha-100": "rgba(12, 98, 83, 0.90)",
-+        "c-primary-dark-600-alpha-200": "rgba(12, 98, 83, 0.80)",
-+        "c-primary-dark-600-alpha-300": "rgba(12, 98, 83, 0.70)",
-+        "c-primary-dark-600-alpha-400": "rgba(12, 98, 83, 0.60)",
-+        "c-primary-dark-600-alpha-500": "rgba(12, 98, 83, 0.50)",
-+        "c-primary-dark-600-alpha-600": "rgba(12, 98, 83, 0.40)",
-+        "c-primary-dark-600-alpha-700": "rgba(12, 98, 83, 0.30)",
-+        "c-primary-dark-600-alpha-800": "rgba(12, 98, 83, 0.20)",
-+        "c-primary-dark-600-alpha-900": "rgba(12, 98, 83, 0.10)",
-+        "c-primary-dark-700": "rgb(11,88,75)",
-+        "c-primary-dark-700-alpha-100": "rgba(11, 88, 75, 0.90)",
-+        "c-primary-dark-700-alpha-200": "rgba(11, 88, 75, 0.80)",
-+        "c-primary-dark-700-alpha-300": "rgba(11, 88, 75, 0.70)",
-+        "c-primary-dark-700-alpha-400": "rgba(11, 88, 75, 0.60)",
-+        "c-primary-dark-700-alpha-500": "rgba(11, 88, 75, 0.50)",
-+        "c-primary-dark-700-alpha-600": "rgba(11, 88, 75, 0.40)",
-+        "c-primary-dark-700-alpha-700": "rgba(11, 88, 75, 0.30)",
-+        "c-primary-dark-700-alpha-800": "rgba(11, 88, 75, 0.20)",
-+        "c-primary-dark-700-alpha-900": "rgba(11, 88, 75, 0.10)",
-+        "c-primary-dark-800": "rgb(10,79,68)",
-+        "c-primary-dark-800-alpha-100": "rgba(10, 79, 68, 0.90)",
-+        "c-primary-dark-800-alpha-200": "rgba(10, 79, 68, 0.80)",
-+        "c-primary-dark-800-alpha-300": "rgba(10, 79, 68, 0.70)",
-+        "c-primary-dark-800-alpha-400": "rgba(10, 79, 68, 0.60)",
-+        "c-primary-dark-800-alpha-500": "rgba(10, 79, 68, 0.50)",
-+        "c-primary-dark-800-alpha-600": "rgba(10, 79, 68, 0.40)",
-+        "c-primary-dark-800-alpha-700": "rgba(10, 79, 68, 0.30)",
-+        "c-primary-dark-800-alpha-800": "rgba(10, 79, 68, 0.20)",
-+        "c-primary-dark-800-alpha-900": "rgba(10, 79, 68, 0.10)",
-+        "c-primary-dark-900": "rgb(9,71,61)",
-+        "c-primary-dark-900-alpha-100": "rgba(9, 71, 61, 0.90)",
-+        "c-primary-dark-900-alpha-200": "rgba(9, 71, 61, 0.80)",
-+        "c-primary-dark-900-alpha-300": "rgba(9, 71, 61, 0.70)",
-+        "c-primary-dark-900-alpha-400": "rgba(9, 71, 61, 0.60)",
-+        "c-primary-dark-900-alpha-500": "rgba(9, 71, 61, 0.50)",
-+        "c-primary-dark-900-alpha-600": "rgba(9, 71, 61, 0.40)",
-+        "c-primary-dark-900-alpha-700": "rgba(9, 71, 61, 0.30)",
-+        "c-primary-dark-900-alpha-800": "rgba(9, 71, 61, 0.20)",
-+        "c-primary-dark-900-alpha-900": "rgba(9, 71, 61, 0.10)",
-+        "c-primary-dark-1000": "rgb(8,64,55)",
-+        "c-primary-dark-1000-alpha-100": "rgba(8, 64, 55, 0.90)",
-+        "c-primary-dark-1000-alpha-200": "rgba(8, 64, 55, 0.80)",
-+        "c-primary-dark-1000-alpha-300": "rgba(8, 64, 55, 0.70)",
-+        "c-primary-dark-1000-alpha-400": "rgba(8, 64, 55, 0.60)",
-+        "c-primary-dark-1000-alpha-500": "rgba(8, 64, 55, 0.50)",
-+        "c-primary-dark-1000-alpha-600": "rgba(8, 64, 55, 0.40)",
-+        "c-primary-dark-1000-alpha-700": "rgba(8, 64, 55, 0.30)",
-+        "c-primary-dark-1000-alpha-800": "rgba(8, 64, 55, 0.20)",
-+        "c-primary-dark-1000-alpha-900": "rgba(8, 64, 55, 0.10)",
-+        "c-primary-light-100": "rgb(69,198,175)",
-+        "c-primary-light-100-alpha-100": "rgba(69, 198, 175, 0.90)",
-+        "c-primary-light-100-alpha-200": "rgba(69, 198, 175, 0.80)",
-+        "c-primary-light-100-alpha-300": "rgba(69, 198, 175, 0.70)",
-+        "c-primary-light-100-alpha-400": "rgba(69, 198, 175, 0.60)",
-+        "c-primary-light-100-alpha-500": "rgba(69, 198, 175, 0.50)",
-+        "c-primary-light-100-alpha-600": "rgba(69, 198, 175, 0.40)",
-+        "c-primary-light-100-alpha-700": "rgba(69, 198, 175, 0.30)",
-+        "c-primary-light-100-alpha-800": "rgba(69, 198, 175, 0.20)",
-+        "c-primary-light-100-alpha-900": "rgba(69, 198, 175, 0.10)",
-+        "c-primary-light-200": "rgb(106,209,191)",
-+        "c-primary-light-200-alpha-100": "rgba(106, 209, 191, 0.90)",
-+        "c-primary-light-200-alpha-200": "rgba(106, 209, 191, 0.80)",
-+        "c-primary-light-200-alpha-300": "rgba(106, 209, 191, 0.70)",
-+        "c-primary-light-200-alpha-400": "rgba(106, 209, 191, 0.60)",
-+        "c-primary-light-200-alpha-500": "rgba(106, 209, 191, 0.50)",
-+        "c-primary-light-200-alpha-600": "rgba(106, 209, 191, 0.40)",
-+        "c-primary-light-200-alpha-700": "rgba(106, 209, 191, 0.30)",
-+        "c-primary-light-200-alpha-800": "rgba(106, 209, 191, 0.20)",
-+        "c-primary-light-200-alpha-900": "rgba(106, 209, 191, 0.10)",
-+        "c-primary-light-300": "rgb(136,218,204)",
-+        "c-primary-light-300-alpha-100": "rgba(136, 218, 204, 0.90)",
-+        "c-primary-light-300-alpha-200": "rgba(136, 218, 204, 0.80)",
-+        "c-primary-light-300-alpha-300": "rgba(136, 218, 204, 0.70)",
-+        "c-primary-light-300-alpha-400": "rgba(136, 218, 204, 0.60)",
-+        "c-primary-light-300-alpha-500": "rgba(136, 218, 204, 0.50)",
-+        "c-primary-light-300-alpha-600": "rgba(136, 218, 204, 0.40)",
-+        "c-primary-light-300-alpha-700": "rgba(136, 218, 204, 0.30)",
-+        "c-primary-light-300-alpha-800": "rgba(136, 218, 204, 0.20)",
-+        "c-primary-light-300-alpha-900": "rgba(136, 218, 204, 0.10)",
-+        "c-primary-light-400": "rgb(160,225,214)",
-+        "c-primary-light-400-alpha-100": "rgba(160, 225, 214, 0.90)",
-+        "c-primary-light-400-alpha-200": "rgba(160, 225, 214, 0.80)",
-+        "c-primary-light-400-alpha-300": "rgba(160, 225, 214, 0.70)",
-+        "c-primary-light-400-alpha-400": "rgba(160, 225, 214, 0.60)",
-+        "c-primary-light-400-alpha-500": "rgba(160, 225, 214, 0.50)",
-+        "c-primary-light-400-alpha-600": "rgba(160, 225, 214, 0.40)",
-+        "c-primary-light-400-alpha-700": "rgba(160, 225, 214, 0.30)",
-+        "c-primary-light-400-alpha-800": "rgba(160, 225, 214, 0.20)",
-+        "c-primary-light-400-alpha-900": "rgba(160, 225, 214, 0.10)",
-+        "c-primary-light-500": "rgb(179,231,222)",
-+        "c-primary-light-500-alpha-100": "rgba(179, 231, 222, 0.90)",
-+        "c-primary-light-500-alpha-200": "rgba(179, 231, 222, 0.80)",
-+        "c-primary-light-500-alpha-300": "rgba(179, 231, 222, 0.70)",
-+        "c-primary-light-500-alpha-400": "rgba(179, 231, 222, 0.60)",
-+        "c-primary-light-500-alpha-500": "rgba(179, 231, 222, 0.50)",
-+        "c-primary-light-500-alpha-600": "rgba(179, 231, 222, 0.40)",
-+        "c-primary-light-500-alpha-700": "rgba(179, 231, 222, 0.30)",
-+        "c-primary-light-500-alpha-800": "rgba(179, 231, 222, 0.20)",
-+        "c-primary-light-500-alpha-900": "rgba(179, 231, 222, 0.10)",
-+        "c-primary-light-600": "rgb(194,236,229)",
-+        "c-primary-light-600-alpha-100": "rgba(194, 236, 229, 0.90)",
-+        "c-primary-light-600-alpha-200": "rgba(194, 236, 229, 0.80)",
-+        "c-primary-light-600-alpha-300": "rgba(194, 236, 229, 0.70)",
-+        "c-primary-light-600-alpha-400": "rgba(194, 236, 229, 0.60)",
-+        "c-primary-light-600-alpha-500": "rgba(194, 236, 229, 0.50)",
-+        "c-primary-light-600-alpha-600": "rgba(194, 236, 229, 0.40)",
-+        "c-primary-light-600-alpha-700": "rgba(194, 236, 229, 0.30)",
-+        "c-primary-light-600-alpha-800": "rgba(194, 236, 229, 0.20)",
-+        "c-primary-light-600-alpha-900": "rgba(194, 236, 229, 0.10)",
-+        "c-primary-light-700": "rgb(206,240,234)",
-+        "c-primary-light-700-alpha-100": "rgba(206, 240, 234, 0.90)",
-+        "c-primary-light-700-alpha-200": "rgba(206, 240, 234, 0.80)",
-+        "c-primary-light-700-alpha-300": "rgba(206, 240, 234, 0.70)",
-+        "c-primary-light-700-alpha-400": "rgba(206, 240, 234, 0.60)",
-+        "c-primary-light-700-alpha-500": "rgba(206, 240, 234, 0.50)",
-+        "c-primary-light-700-alpha-600": "rgba(206, 240, 234, 0.40)",
-+        "c-primary-light-700-alpha-700": "rgba(206, 240, 234, 0.30)",
-+        "c-primary-light-700-alpha-800": "rgba(206, 240, 234, 0.20)",
-+        "c-primary-light-700-alpha-900": "rgba(206, 240, 234, 0.10)",
-+        "c-primary-light-800": "rgb(216,243,238)",
-+        "c-primary-light-800-alpha-100": "rgba(216, 243, 238, 0.90)",
-+        "c-primary-light-800-alpha-200": "rgba(216, 243, 238, 0.80)",
-+        "c-primary-light-800-alpha-300": "rgba(216, 243, 238, 0.70)",
-+        "c-primary-light-800-alpha-400": "rgba(216, 243, 238, 0.60)",
-+        "c-primary-light-800-alpha-500": "rgba(216, 243, 238, 0.50)",
-+        "c-primary-light-800-alpha-600": "rgba(216, 243, 238, 0.40)",
-+        "c-primary-light-800-alpha-700": "rgba(216, 243, 238, 0.30)",
-+        "c-primary-light-800-alpha-800": "rgba(216, 243, 238, 0.20)",
-+        "c-primary-light-800-alpha-900": "rgba(216, 243, 238, 0.10)",
-+        "c-primary-light-900": "rgb(224,245,241)",
-+        "c-primary-light-900-alpha-100": "rgba(224, 245, 241, 0.90)",
-+        "c-primary-light-900-alpha-200": "rgba(224, 245, 241, 0.80)",
-+        "c-primary-light-900-alpha-300": "rgba(224, 245, 241, 0.70)",
-+        "c-primary-light-900-alpha-400": "rgba(224, 245, 241, 0.60)",
-+        "c-primary-light-900-alpha-500": "rgba(224, 245, 241, 0.50)",
-+        "c-primary-light-900-alpha-600": "rgba(224, 245, 241, 0.40)",
-+        "c-primary-light-900-alpha-700": "rgba(224, 245, 241, 0.30)",
-+        "c-primary-light-900-alpha-800": "rgba(224, 245, 241, 0.20)",
-+        "c-primary-light-900-alpha-900": "rgba(224, 245, 241, 0.10)",
-+        "c-primary-light-1000": "rgb(255,255,255)",
-+        "c-primary-light-1000-alpha-100": "rgba(255, 255, 255, 0.90)",
-+        "c-primary-light-1000-alpha-200": "rgba(255, 255, 255, 0.80)",
-+        "c-primary-light-1000-alpha-300": "rgba(255, 255, 255, 0.70)",
-+        "c-primary-light-1000-alpha-400": "rgba(255, 255, 255, 0.60)",
-+        "c-primary-light-1000-alpha-500": "rgba(255, 255, 255, 0.50)",
-+        "c-primary-light-1000-alpha-600": "rgba(255, 255, 255, 0.40)",
-+        "c-primary-light-1000-alpha-700": "rgba(255, 255, 255, 0.30)",
-+        "c-primary-light-1000-alpha-800": "rgba(255, 255, 255, 0.20)",
-+        "c-primary-light-1000-alpha-900": "rgba(255, 255, 255, 0.10)",
-+        "c-theme": "rgb(22, 184, 155)",
-+        "c-1000": "rgb(20, 35, 31)",
-+        "c-950": "rgb(32,46,42)",
-+        "c-900": "rgb(44,57,53)",
-+        "c-850": "rgb(55,68,65)",
-+        "c-800": "rgb(67,79,76)",
-+        "c-750": "rgb(79,90,87)",
-+        "c-700": "rgb(91,101,98)",
-+        "c-650": "rgb(102,112,109)",
-+        "c-600": "rgb(114,123,121)",
-+        "c-550": "rgb(126,134,132)",
-+        "c-500": "rgb(138,145,143)",
-+        "c-450": "rgb(149,156,154)",
-+        "c-400": "rgb(161,167,165)",
-+        "c-350": "rgb(173,178,177)",
-+        "c-300": "rgb(185,189,188)",
-+        "c-250": "rgb(196,200,199)",
-+        "c-200": "rgb(208,211,210)",
-+        "c-150": "rgb(220,222,221)",
-+        "c-100": "rgb(232,233,233)",
-+        "c-050": "rgb(243,244,244)",
-+        "c-000": "rgb(255,255,255)"
++        "c-primary": "rgb(52, 211, 153)",
++        "c-primary-dark-100": "rgb(93,220,173)",
++        "c-primary-dark-100-alpha-100": "rgba(93, 220, 173, 0.90)",
++        "c-primary-alpha-100": "rgba(52, 211, 153, 0.90)",
++        "c-primary-dark-100-alpha-200": "rgba(93, 220, 173, 0.80)",
++        "c-primary-alpha-200": "rgba(52, 211, 153, 0.80)",
++        "c-primary-dark-100-alpha-300": "rgba(93, 220, 173, 0.70)",
++        "c-primary-alpha-300": "rgba(52, 211, 153, 0.70)",
++        "c-primary-dark-100-alpha-400": "rgba(93, 220, 173, 0.60)",
++        "c-primary-alpha-400": "rgba(52, 211, 153, 0.60)",
++        "c-primary-dark-100-alpha-500": "rgba(93, 220, 173, 0.50)",
++        "c-primary-alpha-500": "rgba(52, 211, 153, 0.50)",
++        "c-primary-dark-100-alpha-600": "rgba(93, 220, 173, 0.40)",
++        "c-primary-alpha-600": "rgba(52, 211, 153, 0.40)",
++        "c-primary-dark-100-alpha-700": "rgba(93, 220, 173, 0.30)",
++        "c-primary-alpha-700": "rgba(52, 211, 153, 0.30)",
++        "c-primary-dark-100-alpha-800": "rgba(93, 220, 173, 0.20)",
++        "c-primary-alpha-800": "rgba(52, 211, 153, 0.20)",
++        "c-primary-dark-100-alpha-900": "rgba(93, 220, 173, 0.10)",
++        "c-primary-alpha-900": "rgba(52, 211, 153, 0.10)",
++        "c-primary-dark-200": "rgb(125,227,189)",
++        "c-primary-dark-200-alpha-100": "rgba(125, 227, 189, 0.90)",
++        "c-primary-dark-200-alpha-200": "rgba(125, 227, 189, 0.80)",
++        "c-primary-dark-200-alpha-300": "rgba(125, 227, 189, 0.70)",
++        "c-primary-dark-200-alpha-400": "rgba(125, 227, 189, 0.60)",
++        "c-primary-dark-200-alpha-500": "rgba(125, 227, 189, 0.50)",
++        "c-primary-dark-200-alpha-600": "rgba(125, 227, 189, 0.40)",
++        "c-primary-dark-200-alpha-700": "rgba(125, 227, 189, 0.30)",
++        "c-primary-dark-200-alpha-800": "rgba(125, 227, 189, 0.20)",
++        "c-primary-dark-200-alpha-900": "rgba(125, 227, 189, 0.10)",
++        "c-primary-dark-300": "rgb(151,233,202)",
++        "c-primary-dark-300-alpha-100": "rgba(151, 233, 202, 0.90)",
++        "c-primary-dark-300-alpha-200": "rgba(151, 233, 202, 0.80)",
++        "c-primary-dark-300-alpha-300": "rgba(151, 233, 202, 0.70)",
++        "c-primary-dark-300-alpha-400": "rgba(151, 233, 202, 0.60)",
++        "c-primary-dark-300-alpha-500": "rgba(151, 233, 202, 0.50)",
++        "c-primary-dark-300-alpha-600": "rgba(151, 233, 202, 0.40)",
++        "c-primary-dark-300-alpha-700": "rgba(151, 233, 202, 0.30)",
++        "c-primary-dark-300-alpha-800": "rgba(151, 233, 202, 0.20)",
++        "c-primary-dark-300-alpha-900": "rgba(151, 233, 202, 0.10)",
++        "c-primary-dark-400": "rgb(172,237,213)",
++        "c-primary-dark-400-alpha-100": "rgba(172, 237, 213, 0.90)",
++        "c-primary-dark-400-alpha-200": "rgba(172, 237, 213, 0.80)",
++        "c-primary-dark-400-alpha-300": "rgba(172, 237, 213, 0.70)",
++        "c-primary-dark-400-alpha-400": "rgba(172, 237, 213, 0.60)",
++        "c-primary-dark-400-alpha-500": "rgba(172, 237, 213, 0.50)",
++        "c-primary-dark-400-alpha-600": "rgba(172, 237, 213, 0.40)",
++        "c-primary-dark-400-alpha-700": "rgba(172, 237, 213, 0.30)",
++        "c-primary-dark-400-alpha-800": "rgba(172, 237, 213, 0.20)",
++        "c-primary-dark-400-alpha-900": "rgba(172, 237, 213, 0.10)",
++        "c-primary-dark-500": "rgb(189,241,221)",
++        "c-primary-dark-500-alpha-100": "rgba(189, 241, 221, 0.90)",
++        "c-primary-dark-500-alpha-200": "rgba(189, 241, 221, 0.80)",
++        "c-primary-dark-500-alpha-300": "rgba(189, 241, 221, 0.70)",
++        "c-primary-dark-500-alpha-400": "rgba(189, 241, 221, 0.60)",
++        "c-primary-dark-500-alpha-500": "rgba(189, 241, 221, 0.50)",
++        "c-primary-dark-500-alpha-600": "rgba(189, 241, 221, 0.40)",
++        "c-primary-dark-500-alpha-700": "rgba(189, 241, 221, 0.30)",
++        "c-primary-dark-500-alpha-800": "rgba(189, 241, 221, 0.20)",
++        "c-primary-dark-500-alpha-900": "rgba(189, 241, 221, 0.10)",
++        "c-primary-dark-600": "rgb(202,244,228)",
++        "c-primary-dark-600-alpha-100": "rgba(202, 244, 228, 0.90)",
++        "c-primary-dark-600-alpha-200": "rgba(202, 244, 228, 0.80)",
++        "c-primary-dark-600-alpha-300": "rgba(202, 244, 228, 0.70)",
++        "c-primary-dark-600-alpha-400": "rgba(202, 244, 228, 0.60)",
++        "c-primary-dark-600-alpha-500": "rgba(202, 244, 228, 0.50)",
++        "c-primary-dark-600-alpha-600": "rgba(202, 244, 228, 0.40)",
++        "c-primary-dark-600-alpha-700": "rgba(202, 244, 228, 0.30)",
++        "c-primary-dark-600-alpha-800": "rgba(202, 244, 228, 0.20)",
++        "c-primary-dark-600-alpha-900": "rgba(202, 244, 228, 0.10)",
++        "c-primary-dark-700": "rgb(213,246,233)",
++        "c-primary-dark-700-alpha-100": "rgba(213, 246, 233, 0.90)",
++        "c-primary-dark-700-alpha-200": "rgba(213, 246, 233, 0.80)",
++        "c-primary-dark-700-alpha-300": "rgba(213, 246, 233, 0.70)",
++        "c-primary-dark-700-alpha-400": "rgba(213, 246, 233, 0.60)",
++        "c-primary-dark-700-alpha-500": "rgba(213, 246, 233, 0.50)",
++        "c-primary-dark-700-alpha-600": "rgba(213, 246, 233, 0.40)",
++        "c-primary-dark-700-alpha-700": "rgba(213, 246, 233, 0.30)",
++        "c-primary-dark-700-alpha-800": "rgba(213, 246, 233, 0.20)",
++        "c-primary-dark-700-alpha-900": "rgba(213, 246, 233, 0.10)",
++        "c-primary-dark-800": "rgb(221,248,237)",
++        "c-primary-dark-800-alpha-100": "rgba(221, 248, 237, 0.90)",
++        "c-primary-dark-800-alpha-200": "rgba(221, 248, 237, 0.80)",
++        "c-primary-dark-800-alpha-300": "rgba(221, 248, 237, 0.70)",
++        "c-primary-dark-800-alpha-400": "rgba(221, 248, 237, 0.60)",
++        "c-primary-dark-800-alpha-500": "rgba(221, 248, 237, 0.50)",
++        "c-primary-dark-800-alpha-600": "rgba(221, 248, 237, 0.40)",
++        "c-primary-dark-800-alpha-700": "rgba(221, 248, 237, 0.30)",
++        "c-primary-dark-800-alpha-800": "rgba(221, 248, 237, 0.20)",
++        "c-primary-dark-800-alpha-900": "rgba(221, 248, 237, 0.10)",
++        "c-primary-dark-900": "rgb(228,249,241)",
++        "c-primary-dark-900-alpha-100": "rgba(228, 249, 241, 0.90)",
++        "c-primary-dark-900-alpha-200": "rgba(228, 249, 241, 0.80)",
++        "c-primary-dark-900-alpha-300": "rgba(228, 249, 241, 0.70)",
++        "c-primary-dark-900-alpha-400": "rgba(228, 249, 241, 0.60)",
++        "c-primary-dark-900-alpha-500": "rgba(228, 249, 241, 0.50)",
++        "c-primary-dark-900-alpha-600": "rgba(228, 249, 241, 0.40)",
++        "c-primary-dark-900-alpha-700": "rgba(228, 249, 241, 0.30)",
++        "c-primary-dark-900-alpha-800": "rgba(228, 249, 241, 0.20)",
++        "c-primary-dark-900-alpha-900": "rgba(228, 249, 241, 0.10)",
++        "c-primary-dark-1000": "rgb(233,250,244)",
++        "c-primary-dark-1000-alpha-100": "rgba(233, 250, 244, 0.90)",
++        "c-primary-dark-1000-alpha-200": "rgba(233, 250, 244, 0.80)",
++        "c-primary-dark-1000-alpha-300": "rgba(233, 250, 244, 0.70)",
++        "c-primary-dark-1000-alpha-400": "rgba(233, 250, 244, 0.60)",
++        "c-primary-dark-1000-alpha-500": "rgba(233, 250, 244, 0.50)",
++        "c-primary-dark-1000-alpha-600": "rgba(233, 250, 244, 0.40)",
++        "c-primary-dark-1000-alpha-700": "rgba(233, 250, 244, 0.30)",
++        "c-primary-dark-1000-alpha-800": "rgba(233, 250, 244, 0.20)",
++        "c-primary-dark-1000-alpha-900": "rgba(233, 250, 244, 0.10)",
++        "c-primary-light-100": "rgb(47,190,138)",
++        "c-primary-light-100-alpha-100": "rgba(47, 190, 138, 0.90)",
++        "c-primary-light-100-alpha-200": "rgba(47, 190, 138, 0.80)",
++        "c-primary-light-100-alpha-300": "rgba(47, 190, 138, 0.70)",
++        "c-primary-light-100-alpha-400": "rgba(47, 190, 138, 0.60)",
++        "c-primary-light-100-alpha-500": "rgba(47, 190, 138, 0.50)",
++        "c-primary-light-100-alpha-600": "rgba(47, 190, 138, 0.40)",
++        "c-primary-light-100-alpha-700": "rgba(47, 190, 138, 0.30)",
++        "c-primary-light-100-alpha-800": "rgba(47, 190, 138, 0.20)",
++        "c-primary-light-100-alpha-900": "rgba(47, 190, 138, 0.10)",
++        "c-primary-light-200": "rgb(42,171,124)",
++        "c-primary-light-200-alpha-100": "rgba(42, 171, 124, 0.90)",
++        "c-primary-light-200-alpha-200": "rgba(42, 171, 124, 0.80)",
++        "c-primary-light-200-alpha-300": "rgba(42, 171, 124, 0.70)",
++        "c-primary-light-200-alpha-400": "rgba(42, 171, 124, 0.60)",
++        "c-primary-light-200-alpha-500": "rgba(42, 171, 124, 0.50)",
++        "c-primary-light-200-alpha-600": "rgba(42, 171, 124, 0.40)",
++        "c-primary-light-200-alpha-700": "rgba(42, 171, 124, 0.30)",
++        "c-primary-light-200-alpha-800": "rgba(42, 171, 124, 0.20)",
++        "c-primary-light-200-alpha-900": "rgba(42, 171, 124, 0.10)",
++        "c-primary-light-300": "rgb(38,154,112)",
++        "c-primary-light-300-alpha-100": "rgba(38, 154, 112, 0.90)",
++        "c-primary-light-300-alpha-200": "rgba(38, 154, 112, 0.80)",
++        "c-primary-light-300-alpha-300": "rgba(38, 154, 112, 0.70)",
++        "c-primary-light-300-alpha-400": "rgba(38, 154, 112, 0.60)",
++        "c-primary-light-300-alpha-500": "rgba(38, 154, 112, 0.50)",
++        "c-primary-light-300-alpha-600": "rgba(38, 154, 112, 0.40)",
++        "c-primary-light-300-alpha-700": "rgba(38, 154, 112, 0.30)",
++        "c-primary-light-300-alpha-800": "rgba(38, 154, 112, 0.20)",
++        "c-primary-light-300-alpha-900": "rgba(38, 154, 112, 0.10)",
++        "c-primary-light-400": "rgb(34,139,101)",
++        "c-primary-light-400-alpha-100": "rgba(34, 139, 101, 0.90)",
++        "c-primary-light-400-alpha-200": "rgba(34, 139, 101, 0.80)",
++        "c-primary-light-400-alpha-300": "rgba(34, 139, 101, 0.70)",
++        "c-primary-light-400-alpha-400": "rgba(34, 139, 101, 0.60)",
++        "c-primary-light-400-alpha-500": "rgba(34, 139, 101, 0.50)",
++        "c-primary-light-400-alpha-600": "rgba(34, 139, 101, 0.40)",
++        "c-primary-light-400-alpha-700": "rgba(34, 139, 101, 0.30)",
++        "c-primary-light-400-alpha-800": "rgba(34, 139, 101, 0.20)",
++        "c-primary-light-400-alpha-900": "rgba(34, 139, 101, 0.10)",
++        "c-primary-light-500": "rgb(31,125,91)",
++        "c-primary-light-500-alpha-100": "rgba(31, 125, 91, 0.90)",
++        "c-primary-light-500-alpha-200": "rgba(31, 125, 91, 0.80)",
++        "c-primary-light-500-alpha-300": "rgba(31, 125, 91, 0.70)",
++        "c-primary-light-500-alpha-400": "rgba(31, 125, 91, 0.60)",
++        "c-primary-light-500-alpha-500": "rgba(31, 125, 91, 0.50)",
++        "c-primary-light-500-alpha-600": "rgba(31, 125, 91, 0.40)",
++        "c-primary-light-500-alpha-700": "rgba(31, 125, 91, 0.30)",
++        "c-primary-light-500-alpha-800": "rgba(31, 125, 91, 0.20)",
++        "c-primary-light-500-alpha-900": "rgba(31, 125, 91, 0.10)",
++        "c-primary-light-600": "rgb(28,113,82)",
++        "c-primary-light-600-alpha-100": "rgba(28, 113, 82, 0.90)",
++        "c-primary-light-600-alpha-200": "rgba(28, 113, 82, 0.80)",
++        "c-primary-light-600-alpha-300": "rgba(28, 113, 82, 0.70)",
++        "c-primary-light-600-alpha-400": "rgba(28, 113, 82, 0.60)",
++        "c-primary-light-600-alpha-500": "rgba(28, 113, 82, 0.50)",
++        "c-primary-light-600-alpha-600": "rgba(28, 113, 82, 0.40)",
++        "c-primary-light-600-alpha-700": "rgba(28, 113, 82, 0.30)",
++        "c-primary-light-600-alpha-800": "rgba(28, 113, 82, 0.20)",
++        "c-primary-light-600-alpha-900": "rgba(28, 113, 82, 0.10)",
++        "c-primary-light-700": "rgb(25,102,74)",
++        "c-primary-light-700-alpha-100": "rgba(25, 102, 74, 0.90)",
++        "c-primary-light-700-alpha-200": "rgba(25, 102, 74, 0.80)",
++        "c-primary-light-700-alpha-300": "rgba(25, 102, 74, 0.70)",
++        "c-primary-light-700-alpha-400": "rgba(25, 102, 74, 0.60)",
++        "c-primary-light-700-alpha-500": "rgba(25, 102, 74, 0.50)",
++        "c-primary-light-700-alpha-600": "rgba(25, 102, 74, 0.40)",
++        "c-primary-light-700-alpha-700": "rgba(25, 102, 74, 0.30)",
++        "c-primary-light-700-alpha-800": "rgba(25, 102, 74, 0.20)",
++        "c-primary-light-700-alpha-900": "rgba(25, 102, 74, 0.10)",
++        "c-primary-light-800": "rgb(23,92,67)",
++        "c-primary-light-800-alpha-100": "rgba(23, 92, 67, 0.90)",
++        "c-primary-light-800-alpha-200": "rgba(23, 92, 67, 0.80)",
++        "c-primary-light-800-alpha-300": "rgba(23, 92, 67, 0.70)",
++        "c-primary-light-800-alpha-400": "rgba(23, 92, 67, 0.60)",
++        "c-primary-light-800-alpha-500": "rgba(23, 92, 67, 0.50)",
++        "c-primary-light-800-alpha-600": "rgba(23, 92, 67, 0.40)",
++        "c-primary-light-800-alpha-700": "rgba(23, 92, 67, 0.30)",
++        "c-primary-light-800-alpha-800": "rgba(23, 92, 67, 0.20)",
++        "c-primary-light-800-alpha-900": "rgba(23, 92, 67, 0.10)",
++        "c-primary-light-900": "rgb(21,83,60)",
++        "c-primary-light-900-alpha-100": "rgba(21, 83, 60, 0.90)",
++        "c-primary-light-900-alpha-200": "rgba(21, 83, 60, 0.80)",
++        "c-primary-light-900-alpha-300": "rgba(21, 83, 60, 0.70)",
++        "c-primary-light-900-alpha-400": "rgba(21, 83, 60, 0.60)",
++        "c-primary-light-900-alpha-500": "rgba(21, 83, 60, 0.50)",
++        "c-primary-light-900-alpha-600": "rgba(21, 83, 60, 0.40)",
++        "c-primary-light-900-alpha-700": "rgba(21, 83, 60, 0.30)",
++        "c-primary-light-900-alpha-800": "rgba(21, 83, 60, 0.20)",
++        "c-primary-light-900-alpha-900": "rgba(21, 83, 60, 0.10)",
++        "c-primary-light-1000": "rgb(14,54,39)",
++        "c-primary-light-1000-alpha-100": "rgba(14, 54, 39, 0.90)",
++        "c-primary-light-1000-alpha-200": "rgba(14, 54, 39, 0.80)",
++        "c-primary-light-1000-alpha-300": "rgba(14, 54, 39, 0.70)",
++        "c-primary-light-1000-alpha-400": "rgba(14, 54, 39, 0.60)",
++        "c-primary-light-1000-alpha-500": "rgba(14, 54, 39, 0.50)",
++        "c-primary-light-1000-alpha-600": "rgba(14, 54, 39, 0.40)",
++        "c-primary-light-1000-alpha-700": "rgba(14, 54, 39, 0.30)",
++        "c-primary-light-1000-alpha-800": "rgba(14, 54, 39, 0.20)",
++        "c-primary-light-1000-alpha-900": "rgba(14, 54, 39, 0.10)",
++        "c-theme": "rgb(21,83,60)",
++        "c-1000": "rgb(226, 232, 240)",
++        "c-950": "rgb(215,220,228)",
++        "c-900": "rgb(204,209,217)",
++        "c-850": "rgb(194,199,206)",
++        "c-800": "rgb(184,189,196)",
++        "c-750": "rgb(175,180,186)",
++        "c-700": "rgb(166,171,177)",
++        "c-650": "rgb(158,162,168)",
++        "c-600": "rgb(150,154,160)",
++        "c-550": "rgb(143,146,152)",
++        "c-500": "rgb(136,139,144)",
++        "c-450": "rgb(129,132,137)",
++        "c-400": "rgb(123,125,130)",
++        "c-350": "rgb(117,119,124)",
++        "c-300": "rgb(111,113,118)",
++        "c-250": "rgb(105,107,112)",
++        "c-200": "rgb(100,102,106)",
++        "c-150": "rgb(95,97,101)",
++        "c-100": "rgb(90,92,96)",
++        "c-050": "rgb(86,87,91)",
++        "c-000": "rgb(82,83,86)"
 +      },
 +      "extInfo": {
-+        "c-app-background": "var(c-primary-light-600-alpha-700)",
-+        "c-main-background": "rgba(255, 255, 255, 0.92)",
++        "c-app-background": "#0b0d10",
++        "c-main-background": "rgba(17, 20, 25, 0.96)",
 +        "bg-image": "",
 +        "bg-image-position": "center",
 +        "bg-image-size": "cover",
 +        "c-badge-primary": "var(c-primary)",
-+        "c-badge-secondary": "#5cbf9b",
-+        "c-badge-tertiary": "#8b7cff"
++        "c-badge-secondary": "#60a5fa",
++        "c-badge-tertiary": "#f472b6"
 +      }
 +    }
    }
  ] as const
 \ No newline at end of file
+diff --git a/src/utils/nativeModules/crypto.ts b/src/utils/nativeModules/crypto.ts
+index c8ee86a..0a513e2 100644
+--- a/src/utils/nativeModules/crypto.ts
++++ b/src/utils/nativeModules/crypto.ts
+@@ -80,11 +80,3 @@ export const aesDecryptSync = (text: string, key: string, vi: string, mode: AES_
+   return CryptoModule.aesDecryptSync(text, key, vi, mode)
+ }
+ 
+-export const hashSHA1 = async(text: any) => {
+-  try {
+-    return await CryptoModule.sha1(text)
+-  } catch (error) {
+-    console.error('生成SHA1出现问题:', error)
+-    throw error
+-  }
+-}

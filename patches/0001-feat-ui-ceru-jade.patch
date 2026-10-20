@@ -12,7 +12,7 @@ index aeff42c..ee29a4d 100644
    <a href="https://github.com/lyswhut/lx-music-desktop/releases"><img src="https://img.shields.io/github/release/lyswhut/lx-music-desktop" alt="Release version"></a>
    <a href="https://github.com/lyswhut/lx-music-desktop/actions/workflows/release.yml"><img src="https://github.com/lyswhut/lx-music-desktop/workflows/Build/badge.svg" alt="Build status"></a>
 diff --git a/build-config/build-pack.js b/build-config/build-pack.js
-index 5cc09d4..e89ebcc 100644
+index 5cc09d4..b3f9b10 100644
 --- a/build-config/build-pack.js
 +++ b/build-config/build-pack.js
 @@ -11,6 +11,8 @@ const afterPack = require('./build-after-pack')
@@ -24,6 +24,29 @@ index 5cc09d4..e89ebcc 100644
    beforePack,
    afterPack,
    protocols: {
+@@ -68,6 +70,10 @@ const winOptions = {
+     // differentialPackage: true,
+     license: './licenses/license.rtf',
+     shortcutName: 'LX Music',
++    createDesktopShortcut: 'always',
++    createStartMenuShortcut: true,
++    runAfterFinish: true,
++    deleteAppDataOnUninstall: false,
+   },
+ }
+ /**
+diff --git a/src/common/constants.ts b/src/common/constants.ts
+index 5323dbe..c155c92 100644
+--- a/src/common/constants.ts
++++ b/src/common/constants.ts
+@@ -28,6 +28,7 @@ export const LIST_IDS = {
+   LOVE: 'love',
+   TEMP: 'temp',
+   DOWNLOAD: 'download',
++  RECENT: 'recent',
+   PLAY_LATER: null,
+ } as const
+ 
 diff --git a/src/common/defaultSetting.ts b/src/common/defaultSetting.ts
 index e4ce730..52da268 100644
 --- a/src/common/defaultSetting.ts
@@ -57,7 +80,7 @@ index e4ce730..52da268 100644
  }
  
 diff --git a/src/common/theme/createThemes.js b/src/common/theme/createThemes.js
-index 30e5564..d1406a4 100644
+index 30e5564..4327ba0 100644
 --- a/src/common/theme/createThemes.js
 +++ b/src/common/theme/createThemes.js
 @@ -367,6 +367,30 @@ const defaultThemes = [
@@ -66,14 +89,14 @@ index 30e5564..d1406a4 100644
    },
 +  {
 +    id: 'ceru',
-+    name: '青瓷',
-+    isDark: false,
++    name: '青瓷夜色',
++    isDark: true,
 +    isDarkFont: false,
 +    config: {
-+      primary: 'rgb(22, 184, 155)',
-+      font: 'rgb(20, 35, 31)',
-+      '--color-app-background': 'transparent',
-+      '--color-main-background': 'rgba(255, 255, 255, 0.72)',
++      primary: 'rgb(52, 211, 153)',
++      font: 'rgb(226, 232, 240)',
++      '--color-app-background': '#0b0d10',
++      '--color-main-background': 'rgba(17, 20, 25, 0.96)',
 +      '--color-nav-font': 'var(--color-primary)',
 +      '--background-image': 'none',
 +      '--background-image-position': 'center',
@@ -84,15 +107,15 @@ index 30e5564..d1406a4 100644
 +      '--color-btn-close': '#fab4a0',
 +
 +      '--color-badge-primary': 'var(--color-primary)',
-+      '--color-badge-secondary': '#5cbf9b',
-+      '--color-badge-tertiary': '#8b7cff',
++      '--color-badge-secondary': '#60a5fa',
++      '--color-badge-tertiary': '#f472b6',
 +    },
 +  },
  ]
  
  const themes = defaultThemes.map(({ config: { primary, font, ...extInfo }, ...themeInfo }) => {
 diff --git a/src/common/theme/index.json b/src/common/theme/index.json
-index 5c30e05..04222d5 100644
+index 5c30e05..9b92409 100644
 --- a/src/common/theme/index.json
 +++ b/src/common/theme/index.json
 @@ -3853,5 +3853,262 @@
@@ -102,248 +125,248 @@ index 5c30e05..04222d5 100644
 +  },
 +  {
 +    "id": "ceru",
-+    "name": "青瓷",
-+    "isDark": false,
++    "name": "青瓷夜色",
++    "isDark": true,
 +    "isDarkFont": false,
 +    "isCustom": false,
 +    "config": {
 +      "themeColors": {
-+        "--color-primary": "rgb(22, 184, 155)",
-+        "--color-primary-dark-100": "rgb(20,166,140)",
-+        "--color-primary-dark-100-alpha-100": "rgba(20, 166, 140, 0.90)",
-+        "--color-primary-alpha-100": "rgba(22, 184, 155, 0.90)",
-+        "--color-primary-dark-100-alpha-200": "rgba(20, 166, 140, 0.80)",
-+        "--color-primary-alpha-200": "rgba(22, 184, 155, 0.80)",
-+        "--color-primary-dark-100-alpha-300": "rgba(20, 166, 140, 0.70)",
-+        "--color-primary-alpha-300": "rgba(22, 184, 155, 0.70)",
-+        "--color-primary-dark-100-alpha-400": "rgba(20, 166, 140, 0.60)",
-+        "--color-primary-alpha-400": "rgba(22, 184, 155, 0.60)",
-+        "--color-primary-dark-100-alpha-500": "rgba(20, 166, 140, 0.50)",
-+        "--color-primary-alpha-500": "rgba(22, 184, 155, 0.50)",
-+        "--color-primary-dark-100-alpha-600": "rgba(20, 166, 140, 0.40)",
-+        "--color-primary-alpha-600": "rgba(22, 184, 155, 0.40)",
-+        "--color-primary-dark-100-alpha-700": "rgba(20, 166, 140, 0.30)",
-+        "--color-primary-alpha-700": "rgba(22, 184, 155, 0.30)",
-+        "--color-primary-dark-100-alpha-800": "rgba(20, 166, 140, 0.20)",
-+        "--color-primary-alpha-800": "rgba(22, 184, 155, 0.20)",
-+        "--color-primary-dark-100-alpha-900": "rgba(20, 166, 140, 0.10)",
-+        "--color-primary-alpha-900": "rgba(22, 184, 155, 0.10)",
-+        "--color-primary-dark-200": "rgb(18,149,126)",
-+        "--color-primary-dark-200-alpha-100": "rgba(18, 149, 126, 0.90)",
-+        "--color-primary-dark-200-alpha-200": "rgba(18, 149, 126, 0.80)",
-+        "--color-primary-dark-200-alpha-300": "rgba(18, 149, 126, 0.70)",
-+        "--color-primary-dark-200-alpha-400": "rgba(18, 149, 126, 0.60)",
-+        "--color-primary-dark-200-alpha-500": "rgba(18, 149, 126, 0.50)",
-+        "--color-primary-dark-200-alpha-600": "rgba(18, 149, 126, 0.40)",
-+        "--color-primary-dark-200-alpha-700": "rgba(18, 149, 126, 0.30)",
-+        "--color-primary-dark-200-alpha-800": "rgba(18, 149, 126, 0.20)",
-+        "--color-primary-dark-200-alpha-900": "rgba(18, 149, 126, 0.10)",
-+        "--color-primary-dark-300": "rgb(16,134,113)",
-+        "--color-primary-dark-300-alpha-100": "rgba(16, 134, 113, 0.90)",
-+        "--color-primary-dark-300-alpha-200": "rgba(16, 134, 113, 0.80)",
-+        "--color-primary-dark-300-alpha-300": "rgba(16, 134, 113, 0.70)",
-+        "--color-primary-dark-300-alpha-400": "rgba(16, 134, 113, 0.60)",
-+        "--color-primary-dark-300-alpha-500": "rgba(16, 134, 113, 0.50)",
-+        "--color-primary-dark-300-alpha-600": "rgba(16, 134, 113, 0.40)",
-+        "--color-primary-dark-300-alpha-700": "rgba(16, 134, 113, 0.30)",
-+        "--color-primary-dark-300-alpha-800": "rgba(16, 134, 113, 0.20)",
-+        "--color-primary-dark-300-alpha-900": "rgba(16, 134, 113, 0.10)",
-+        "--color-primary-dark-400": "rgb(14,121,102)",
-+        "--color-primary-dark-400-alpha-100": "rgba(14, 121, 102, 0.90)",
-+        "--color-primary-dark-400-alpha-200": "rgba(14, 121, 102, 0.80)",
-+        "--color-primary-dark-400-alpha-300": "rgba(14, 121, 102, 0.70)",
-+        "--color-primary-dark-400-alpha-400": "rgba(14, 121, 102, 0.60)",
-+        "--color-primary-dark-400-alpha-500": "rgba(14, 121, 102, 0.50)",
-+        "--color-primary-dark-400-alpha-600": "rgba(14, 121, 102, 0.40)",
-+        "--color-primary-dark-400-alpha-700": "rgba(14, 121, 102, 0.30)",
-+        "--color-primary-dark-400-alpha-800": "rgba(14, 121, 102, 0.20)",
-+        "--color-primary-dark-400-alpha-900": "rgba(14, 121, 102, 0.10)",
-+        "--color-primary-dark-500": "rgb(13,109,92)",
-+        "--color-primary-dark-500-alpha-100": "rgba(13, 109, 92, 0.90)",
-+        "--color-primary-dark-500-alpha-200": "rgba(13, 109, 92, 0.80)",
-+        "--color-primary-dark-500-alpha-300": "rgba(13, 109, 92, 0.70)",
-+        "--color-primary-dark-500-alpha-400": "rgba(13, 109, 92, 0.60)",
-+        "--color-primary-dark-500-alpha-500": "rgba(13, 109, 92, 0.50)",
-+        "--color-primary-dark-500-alpha-600": "rgba(13, 109, 92, 0.40)",
-+        "--color-primary-dark-500-alpha-700": "rgba(13, 109, 92, 0.30)",
-+        "--color-primary-dark-500-alpha-800": "rgba(13, 109, 92, 0.20)",
-+        "--color-primary-dark-500-alpha-900": "rgba(13, 109, 92, 0.10)",
-+        "--color-primary-dark-600": "rgb(12,98,83)",
-+        "--color-primary-dark-600-alpha-100": "rgba(12, 98, 83, 0.90)",
-+        "--color-primary-dark-600-alpha-200": "rgba(12, 98, 83, 0.80)",
-+        "--color-primary-dark-600-alpha-300": "rgba(12, 98, 83, 0.70)",
-+        "--color-primary-dark-600-alpha-400": "rgba(12, 98, 83, 0.60)",
-+        "--color-primary-dark-600-alpha-500": "rgba(12, 98, 83, 0.50)",
-+        "--color-primary-dark-600-alpha-600": "rgba(12, 98, 83, 0.40)",
-+        "--color-primary-dark-600-alpha-700": "rgba(12, 98, 83, 0.30)",
-+        "--color-primary-dark-600-alpha-800": "rgba(12, 98, 83, 0.20)",
-+        "--color-primary-dark-600-alpha-900": "rgba(12, 98, 83, 0.10)",
-+        "--color-primary-dark-700": "rgb(11,88,75)",
-+        "--color-primary-dark-700-alpha-100": "rgba(11, 88, 75, 0.90)",
-+        "--color-primary-dark-700-alpha-200": "rgba(11, 88, 75, 0.80)",
-+        "--color-primary-dark-700-alpha-300": "rgba(11, 88, 75, 0.70)",
-+        "--color-primary-dark-700-alpha-400": "rgba(11, 88, 75, 0.60)",
-+        "--color-primary-dark-700-alpha-500": "rgba(11, 88, 75, 0.50)",
-+        "--color-primary-dark-700-alpha-600": "rgba(11, 88, 75, 0.40)",
-+        "--color-primary-dark-700-alpha-700": "rgba(11, 88, 75, 0.30)",
-+        "--color-primary-dark-700-alpha-800": "rgba(11, 88, 75, 0.20)",
-+        "--color-primary-dark-700-alpha-900": "rgba(11, 88, 75, 0.10)",
-+        "--color-primary-dark-800": "rgb(10,79,68)",
-+        "--color-primary-dark-800-alpha-100": "rgba(10, 79, 68, 0.90)",
-+        "--color-primary-dark-800-alpha-200": "rgba(10, 79, 68, 0.80)",
-+        "--color-primary-dark-800-alpha-300": "rgba(10, 79, 68, 0.70)",
-+        "--color-primary-dark-800-alpha-400": "rgba(10, 79, 68, 0.60)",
-+        "--color-primary-dark-800-alpha-500": "rgba(10, 79, 68, 0.50)",
-+        "--color-primary-dark-800-alpha-600": "rgba(10, 79, 68, 0.40)",
-+        "--color-primary-dark-800-alpha-700": "rgba(10, 79, 68, 0.30)",
-+        "--color-primary-dark-800-alpha-800": "rgba(10, 79, 68, 0.20)",
-+        "--color-primary-dark-800-alpha-900": "rgba(10, 79, 68, 0.10)",
-+        "--color-primary-dark-900": "rgb(9,71,61)",
-+        "--color-primary-dark-900-alpha-100": "rgba(9, 71, 61, 0.90)",
-+        "--color-primary-dark-900-alpha-200": "rgba(9, 71, 61, 0.80)",
-+        "--color-primary-dark-900-alpha-300": "rgba(9, 71, 61, 0.70)",
-+        "--color-primary-dark-900-alpha-400": "rgba(9, 71, 61, 0.60)",
-+        "--color-primary-dark-900-alpha-500": "rgba(9, 71, 61, 0.50)",
-+        "--color-primary-dark-900-alpha-600": "rgba(9, 71, 61, 0.40)",
-+        "--color-primary-dark-900-alpha-700": "rgba(9, 71, 61, 0.30)",
-+        "--color-primary-dark-900-alpha-800": "rgba(9, 71, 61, 0.20)",
-+        "--color-primary-dark-900-alpha-900": "rgba(9, 71, 61, 0.10)",
-+        "--color-primary-dark-1000": "rgb(8,64,55)",
-+        "--color-primary-dark-1000-alpha-100": "rgba(8, 64, 55, 0.90)",
-+        "--color-primary-dark-1000-alpha-200": "rgba(8, 64, 55, 0.80)",
-+        "--color-primary-dark-1000-alpha-300": "rgba(8, 64, 55, 0.70)",
-+        "--color-primary-dark-1000-alpha-400": "rgba(8, 64, 55, 0.60)",
-+        "--color-primary-dark-1000-alpha-500": "rgba(8, 64, 55, 0.50)",
-+        "--color-primary-dark-1000-alpha-600": "rgba(8, 64, 55, 0.40)",
-+        "--color-primary-dark-1000-alpha-700": "rgba(8, 64, 55, 0.30)",
-+        "--color-primary-dark-1000-alpha-800": "rgba(8, 64, 55, 0.20)",
-+        "--color-primary-dark-1000-alpha-900": "rgba(8, 64, 55, 0.10)",
-+        "--color-primary-light-100": "rgb(69,198,175)",
-+        "--color-primary-light-100-alpha-100": "rgba(69, 198, 175, 0.90)",
-+        "--color-primary-light-100-alpha-200": "rgba(69, 198, 175, 0.80)",
-+        "--color-primary-light-100-alpha-300": "rgba(69, 198, 175, 0.70)",
-+        "--color-primary-light-100-alpha-400": "rgba(69, 198, 175, 0.60)",
-+        "--color-primary-light-100-alpha-500": "rgba(69, 198, 175, 0.50)",
-+        "--color-primary-light-100-alpha-600": "rgba(69, 198, 175, 0.40)",
-+        "--color-primary-light-100-alpha-700": "rgba(69, 198, 175, 0.30)",
-+        "--color-primary-light-100-alpha-800": "rgba(69, 198, 175, 0.20)",
-+        "--color-primary-light-100-alpha-900": "rgba(69, 198, 175, 0.10)",
-+        "--color-primary-light-200": "rgb(106,209,191)",
-+        "--color-primary-light-200-alpha-100": "rgba(106, 209, 191, 0.90)",
-+        "--color-primary-light-200-alpha-200": "rgba(106, 209, 191, 0.80)",
-+        "--color-primary-light-200-alpha-300": "rgba(106, 209, 191, 0.70)",
-+        "--color-primary-light-200-alpha-400": "rgba(106, 209, 191, 0.60)",
-+        "--color-primary-light-200-alpha-500": "rgba(106, 209, 191, 0.50)",
-+        "--color-primary-light-200-alpha-600": "rgba(106, 209, 191, 0.40)",
-+        "--color-primary-light-200-alpha-700": "rgba(106, 209, 191, 0.30)",
-+        "--color-primary-light-200-alpha-800": "rgba(106, 209, 191, 0.20)",
-+        "--color-primary-light-200-alpha-900": "rgba(106, 209, 191, 0.10)",
-+        "--color-primary-light-300": "rgb(136,218,204)",
-+        "--color-primary-light-300-alpha-100": "rgba(136, 218, 204, 0.90)",
-+        "--color-primary-light-300-alpha-200": "rgba(136, 218, 204, 0.80)",
-+        "--color-primary-light-300-alpha-300": "rgba(136, 218, 204, 0.70)",
-+        "--color-primary-light-300-alpha-400": "rgba(136, 218, 204, 0.60)",
-+        "--color-primary-light-300-alpha-500": "rgba(136, 218, 204, 0.50)",
-+        "--color-primary-light-300-alpha-600": "rgba(136, 218, 204, 0.40)",
-+        "--color-primary-light-300-alpha-700": "rgba(136, 218, 204, 0.30)",
-+        "--color-primary-light-300-alpha-800": "rgba(136, 218, 204, 0.20)",
-+        "--color-primary-light-300-alpha-900": "rgba(136, 218, 204, 0.10)",
-+        "--color-primary-light-400": "rgb(160,225,214)",
-+        "--color-primary-light-400-alpha-100": "rgba(160, 225, 214, 0.90)",
-+        "--color-primary-light-400-alpha-200": "rgba(160, 225, 214, 0.80)",
-+        "--color-primary-light-400-alpha-300": "rgba(160, 225, 214, 0.70)",
-+        "--color-primary-light-400-alpha-400": "rgba(160, 225, 214, 0.60)",
-+        "--color-primary-light-400-alpha-500": "rgba(160, 225, 214, 0.50)",
-+        "--color-primary-light-400-alpha-600": "rgba(160, 225, 214, 0.40)",
-+        "--color-primary-light-400-alpha-700": "rgba(160, 225, 214, 0.30)",
-+        "--color-primary-light-400-alpha-800": "rgba(160, 225, 214, 0.20)",
-+        "--color-primary-light-400-alpha-900": "rgba(160, 225, 214, 0.10)",
-+        "--color-primary-light-500": "rgb(179,231,222)",
-+        "--color-primary-light-500-alpha-100": "rgba(179, 231, 222, 0.90)",
-+        "--color-primary-light-500-alpha-200": "rgba(179, 231, 222, 0.80)",
-+        "--color-primary-light-500-alpha-300": "rgba(179, 231, 222, 0.70)",
-+        "--color-primary-light-500-alpha-400": "rgba(179, 231, 222, 0.60)",
-+        "--color-primary-light-500-alpha-500": "rgba(179, 231, 222, 0.50)",
-+        "--color-primary-light-500-alpha-600": "rgba(179, 231, 222, 0.40)",
-+        "--color-primary-light-500-alpha-700": "rgba(179, 231, 222, 0.30)",
-+        "--color-primary-light-500-alpha-800": "rgba(179, 231, 222, 0.20)",
-+        "--color-primary-light-500-alpha-900": "rgba(179, 231, 222, 0.10)",
-+        "--color-primary-light-600": "rgb(194,236,229)",
-+        "--color-primary-light-600-alpha-100": "rgba(194, 236, 229, 0.90)",
-+        "--color-primary-light-600-alpha-200": "rgba(194, 236, 229, 0.80)",
-+        "--color-primary-light-600-alpha-300": "rgba(194, 236, 229, 0.70)",
-+        "--color-primary-light-600-alpha-400": "rgba(194, 236, 229, 0.60)",
-+        "--color-primary-light-600-alpha-500": "rgba(194, 236, 229, 0.50)",
-+        "--color-primary-light-600-alpha-600": "rgba(194, 236, 229, 0.40)",
-+        "--color-primary-light-600-alpha-700": "rgba(194, 236, 229, 0.30)",
-+        "--color-primary-light-600-alpha-800": "rgba(194, 236, 229, 0.20)",
-+        "--color-primary-light-600-alpha-900": "rgba(194, 236, 229, 0.10)",
-+        "--color-primary-light-700": "rgb(206,240,234)",
-+        "--color-primary-light-700-alpha-100": "rgba(206, 240, 234, 0.90)",
-+        "--color-primary-light-700-alpha-200": "rgba(206, 240, 234, 0.80)",
-+        "--color-primary-light-700-alpha-300": "rgba(206, 240, 234, 0.70)",
-+        "--color-primary-light-700-alpha-400": "rgba(206, 240, 234, 0.60)",
-+        "--color-primary-light-700-alpha-500": "rgba(206, 240, 234, 0.50)",
-+        "--color-primary-light-700-alpha-600": "rgba(206, 240, 234, 0.40)",
-+        "--color-primary-light-700-alpha-700": "rgba(206, 240, 234, 0.30)",
-+        "--color-primary-light-700-alpha-800": "rgba(206, 240, 234, 0.20)",
-+        "--color-primary-light-700-alpha-900": "rgba(206, 240, 234, 0.10)",
-+        "--color-primary-light-800": "rgb(216,243,238)",
-+        "--color-primary-light-800-alpha-100": "rgba(216, 243, 238, 0.90)",
-+        "--color-primary-light-800-alpha-200": "rgba(216, 243, 238, 0.80)",
-+        "--color-primary-light-800-alpha-300": "rgba(216, 243, 238, 0.70)",
-+        "--color-primary-light-800-alpha-400": "rgba(216, 243, 238, 0.60)",
-+        "--color-primary-light-800-alpha-500": "rgba(216, 243, 238, 0.50)",
-+        "--color-primary-light-800-alpha-600": "rgba(216, 243, 238, 0.40)",
-+        "--color-primary-light-800-alpha-700": "rgba(216, 243, 238, 0.30)",
-+        "--color-primary-light-800-alpha-800": "rgba(216, 243, 238, 0.20)",
-+        "--color-primary-light-800-alpha-900": "rgba(216, 243, 238, 0.10)",
-+        "--color-primary-light-900": "rgb(224,245,241)",
-+        "--color-primary-light-900-alpha-100": "rgba(224, 245, 241, 0.90)",
-+        "--color-primary-light-900-alpha-200": "rgba(224, 245, 241, 0.80)",
-+        "--color-primary-light-900-alpha-300": "rgba(224, 245, 241, 0.70)",
-+        "--color-primary-light-900-alpha-400": "rgba(224, 245, 241, 0.60)",
-+        "--color-primary-light-900-alpha-500": "rgba(224, 245, 241, 0.50)",
-+        "--color-primary-light-900-alpha-600": "rgba(224, 245, 241, 0.40)",
-+        "--color-primary-light-900-alpha-700": "rgba(224, 245, 241, 0.30)",
-+        "--color-primary-light-900-alpha-800": "rgba(224, 245, 241, 0.20)",
-+        "--color-primary-light-900-alpha-900": "rgba(224, 245, 241, 0.10)",
-+        "--color-primary-light-1000": "rgb(255,255,255)",
-+        "--color-primary-light-1000-alpha-100": "rgba(255, 255, 255, 0.90)",
-+        "--color-primary-light-1000-alpha-200": "rgba(255, 255, 255, 0.80)",
-+        "--color-primary-light-1000-alpha-300": "rgba(255, 255, 255, 0.70)",
-+        "--color-primary-light-1000-alpha-400": "rgba(255, 255, 255, 0.60)",
-+        "--color-primary-light-1000-alpha-500": "rgba(255, 255, 255, 0.50)",
-+        "--color-primary-light-1000-alpha-600": "rgba(255, 255, 255, 0.40)",
-+        "--color-primary-light-1000-alpha-700": "rgba(255, 255, 255, 0.30)",
-+        "--color-primary-light-1000-alpha-800": "rgba(255, 255, 255, 0.20)",
-+        "--color-primary-light-1000-alpha-900": "rgba(255, 255, 255, 0.10)",
-+        "--color-theme": "rgb(22, 184, 155)",
-+        "--color-1000": "rgb(20, 35, 31)",
-+        "--color-950": "rgb(32,46,42)",
-+        "--color-900": "rgb(44,57,53)",
-+        "--color-850": "rgb(55,68,65)",
-+        "--color-800": "rgb(67,79,76)",
-+        "--color-750": "rgb(79,90,87)",
-+        "--color-700": "rgb(91,101,98)",
-+        "--color-650": "rgb(102,112,109)",
-+        "--color-600": "rgb(114,123,121)",
-+        "--color-550": "rgb(126,134,132)",
-+        "--color-500": "rgb(138,145,143)",
-+        "--color-450": "rgb(149,156,154)",
-+        "--color-400": "rgb(161,167,165)",
-+        "--color-350": "rgb(173,178,177)",
-+        "--color-300": "rgb(185,189,188)",
-+        "--color-250": "rgb(196,200,199)",
-+        "--color-200": "rgb(208,211,210)",
-+        "--color-150": "rgb(220,222,221)",
-+        "--color-100": "rgb(232,233,233)",
-+        "--color-050": "rgb(243,244,244)",
-+        "--color-000": "rgb(255,255,255)"
++        "--color-primary": "rgb(52, 211, 153)",
++        "--color-primary-dark-100": "rgb(93,220,173)",
++        "--color-primary-dark-100-alpha-100": "rgba(93, 220, 173, 0.90)",
++        "--color-primary-alpha-100": "rgba(52, 211, 153, 0.90)",
++        "--color-primary-dark-100-alpha-200": "rgba(93, 220, 173, 0.80)",
++        "--color-primary-alpha-200": "rgba(52, 211, 153, 0.80)",
++        "--color-primary-dark-100-alpha-300": "rgba(93, 220, 173, 0.70)",
++        "--color-primary-alpha-300": "rgba(52, 211, 153, 0.70)",
++        "--color-primary-dark-100-alpha-400": "rgba(93, 220, 173, 0.60)",
++        "--color-primary-alpha-400": "rgba(52, 211, 153, 0.60)",
++        "--color-primary-dark-100-alpha-500": "rgba(93, 220, 173, 0.50)",
++        "--color-primary-alpha-500": "rgba(52, 211, 153, 0.50)",
++        "--color-primary-dark-100-alpha-600": "rgba(93, 220, 173, 0.40)",
++        "--color-primary-alpha-600": "rgba(52, 211, 153, 0.40)",
++        "--color-primary-dark-100-alpha-700": "rgba(93, 220, 173, 0.30)",
++        "--color-primary-alpha-700": "rgba(52, 211, 153, 0.30)",
++        "--color-primary-dark-100-alpha-800": "rgba(93, 220, 173, 0.20)",
++        "--color-primary-alpha-800": "rgba(52, 211, 153, 0.20)",
++        "--color-primary-dark-100-alpha-900": "rgba(93, 220, 173, 0.10)",
++        "--color-primary-alpha-900": "rgba(52, 211, 153, 0.10)",
++        "--color-primary-dark-200": "rgb(125,227,189)",
++        "--color-primary-dark-200-alpha-100": "rgba(125, 227, 189, 0.90)",
++        "--color-primary-dark-200-alpha-200": "rgba(125, 227, 189, 0.80)",
++        "--color-primary-dark-200-alpha-300": "rgba(125, 227, 189, 0.70)",
++        "--color-primary-dark-200-alpha-400": "rgba(125, 227, 189, 0.60)",
++        "--color-primary-dark-200-alpha-500": "rgba(125, 227, 189, 0.50)",
++        "--color-primary-dark-200-alpha-600": "rgba(125, 227, 189, 0.40)",
++        "--color-primary-dark-200-alpha-700": "rgba(125, 227, 189, 0.30)",
++        "--color-primary-dark-200-alpha-800": "rgba(125, 227, 189, 0.20)",
++        "--color-primary-dark-200-alpha-900": "rgba(125, 227, 189, 0.10)",
++        "--color-primary-dark-300": "rgb(151,233,202)",
++        "--color-primary-dark-300-alpha-100": "rgba(151, 233, 202, 0.90)",
++        "--color-primary-dark-300-alpha-200": "rgba(151, 233, 202, 0.80)",
++        "--color-primary-dark-300-alpha-300": "rgba(151, 233, 202, 0.70)",
++        "--color-primary-dark-300-alpha-400": "rgba(151, 233, 202, 0.60)",
++        "--color-primary-dark-300-alpha-500": "rgba(151, 233, 202, 0.50)",
++        "--color-primary-dark-300-alpha-600": "rgba(151, 233, 202, 0.40)",
++        "--color-primary-dark-300-alpha-700": "rgba(151, 233, 202, 0.30)",
++        "--color-primary-dark-300-alpha-800": "rgba(151, 233, 202, 0.20)",
++        "--color-primary-dark-300-alpha-900": "rgba(151, 233, 202, 0.10)",
++        "--color-primary-dark-400": "rgb(172,237,213)",
++        "--color-primary-dark-400-alpha-100": "rgba(172, 237, 213, 0.90)",
++        "--color-primary-dark-400-alpha-200": "rgba(172, 237, 213, 0.80)",
++        "--color-primary-dark-400-alpha-300": "rgba(172, 237, 213, 0.70)",
++        "--color-primary-dark-400-alpha-400": "rgba(172, 237, 213, 0.60)",
++        "--color-primary-dark-400-alpha-500": "rgba(172, 237, 213, 0.50)",
++        "--color-primary-dark-400-alpha-600": "rgba(172, 237, 213, 0.40)",
++        "--color-primary-dark-400-alpha-700": "rgba(172, 237, 213, 0.30)",
++        "--color-primary-dark-400-alpha-800": "rgba(172, 237, 213, 0.20)",
++        "--color-primary-dark-400-alpha-900": "rgba(172, 237, 213, 0.10)",
++        "--color-primary-dark-500": "rgb(189,241,221)",
++        "--color-primary-dark-500-alpha-100": "rgba(189, 241, 221, 0.90)",
++        "--color-primary-dark-500-alpha-200": "rgba(189, 241, 221, 0.80)",
++        "--color-primary-dark-500-alpha-300": "rgba(189, 241, 221, 0.70)",
++        "--color-primary-dark-500-alpha-400": "rgba(189, 241, 221, 0.60)",
++        "--color-primary-dark-500-alpha-500": "rgba(189, 241, 221, 0.50)",
++        "--color-primary-dark-500-alpha-600": "rgba(189, 241, 221, 0.40)",
++        "--color-primary-dark-500-alpha-700": "rgba(189, 241, 221, 0.30)",
++        "--color-primary-dark-500-alpha-800": "rgba(189, 241, 221, 0.20)",
++        "--color-primary-dark-500-alpha-900": "rgba(189, 241, 221, 0.10)",
++        "--color-primary-dark-600": "rgb(202,244,228)",
++        "--color-primary-dark-600-alpha-100": "rgba(202, 244, 228, 0.90)",
++        "--color-primary-dark-600-alpha-200": "rgba(202, 244, 228, 0.80)",
++        "--color-primary-dark-600-alpha-300": "rgba(202, 244, 228, 0.70)",
++        "--color-primary-dark-600-alpha-400": "rgba(202, 244, 228, 0.60)",
++        "--color-primary-dark-600-alpha-500": "rgba(202, 244, 228, 0.50)",
++        "--color-primary-dark-600-alpha-600": "rgba(202, 244, 228, 0.40)",
++        "--color-primary-dark-600-alpha-700": "rgba(202, 244, 228, 0.30)",
++        "--color-primary-dark-600-alpha-800": "rgba(202, 244, 228, 0.20)",
++        "--color-primary-dark-600-alpha-900": "rgba(202, 244, 228, 0.10)",
++        "--color-primary-dark-700": "rgb(213,246,233)",
++        "--color-primary-dark-700-alpha-100": "rgba(213, 246, 233, 0.90)",
++        "--color-primary-dark-700-alpha-200": "rgba(213, 246, 233, 0.80)",
++        "--color-primary-dark-700-alpha-300": "rgba(213, 246, 233, 0.70)",
++        "--color-primary-dark-700-alpha-400": "rgba(213, 246, 233, 0.60)",
++        "--color-primary-dark-700-alpha-500": "rgba(213, 246, 233, 0.50)",
++        "--color-primary-dark-700-alpha-600": "rgba(213, 246, 233, 0.40)",
++        "--color-primary-dark-700-alpha-700": "rgba(213, 246, 233, 0.30)",
++        "--color-primary-dark-700-alpha-800": "rgba(213, 246, 233, 0.20)",
++        "--color-primary-dark-700-alpha-900": "rgba(213, 246, 233, 0.10)",
++        "--color-primary-dark-800": "rgb(221,248,237)",
++        "--color-primary-dark-800-alpha-100": "rgba(221, 248, 237, 0.90)",
++        "--color-primary-dark-800-alpha-200": "rgba(221, 248, 237, 0.80)",
++        "--color-primary-dark-800-alpha-300": "rgba(221, 248, 237, 0.70)",
++        "--color-primary-dark-800-alpha-400": "rgba(221, 248, 237, 0.60)",
++        "--color-primary-dark-800-alpha-500": "rgba(221, 248, 237, 0.50)",
++        "--color-primary-dark-800-alpha-600": "rgba(221, 248, 237, 0.40)",
++        "--color-primary-dark-800-alpha-700": "rgba(221, 248, 237, 0.30)",
++        "--color-primary-dark-800-alpha-800": "rgba(221, 248, 237, 0.20)",
++        "--color-primary-dark-800-alpha-900": "rgba(221, 248, 237, 0.10)",
++        "--color-primary-dark-900": "rgb(228,249,241)",
++        "--color-primary-dark-900-alpha-100": "rgba(228, 249, 241, 0.90)",
++        "--color-primary-dark-900-alpha-200": "rgba(228, 249, 241, 0.80)",
++        "--color-primary-dark-900-alpha-300": "rgba(228, 249, 241, 0.70)",
++        "--color-primary-dark-900-alpha-400": "rgba(228, 249, 241, 0.60)",
++        "--color-primary-dark-900-alpha-500": "rgba(228, 249, 241, 0.50)",
++        "--color-primary-dark-900-alpha-600": "rgba(228, 249, 241, 0.40)",
++        "--color-primary-dark-900-alpha-700": "rgba(228, 249, 241, 0.30)",
++        "--color-primary-dark-900-alpha-800": "rgba(228, 249, 241, 0.20)",
++        "--color-primary-dark-900-alpha-900": "rgba(228, 249, 241, 0.10)",
++        "--color-primary-dark-1000": "rgb(233,250,244)",
++        "--color-primary-dark-1000-alpha-100": "rgba(233, 250, 244, 0.90)",
++        "--color-primary-dark-1000-alpha-200": "rgba(233, 250, 244, 0.80)",
++        "--color-primary-dark-1000-alpha-300": "rgba(233, 250, 244, 0.70)",
++        "--color-primary-dark-1000-alpha-400": "rgba(233, 250, 244, 0.60)",
++        "--color-primary-dark-1000-alpha-500": "rgba(233, 250, 244, 0.50)",
++        "--color-primary-dark-1000-alpha-600": "rgba(233, 250, 244, 0.40)",
++        "--color-primary-dark-1000-alpha-700": "rgba(233, 250, 244, 0.30)",
++        "--color-primary-dark-1000-alpha-800": "rgba(233, 250, 244, 0.20)",
++        "--color-primary-dark-1000-alpha-900": "rgba(233, 250, 244, 0.10)",
++        "--color-primary-light-100": "rgb(47,190,138)",
++        "--color-primary-light-100-alpha-100": "rgba(47, 190, 138, 0.90)",
++        "--color-primary-light-100-alpha-200": "rgba(47, 190, 138, 0.80)",
++        "--color-primary-light-100-alpha-300": "rgba(47, 190, 138, 0.70)",
++        "--color-primary-light-100-alpha-400": "rgba(47, 190, 138, 0.60)",
++        "--color-primary-light-100-alpha-500": "rgba(47, 190, 138, 0.50)",
++        "--color-primary-light-100-alpha-600": "rgba(47, 190, 138, 0.40)",
++        "--color-primary-light-100-alpha-700": "rgba(47, 190, 138, 0.30)",
++        "--color-primary-light-100-alpha-800": "rgba(47, 190, 138, 0.20)",
++        "--color-primary-light-100-alpha-900": "rgba(47, 190, 138, 0.10)",
++        "--color-primary-light-200": "rgb(42,171,124)",
++        "--color-primary-light-200-alpha-100": "rgba(42, 171, 124, 0.90)",
++        "--color-primary-light-200-alpha-200": "rgba(42, 171, 124, 0.80)",
++        "--color-primary-light-200-alpha-300": "rgba(42, 171, 124, 0.70)",
++        "--color-primary-light-200-alpha-400": "rgba(42, 171, 124, 0.60)",
++        "--color-primary-light-200-alpha-500": "rgba(42, 171, 124, 0.50)",
++        "--color-primary-light-200-alpha-600": "rgba(42, 171, 124, 0.40)",
++        "--color-primary-light-200-alpha-700": "rgba(42, 171, 124, 0.30)",
++        "--color-primary-light-200-alpha-800": "rgba(42, 171, 124, 0.20)",
++        "--color-primary-light-200-alpha-900": "rgba(42, 171, 124, 0.10)",
++        "--color-primary-light-300": "rgb(38,154,112)",
++        "--color-primary-light-300-alpha-100": "rgba(38, 154, 112, 0.90)",
++        "--color-primary-light-300-alpha-200": "rgba(38, 154, 112, 0.80)",
++        "--color-primary-light-300-alpha-300": "rgba(38, 154, 112, 0.70)",
++        "--color-primary-light-300-alpha-400": "rgba(38, 154, 112, 0.60)",
++        "--color-primary-light-300-alpha-500": "rgba(38, 154, 112, 0.50)",
++        "--color-primary-light-300-alpha-600": "rgba(38, 154, 112, 0.40)",
++        "--color-primary-light-300-alpha-700": "rgba(38, 154, 112, 0.30)",
++        "--color-primary-light-300-alpha-800": "rgba(38, 154, 112, 0.20)",
++        "--color-primary-light-300-alpha-900": "rgba(38, 154, 112, 0.10)",
++        "--color-primary-light-400": "rgb(34,139,101)",
++        "--color-primary-light-400-alpha-100": "rgba(34, 139, 101, 0.90)",
++        "--color-primary-light-400-alpha-200": "rgba(34, 139, 101, 0.80)",
++        "--color-primary-light-400-alpha-300": "rgba(34, 139, 101, 0.70)",
++        "--color-primary-light-400-alpha-400": "rgba(34, 139, 101, 0.60)",
++        "--color-primary-light-400-alpha-500": "rgba(34, 139, 101, 0.50)",
++        "--color-primary-light-400-alpha-600": "rgba(34, 139, 101, 0.40)",
++        "--color-primary-light-400-alpha-700": "rgba(34, 139, 101, 0.30)",
++        "--color-primary-light-400-alpha-800": "rgba(34, 139, 101, 0.20)",
++        "--color-primary-light-400-alpha-900": "rgba(34, 139, 101, 0.10)",
++        "--color-primary-light-500": "rgb(31,125,91)",
++        "--color-primary-light-500-alpha-100": "rgba(31, 125, 91, 0.90)",
++        "--color-primary-light-500-alpha-200": "rgba(31, 125, 91, 0.80)",
++        "--color-primary-light-500-alpha-300": "rgba(31, 125, 91, 0.70)",
++        "--color-primary-light-500-alpha-400": "rgba(31, 125, 91, 0.60)",
++        "--color-primary-light-500-alpha-500": "rgba(31, 125, 91, 0.50)",
++        "--color-primary-light-500-alpha-600": "rgba(31, 125, 91, 0.40)",
++        "--color-primary-light-500-alpha-700": "rgba(31, 125, 91, 0.30)",
++        "--color-primary-light-500-alpha-800": "rgba(31, 125, 91, 0.20)",
++        "--color-primary-light-500-alpha-900": "rgba(31, 125, 91, 0.10)",
++        "--color-primary-light-600": "rgb(28,113,82)",
++        "--color-primary-light-600-alpha-100": "rgba(28, 113, 82, 0.90)",
++        "--color-primary-light-600-alpha-200": "rgba(28, 113, 82, 0.80)",
++        "--color-primary-light-600-alpha-300": "rgba(28, 113, 82, 0.70)",
++        "--color-primary-light-600-alpha-400": "rgba(28, 113, 82, 0.60)",
++        "--color-primary-light-600-alpha-500": "rgba(28, 113, 82, 0.50)",
++        "--color-primary-light-600-alpha-600": "rgba(28, 113, 82, 0.40)",
++        "--color-primary-light-600-alpha-700": "rgba(28, 113, 82, 0.30)",
++        "--color-primary-light-600-alpha-800": "rgba(28, 113, 82, 0.20)",
++        "--color-primary-light-600-alpha-900": "rgba(28, 113, 82, 0.10)",
++        "--color-primary-light-700": "rgb(25,102,74)",
++        "--color-primary-light-700-alpha-100": "rgba(25, 102, 74, 0.90)",
++        "--color-primary-light-700-alpha-200": "rgba(25, 102, 74, 0.80)",
++        "--color-primary-light-700-alpha-300": "rgba(25, 102, 74, 0.70)",
++        "--color-primary-light-700-alpha-400": "rgba(25, 102, 74, 0.60)",
++        "--color-primary-light-700-alpha-500": "rgba(25, 102, 74, 0.50)",
++        "--color-primary-light-700-alpha-600": "rgba(25, 102, 74, 0.40)",
++        "--color-primary-light-700-alpha-700": "rgba(25, 102, 74, 0.30)",
++        "--color-primary-light-700-alpha-800": "rgba(25, 102, 74, 0.20)",
++        "--color-primary-light-700-alpha-900": "rgba(25, 102, 74, 0.10)",
++        "--color-primary-light-800": "rgb(23,92,67)",
++        "--color-primary-light-800-alpha-100": "rgba(23, 92, 67, 0.90)",
++        "--color-primary-light-800-alpha-200": "rgba(23, 92, 67, 0.80)",
++        "--color-primary-light-800-alpha-300": "rgba(23, 92, 67, 0.70)",
++        "--color-primary-light-800-alpha-400": "rgba(23, 92, 67, 0.60)",
++        "--color-primary-light-800-alpha-500": "rgba(23, 92, 67, 0.50)",
++        "--color-primary-light-800-alpha-600": "rgba(23, 92, 67, 0.40)",
++        "--color-primary-light-800-alpha-700": "rgba(23, 92, 67, 0.30)",
++        "--color-primary-light-800-alpha-800": "rgba(23, 92, 67, 0.20)",
++        "--color-primary-light-800-alpha-900": "rgba(23, 92, 67, 0.10)",
++        "--color-primary-light-900": "rgb(21,83,60)",
++        "--color-primary-light-900-alpha-100": "rgba(21, 83, 60, 0.90)",
++        "--color-primary-light-900-alpha-200": "rgba(21, 83, 60, 0.80)",
++        "--color-primary-light-900-alpha-300": "rgba(21, 83, 60, 0.70)",
++        "--color-primary-light-900-alpha-400": "rgba(21, 83, 60, 0.60)",
++        "--color-primary-light-900-alpha-500": "rgba(21, 83, 60, 0.50)",
++        "--color-primary-light-900-alpha-600": "rgba(21, 83, 60, 0.40)",
++        "--color-primary-light-900-alpha-700": "rgba(21, 83, 60, 0.30)",
++        "--color-primary-light-900-alpha-800": "rgba(21, 83, 60, 0.20)",
++        "--color-primary-light-900-alpha-900": "rgba(21, 83, 60, 0.10)",
++        "--color-primary-light-1000": "rgb(14,54,39)",
++        "--color-primary-light-1000-alpha-100": "rgba(14, 54, 39, 0.90)",
++        "--color-primary-light-1000-alpha-200": "rgba(14, 54, 39, 0.80)",
++        "--color-primary-light-1000-alpha-300": "rgba(14, 54, 39, 0.70)",
++        "--color-primary-light-1000-alpha-400": "rgba(14, 54, 39, 0.60)",
++        "--color-primary-light-1000-alpha-500": "rgba(14, 54, 39, 0.50)",
++        "--color-primary-light-1000-alpha-600": "rgba(14, 54, 39, 0.40)",
++        "--color-primary-light-1000-alpha-700": "rgba(14, 54, 39, 0.30)",
++        "--color-primary-light-1000-alpha-800": "rgba(14, 54, 39, 0.20)",
++        "--color-primary-light-1000-alpha-900": "rgba(14, 54, 39, 0.10)",
++        "--color-theme": "rgb(21,83,60)",
++        "--color-1000": "rgb(226, 232, 240)",
++        "--color-950": "rgb(215,220,228)",
++        "--color-900": "rgb(204,209,217)",
++        "--color-850": "rgb(194,199,206)",
++        "--color-800": "rgb(184,189,196)",
++        "--color-750": "rgb(175,180,186)",
++        "--color-700": "rgb(166,171,177)",
++        "--color-650": "rgb(158,162,168)",
++        "--color-600": "rgb(150,154,160)",
++        "--color-550": "rgb(143,146,152)",
++        "--color-500": "rgb(136,139,144)",
++        "--color-450": "rgb(129,132,137)",
++        "--color-400": "rgb(123,125,130)",
++        "--color-350": "rgb(117,119,124)",
++        "--color-300": "rgb(111,113,118)",
++        "--color-250": "rgb(105,107,112)",
++        "--color-200": "rgb(100,102,106)",
++        "--color-150": "rgb(95,97,101)",
++        "--color-100": "rgb(90,92,96)",
++        "--color-050": "rgb(86,87,91)",
++        "--color-000": "rgb(82,83,86)"
 +      },
 +      "extInfo": {
-+        "--color-app-background": "transparent",
-+        "--color-main-background": "rgba(255, 255, 255, 0.72)",
++        "--color-app-background": "#0b0d10",
++        "--color-main-background": "rgba(17, 20, 25, 0.96)",
 +        "--color-nav-font": "var(--color-primary)",
 +        "--background-image": "none",
 +        "--background-image-position": "center",
@@ -352,8 +375,8 @@ index 5c30e05..04222d5 100644
 +        "--color-btn-min": "#85c43b",
 +        "--color-btn-close": "#fab4a0",
 +        "--color-badge-primary": "var(--color-primary)",
-+        "--color-badge-secondary": "#5cbf9b",
-+        "--color-badge-tertiary": "#8b7cff"
++        "--color-badge-secondary": "#60a5fa",
++        "--color-badge-tertiary": "#f472b6"
 +      }
 +    }
    }
@@ -407,6 +430,60 @@ index 7fdbcd9..2adb11b 100644
    "theme_green": "綠意盎然",
    "theme_grey": "灰常美麗",
    "theme_happy_new_year": "新年快樂",
+diff --git a/src/main/modules/winMain/main.ts b/src/main/modules/winMain/main.ts
+index cedb609..9ea9505 100644
+--- a/src/main/modules/winMain/main.ts
++++ b/src/main/modules/winMain/main.ts
+@@ -95,9 +95,12 @@ export const createWindow = () => {
+     hasShadow: global.envParams.cmdParams.dt,
+     // enableRemoteModule: false,
+     // icon: join(global.__static, isWin ? 'icons/256x256.ico' : 'icons/512x512.png'),
+-    resizable: false,
+-    maximizable: false,
++    resizable: true,
++    minimizable: true,
++    maximizable: true,
+     fullscreenable: true,
++    minWidth: 860,
++    minHeight: 600,
+     roundedCorners: global.envParams.cmdParams.dt,
+     show: false,
+     webPreferences: {
+@@ -194,6 +197,12 @@ export const unmaximize = () => {
+   if (!browserWindow) return
+   browserWindow.unmaximize()
+ }
++export const toggleMaximize = () => {
++  if (!browserWindow) return
++  browserWindow.isMaximized()
++    ? browserWindow.unmaximize()
++    : browserWindow.maximize()
++}
+ export const toggleHide = () => {
+   if (!browserWindow) return
+   browserWindow.isVisible()
+diff --git a/src/main/modules/winMain/rendererEvent/app.ts b/src/main/modules/winMain/rendererEvent/app.ts
+index a4d0910..1d458d6 100644
+--- a/src/main/modules/winMain/rendererEvent/app.ts
++++ b/src/main/modules/winMain/rendererEvent/app.ts
+@@ -5,7 +5,7 @@ import { WIN_MAIN_RENDERER_EVENT_NAME } from '@common/ipcNames'
+ // import { name as defaultName } from '../../../../../package.json'
+ import {
+   minimize,
+-  maximize,
++  toggleMaximize,
+   closeWindow,
+   showWindow,
+   setFullScreen,
+@@ -48,7 +48,7 @@ export default () => {
+     minimize()
+   })
+   mainOn(WIN_MAIN_RENDERER_EVENT_NAME.max, () => {
+-    maximize()
++    toggleMaximize()
+   })
+   mainOn(WIN_MAIN_RENDERER_EVENT_NAME.focus, () => {
+     showWindow()
 diff --git a/src/main/utils/index.ts b/src/main/utils/index.ts
 index 71670b9..a3e44b0 100644
 --- a/src/main/utils/index.ts
@@ -547,16 +624,16 @@ index 99ac2b9..d4bc120 100644
  .view-container {
 diff --git a/src/renderer/assets/styles/ceru.less b/src/renderer/assets/styles/ceru.less
 new file mode 100644
-index 0000000..a5f2fe3
+index 0000000..17013de
 --- /dev/null
 +++ b/src/renderer/assets/styles/ceru.less
-@@ -0,0 +1,249 @@
+@@ -0,0 +1,244 @@
 +@import './layout.less';
 +
-+/* 澜音 CeruMusic v1：浅色平面外壳 */
++/* 青瓷夜色：深色卡片外壳（Alger 风格参考） */
 +html,
 +body {
-+  background: #f5f8f7;
++  background: #0b0d10;
 +}
 +
 +#root {
@@ -565,17 +642,18 @@ index 0000000..a5f2fe3
 +
 +#container {
 +  background:
-+    linear-gradient(180deg, #d9f7eb 0%, rgba(217, 247, 235, 0) 300px),
-+    #f6f9f8 !important;
++    radial-gradient(900px 420px at 6% -12%, rgba(16, 185, 129, .20), rgba(16, 185, 129, 0) 62%),
++    radial-gradient(820px 400px at 102% -6%, rgba(59, 130, 246, .15), rgba(59, 130, 246, 0) 58%),
++    #0b0d10 !important;
 +  padding: 0 !important;
 +}
 +
 +#left {
-+  width: 240px !important;
-+  padding: 18px 14px 12px !important;
++  width: 76px !important;
++  padding: 0 0 10px !important;
 +  box-sizing: border-box !important;
-+  background: linear-gradient(180deg, rgba(22, 184, 155, .16) 0%, rgba(22, 184, 155, 0) 300px) !important;
-+  border-right: 1px solid rgba(20, 35, 31, .06);
++  background: rgba(13, 16, 20, .92) !important;
++  border-right: 1px solid rgba(255, 255, 255, .06);
 +}
 +
 +#right {
@@ -589,68 +667,77 @@ index 0000000..a5f2fe3
 +}
 +
 +#toolbar {
-+  height: 68px !important;
-+  padding: 0 12px 0 24px !important;
++  height: 64px !important;
++  padding: 0 14px 0 22px !important;
 +  background: transparent !important;
 +  border-bottom: none !important;
 +}
 +
 +#toolbar input {
 +  width: 100% !important;
-+  height: 36px !important;
-+  border-radius: 99px !important;
-+  background: rgba(255, 255, 255, .9) !important;
-+  border: 1px solid rgba(20, 35, 31, .08) !important;
-+  padding: 0 16px !important;
++  height: 38px !important;
++  border-radius: 12px !important;
++  background: rgba(255, 255, 255, .06) !important;
++  border: 1px solid rgba(255, 255, 255, .08) !important;
++  padding: 0 14px !important;
 +  font-size: 12px !important;
-+  color: #14231f !important;
-+  box-shadow: 0 2px 8px rgba(20, 50, 40, .04) !important;
++  color: #e2e8f0 !important;
++  box-shadow: none !important;
++}
++
++#toolbar input::placeholder {
++  color: rgba(226, 232, 240, .42) !important;
++}
++
++#toolbar input ~ button {
++  background: transparent !important;
++  border: 0 !important;
++  color: rgba(226, 232, 240, .55) !important;
++  box-shadow: none !important;
++}
++
++#toolbar input ~ button:hover {
++  color: var(--color-primary) !important;
 +}
 +
 +#view {
-+  padding: 0 28px 0 !important;
++  padding: 0 26px 0 !important;
 +  background: transparent !important;
 +}
 +
 +/* 贴底播放条 */
 +#player {
 +  margin: 0 !important;
-+  height: 70px !important;
++  height: 76px !important;
 +  border-radius: 0 !important;
-+  background: #f7faf9 !important;
++  background: rgba(12, 15, 19, .94) !important;
 +  border: none !important;
-+  border-top: 1px solid rgba(20, 35, 31, .08) !important;
-+  box-shadow: 0 -6px 22px rgba(20, 50, 40, .05) !important;
-+  backdrop-filter: none !important;
++  border-top: 1px solid rgba(255, 255, 255, .07) !important;
++  box-shadow: 0 -10px 30px rgba(0, 0, 0, .35) !important;
++  backdrop-filter: blur(18px) !important;
 +}
 +
 +#player::before {
 +  display: none !important;
 +}
 +
-+#player > div:first-child > div:first-child > div {
-+  border-radius: 10px !important;
-+  background: linear-gradient(135deg, #71f0cf, #16b89b) !important;
-+  color: #06251f !important;
-+  font-weight: 800 !important;
-+}
-+
 +#player img {
-+  border-radius: 10px !important;
++  border-radius: 12px !important;
++  box-shadow: 0 8px 20px rgba(0, 0, 0, .4) !important;
 +}
 +
 +#player [aria-label="播放"],
 +#player [aria-label="暂停"] {
-+  width: 34px !important;
-+  height: 34px !important;
++  width: 36px !important;
++  height: 36px !important;
 +  border-radius: 50% !important;
-+  background: #16b89b !important;
-+  color: #fff !important;
++  background: linear-gradient(140deg, #6ee7b7, #10b981) !important;
++  color: #052e22 !important;
 +  padding: 8px !important;
-+  box-shadow: 0 6px 16px rgba(22, 184, 155, 0.28) !important;
++  box-shadow: 0 8px 20px rgba(16, 185, 129, .38) !important;
 +}
 +
-+/* 顶部内容里的来源/类型 tab 统一成胶囊 */
++/* 顶部内容里的来源 / 类型 tab 统一成胶囊 */
 +#view ul[role="tablist"] {
 +  gap: 8px !important;
 +  align-items: center !important;
@@ -660,14 +747,15 @@ index 0000000..a5f2fe3
 +  border-radius: 99px !important;
 +  padding: 0 12px !important;
 +  height: 30px !important;
-+  background: rgba(255, 255, 255, 0.6) !important;
-+  border: 1px solid rgba(20, 35, 31, 0.06) !important;
++  background: rgba(255, 255, 255, .05) !important;
++  border: 1px solid rgba(255, 255, 255, .08) !important;
 +}
 +
 +#view li[role="tab"][aria-selected="true"] {
-+  background: #16b89b !important;
-+  color: #fff !important;
++  background: var(--color-primary) !important;
++  color: #04140e !important;
 +  border-color: transparent !important;
++  font-weight: 600 !important;
 +}
 +
 +#view li[role="tab"] span {
@@ -676,38 +764,22 @@ index 0000000..a5f2fe3
 +
 +/* 侧栏导航兜底样式（组件内也会同步改） */
 +#left a[role="tab"] {
-+  border-radius: 10px !important;
-+  color: #5f726b !important;
++  color: rgba(226, 232, 240, .55) !important;
 +}
 +
 +#left a[aria-selected="true"] {
-+  background: #16b89b !important;
-+  color: #fff !important;
-+  box-shadow: 0 8px 18px rgba(22, 184, 155, 0.24) !important;
-+}
-+
-+#left a[aria-selected="true"] svg {
-+  color: #fff !important;
-+}
-+
-+#toolbar input ~ button {
-+  background: transparent !important;
-+  border: 0 !important;
-+  color: var(--color-font-label) !important;
-+  box-shadow: none !important;
-+}
-+
-+#toolbar input ~ button:hover {
 +  color: var(--color-primary) !important;
++  background: rgba(52, 211, 153, .16) !important;
++  box-shadow: inset 0 0 0 1px rgba(52, 211, 153, .35) !important;
 +}
 +
-+/* 播放详情页：黑胶 + 玻璃歌词 */
++/* 播放详情页：深色渐变 + 玻璃歌词 */
 +.ceru-play-detail {
 +  background:
-+    radial-gradient(80% 70% at 0% 0%, #b8f5dd 0%, rgba(184, 245, 221, 0) 55%),
-+    radial-gradient(70% 60% at 100% 0%, #ffd6e0 0%, rgba(255, 214, 224, 0) 52%),
-+    radial-gradient(80% 70% at 50% 110%, #d8d0ff 0%, rgba(216, 208, 255, 0) 62%),
-+    linear-gradient(135deg, #eef9f4 0%, #f8f3ff 55%, #eef9f4 100%) !important;
++    radial-gradient(80% 70% at 0% 0%, rgba(16, 185, 129, .22) 0%, rgba(16, 185, 129, 0) 55%),
++    radial-gradient(70% 60% at 100% 0%, rgba(244, 114, 182, .16) 0%, rgba(244, 114, 182, 0) 52%),
++    radial-gradient(80% 70% at 50% 110%, rgba(99, 102, 241, .20) 0%, rgba(99, 102, 241, 0) 62%),
++    linear-gradient(135deg, #0c1014 0%, #10161c 55%, #0c1014 100%) !important;
 +  border-radius: 18px !important;
 +}
 +
@@ -737,7 +809,7 @@ index 0000000..a5f2fe3
 +  left: 50%;
 +  transform: translateX(-50%);
 +  background: repeating-radial-gradient(circle at 50% 50%, #0b0b0b 0 2px, #1a1a1a 2px 4px);
-+  box-shadow: 0 30px 60px rgba(0, 0, 0, .28), inset 0 0 0 1px rgba(255, 255, 255, .08);
++  box-shadow: 0 30px 60px rgba(0, 0, 0, .5), inset 0 0 0 1px rgba(255, 255, 255, .08);
 +}
 +
 +.ceru-play-left .info::after {
@@ -766,7 +838,7 @@ index 0000000..a5f2fe3
 +  object-fit: cover;
 +  border-radius: 50% !important;
 +  opacity: 1 !important;
-+  box-shadow: 0 20px 50px rgba(0, 0, 0, .3) !important;
++  box-shadow: 0 24px 60px rgba(0, 0, 0, .55) !important;
 +}
 +
 +.ceru-play-left .description {
@@ -781,23 +853,23 @@ index 0000000..a5f2fe3
 +.ceru-play-left .description p {
 +  font-size: 12px !important;
 +  line-height: 1.6;
-+  color: var(--color-font-label);
++  color: rgba(226, 232, 240, .6);
 +}
 +
 +.ceru-play-left .description p:first-child {
 +  font-size: 16px !important;
 +  font-weight: 600;
-+  color: var(--color-font);
++  color: #f1f5f9;
 +}
 +
 +.ceru-play-detail .right {
-+  background: rgba(255, 255, 255, .55) !important;
-+  border: 1px solid rgba(255, 255, 255, .75);
++  background: rgba(255, 255, 255, .04) !important;
++  border: 1px solid rgba(255, 255, 255, .08);
 +  border-radius: 20px;
 +  margin: 12px 6px 12px 0;
 +  padding: 18px 16px;
 +  backdrop-filter: blur(20px);
-+  box-shadow: 0 12px 30px rgba(40, 90, 70, .08);
++  box-shadow: 0 12px 30px rgba(0, 0, 0, .35);
 +  overflow: hidden;
 +}
 diff --git a/src/renderer/assets/styles/index.less b/src/renderer/assets/styles/index.less
@@ -844,23 +916,20 @@ index 7672a97..8cc02e0 100644
  @transition-slow: .6s ease;
  @transition-normal: .4s ease;
 diff --git a/src/renderer/components/layout/Aside/NavBar.vue b/src/renderer/components/layout/Aside/NavBar.vue
-index c0f7826..08a6c6c 100644
+index c0f7826..9fb5d88 100644
 --- a/src/renderer/components/layout/Aside/NavBar.vue
 +++ b/src/renderer/components/layout/Aside/NavBar.vue
-@@ -1,11 +1,19 @@
+@@ -1,11 +1,15 @@
  <template>
    <div ref="dom_menu" :class="$style.menu">
 +    <div :class="$style.brand">
 +      <span :class="$style.mark">♪</span>
-+      <div :class="$style.brandText">
-+        <span :class="$style.name">Ceru Music</span>
-+        <span :class="$style.brandSub">青瓷 · CERU JADE</span>
-+      </div>
 +    </div>
      <ul :class="$style.list" role="toolbar">
 -      <li v-for="item in menus" :key="item.to" :class="$style.navItem" role="presentation">
+-        <router-link :class="[$style.link, {[$style.active]: $route.meta.name == item.name}]" role="tab" :aria-selected="$route.meta.name == item.name" :to="item.to" :aria-label="item.tips">
 +      <li v-for="item in menus" :key="item.name" :class="$style.navItem" role="presentation">
-         <router-link :class="[$style.link, {[$style.active]: $route.meta.name == item.name}]" role="tab" :aria-selected="$route.meta.name == item.name" :to="item.to" :aria-label="item.tips">
++        <router-link :class="[$style.link, {[$style.active]: isActive(item)}]" role="tab" :aria-selected="isActive(item)" :to="item.to" :aria-label="item.tips">
            <svg version="1.1" xmlns="http://www.w3.org/2000/svg" xlink="http://www.w3.org/1999/xlink" :viewBox="item.iconSize" :height="item.size" :width="item.size" space="preserve">
              <use :xlink:href="item.icon" />
            </svg>
@@ -868,7 +937,7 @@ index c0f7826..08a6c6c 100644
          </router-link>
        </li>
      </ul>
-@@ -13,79 +21,48 @@
+@@ -13,33 +17,31 @@
  </template>
  
  <script lang="ts">
@@ -876,6 +945,8 @@ index c0f7826..08a6c6c 100644
 -import { useI18n } from '@root/lang'
  import { ref, computed } from '@common/utils/vueTools'
  import { useIconSize } from '@renderer/utils/compositions/useIconSize'
++import { useRoute } from '@common/utils/vueRouter'
++import { LIST_IDS } from '@common/constants'
  
  export default {
    name: 'NavBar',
@@ -883,7 +954,15 @@ index c0f7826..08a6c6c 100644
 -    const t = useI18n()
      const dom_menu = ref<HTMLElement>()
 -    const iconSize = useIconSize(dom_menu, 0.32)
-+    const iconSize = useIconSize(dom_menu, 0.1)
++    const iconSize = useIconSize(dom_menu, 0.26)
++    const route = useRoute()
++
++    const isActive = (item: { name: string, queryId?: string }) => {
++      if (item.queryId) {
++        return route.path == '/list' && String(route.query.id ?? LIST_IDS.DEFAULT) == item.queryId
++      }
++      return route.meta.name == item.name
++    }
  
      const menus = computed(() => {
        const size = iconSize.value
@@ -904,10 +983,10 @@ index c0f7826..08a6c6c 100644
            icon: '#icon-album',
            iconSize: '0 0 425.2 425.2',
            size,
-           name: 'SongList',
+@@ -47,46 +49,39 @@ export default {
            enable: true,
          },
--        {
+         {
 -          to: '/leaderboard',
 -          tips: t('leaderboard'),
 -          icon: '#icon-leaderboard',
@@ -919,12 +998,16 @@ index c0f7826..08a6c6c 100644
 -        {
 -          to: '/list',
 -          tips: t('my_list'),
--          icon: '#icon-love',
++          to: { path: '/list', query: { id: LIST_IDS.LOVE } },
++          tips: '收藏',
+           icon: '#icon-love',
 -          iconSize: '0 0 444.87 391.18',
--          size,
--          name: 'List',
--          enable: true,
--        },
++          iconSize: '0 0 445 391',
+           size,
+           name: 'List',
++          queryId: LIST_IDS.LOVE,
+           enable: true,
+         },
          {
            to: '/download',
 -          tips: t('download'),
@@ -941,12 +1024,13 @@ index c0f7826..08a6c6c 100644
 -          tips: t('setting'),
 -          icon: '#icon-setting',
 -          iconSize: '0 0 493.23 436.47',
-+          to: { path: '/list', query: { id: 'default' } },
++          to: { path: '/list', query: { id: LIST_IDS.RECENT } },
 +          tips: '最近',
 +          icon: '#icon-audio-wave',
 +          iconSize: '0 0 24 24',
            size,
 +          name: 'List',
++          queryId: LIST_IDS.RECENT,
            enable: true,
 -          name: 'Setting',
          },
@@ -955,9 +1039,11 @@ index c0f7826..08a6c6c 100644
      return {
 -      appSetting,
        menus,
++      isActive,
        dom_menu,
      }
-@@ -98,109 +75,108 @@ export default {
+   },
+@@ -98,109 +93,110 @@ export default {
  
  .menu {
    flex: auto;
@@ -969,45 +1055,30 @@ index c0f7826..08a6c6c 100644
 -  // }
 -  // padding: 5px;
 +  overflow: hidden;
++  display: flex;
++  flex-direction: column;
++  align-items: center;
++  padding-top: 14px;
 +}
 +.brand {
 +  display: flex;
 +  align-items: center;
-+  gap: 10px;
-+  padding: 2px 8px 18px;
++  justify-content: center;
++  padding: 0 0 18px;
 +  -webkit-app-region: drag;
 +}
 +.mark {
-+  width: 34px;
-+  height: 34px;
-+  border-radius: 11px;
-+  background: linear-gradient(140deg, #5fe0c2, #16b89b);
-+  color: #fff;
++  width: 40px;
++  height: 40px;
++  border-radius: 13px;
++  background: linear-gradient(140deg, #6ee7b7, #10b981);
++  color: #052e22;
 +  display: grid;
 +  place-items: center;
-+  font-size: 17px;
-+  font-weight: 800;
-+  box-shadow: 0 6px 16px rgba(22, 184, 155, .25);
++  font-size: 19px;
++  font-weight: 900;
++  box-shadow: 0 8px 20px rgba(16, 185, 129, .32);
 +  flex: none;
-+}
-+.brandText {
-+  display: flex;
-+  flex-direction: column;
-+  gap: 2px;
-+  min-width: 0;
-+}
-+.name {
-+  font-size: 15px;
-+  font-weight: 700;
-+  letter-spacing: -.02em;
-+  color: #14231f;
-+  white-space: nowrap;
-+}
-+.brandSub {
-+  font-size: 8px;
-+  letter-spacing: .16em;
-+  color: var(--color-font-label);
-+  white-space: nowrap;
  }
  .list {
    -webkit-app-region: no-drag;
@@ -1026,7 +1097,9 @@ index c0f7826..08a6c6c 100644
 -  // }
 +  display: flex;
 +  flex-direction: column;
-+  gap: 3px;
++  align-items: center;
++  gap: 6px;
++  width: 100%;
  }
  .navItem {
    position: relative;
@@ -1037,21 +1110,24 @@ index c0f7826..08a6c6c 100644
 -    padding-bottom: 84%;
 -  }
 +  width: 100%;
-+  height: 38px;
++  height: 46px;
++  display: flex;
++  justify-content: center;
  }
  .link {
 -  position: absolute;
 -  left: 0%;
 -  top: 0%;
-+  position: static;
-   width: 100%;
+-  width: 100%;
 -  height: 100%;
 -  // left: 15%;
 -  // top: 15%;
 -  // width: 70%;
 -  // height: 70%;
 -  // display: block;
-+  height: 38px;
++  position: relative;
++  width: 44px;
++  height: 44px;
    box-sizing: border-box;
 -  // text-decoration: none;
 -  // border-radius: 20%;
@@ -1059,28 +1135,28 @@ index c0f7826..08a6c6c 100644
 -  // padding: 18px 3px;
 -  // margin: 5px 0;
 -  // border-left: 5px solid transparent;
-+  display: flex;
-+  align-items: center;
-+  justify-content: flex-start;
-+  gap: 10px;
-+  padding: 0 12px;
-+  border-radius: 10px;
-   transition: @transition-fast;
+-  transition: @transition-fast;
 -  transition-property: background-color, opacity;
 -  color: var(--color-nav-font);
-+  transition-property: background-color, opacity, color;
-+  color: #5f726b;
-+  font-size: 13px;
-+  font-weight: 500;
-   cursor: pointer;
+-  cursor: pointer;
 -  // font-size: 11.5px;
 -  text-align: center;
-   outline: none;
--  display: flex;
--  align-items: center;
--  justify-content: center;
+-  outline: none;
+   display: flex;
+   align-items: center;
+   justify-content: center;
 -
 -  // border-radius: @radius-border;
++  gap: 0;
++  padding: 0;
++  border-radius: 14px;
++  transition: @transition-fast;
++  transition-property: background-color, opacity, color, transform;
++  color: var(--color-font-label);
++  font-size: 13px;
++  font-weight: 500;
++  cursor: pointer;
++  outline: none;
    .mixin-ellipsis-1();
 +
    &:before {
@@ -1099,17 +1175,28 @@ index c0f7826..08a6c6c 100644
    &.active {
 -    // border-left-color: @color-theme-active;
 -    background-color: var(--color-primary-light-300-alpha-700);
--
--    &:before {
++    background-color: rgba(52, 211, 153, .16);
++    color: var(--color-primary);
++    box-shadow: inset 0 0 0 1px rgba(52, 211, 153, .35);
+ 
+     &:before {
 -      transform: translateX(0);
--    }
-+    background-color: #16b89b;
-+    color: #fff;
-+    box-shadow: 0 8px 18px rgba(22, 184, 155, .24);
++      content: "";
++      display: block;
++      position: absolute;
++      left: -9px;
++      top: 50%;
++      width: 3px;
++      height: 18px;
++      margin-top: -9px;
++      border-radius: 3px;
++      background: var(--color-primary);
++      box-shadow: 0 0 10px rgba(52, 211, 153, .8);
+     }
  
      &:hover {
 -      background-color: var(--color-primary-light-300-alpha-800);
-+      background-color: #16b89b;
++      background-color: rgba(52, 211, 153, .22);
      }
    }
  
@@ -1117,23 +1204,22 @@ index c0f7826..08a6c6c 100644
    &:hover {
 -    color: var(--color-nav-font);
 +    color: var(--color-primary);
++    transform: translateY(-1px);
  
      &:not(.active) {
 -      opacity: .8;
 -      background-color: var(--color-primary-light-400-alpha-700);
-+      background-color: rgba(255, 255, 255, .48);
++      background-color: rgba(255, 255, 255, .06);
      }
    }
    &:active:not(.active) {
 -    opacity: .6;
 -    background-color: var(--color-primary-light-300-alpha-600);
-+    background-color: rgba(255, 255, 255, .7);
++    background-color: rgba(255, 255, 255, .1);
    }
  }
 +.label {
-+  font-size: 13px;
-+  font-weight: 500;
-+  white-space: nowrap;
++  display: none;
 +}
  
  // .icon {
@@ -1201,7 +1287,7 @@ index 50f47c5..f91b45b 100644
  
  </style>
 diff --git a/src/renderer/components/layout/PlayBar/MiniWidthProgress.vue b/src/renderer/components/layout/PlayBar/MiniWidthProgress.vue
-index 0a440db..a6cd715 100644
+index 0a440db..b0cdac0 100644
 --- a/src/renderer/components/layout/PlayBar/MiniWidthProgress.vue
 +++ b/src/renderer/components/layout/PlayBar/MiniWidthProgress.vue
 @@ -1,47 +1,43 @@
@@ -1216,7 +1302,7 @@ index 0a440db..a6cd715 100644
 -        {{ title }}
 +    <div :class="$style.left">
 +      <div :class="$style.picContent" :aria-label="$t('player__pic_tip')" @contextmenu="handleToMusicLocation" @click="showPlayerDetail">
-+        <img v-if="musicInfo.pic" :src="musicInfo.pic" decoding="async" @error="imgError">
++        <img v-if="musicInfo.pic" :key="musicInfo.pic" :src="musicInfo.pic" decoding="async" @error="imgError">
 +        <div v-else :class="$style.emptyPic">♪</div>
        </div>
 -      <div :class="$style.status">{{ statusText }}</div>
@@ -1308,7 +1394,7 @@ index 0a440db..a6cd715 100644
    * {
      box-sizing: border-box;
    }
-@@ -178,6 +176,25 @@ export default {
+@@ -178,9 +176,32 @@ export default {
    }
  }
  
@@ -1317,6 +1403,8 @@ index 0a440db..a6cd715 100644
 +  align-items: center;
 +  min-width: 0;
 +  height: 100%;
++  max-height: 100%;
++  min-height: 0;
 +}
 +.center {
 +  display: flex;
@@ -1333,21 +1421,39 @@ index 0a440db..a6cd715 100644
 +
  .picContent {
    height: 100%;
++  max-height: 100%;
    aspect-ratio: 1 / 1;
-@@ -207,27 +224,21 @@ export default {
++  overflow: hidden;
+ 
+   // color: var(--color-primary);
+   // transition: @transition-normal;
+@@ -203,31 +224,34 @@ export default {
+   // }
+   img {
+     box-shadow: 0 0 2px rgba(0, 0, 0, 0.3);
++    width: 100%;
++    height: 100%;
+     max-width: 100%;
      max-height: 100%;
++    object-fit: cover;
      transition: @transition-normal;
      transition-property: border-color;
 -    // border-radius: 50%;
 -    border-radius: @radius-border;
 -    // border: 2px solid @color-theme_2-background_1;
 +    border-radius: 10px;
++    animation: ceru-cover-in .3s ease both;
++  }
++  @keyframes ceru-cover-in {
++    from { opacity: 0; }
++    to { opacity: 1; }
    }
  
    .emptyPic {
 -    background-color: var(--color-primary-light-900-alpha-200);
 -    border-radius: @radius-border;
-+    background: linear-gradient(140deg, #71f0cf, #16b89b);
++    background: rgba(255, 255, 255, .05);
++    border: 1px solid rgba(255, 255, 255, .08);
 +    border-radius: 10px;
      width: 100%;
      height: 100%;
@@ -1355,7 +1461,7 @@ index 0a440db..a6cd715 100644
      align-items: center;
      justify-content: center;
 -    color: var(--color-primary-light-400-alpha-200);
-+    color: #06251f;
++    color: var(--color-primary);
      user-select: none;
      font-size: 20px;
 -    font-family: Consolas, "Courier New", monospace;
@@ -1367,7 +1473,7 @@ index 0a440db..a6cd715 100644
    }
  }
  
-@@ -246,13 +257,15 @@ export default {
+@@ -246,13 +270,15 @@ export default {
  
  .title {
    max-width: 100%;
@@ -1387,7 +1493,7 @@ index 0a440db..a6cd715 100644
    .mixin-ellipsis-1();
    max-width: 100%;
  }
-@@ -310,17 +323,16 @@ export default {
+@@ -310,17 +336,16 @@ export default {
    display: flex;
    flex-flow: row nowrap;
    align-items: center;
@@ -1408,7 +1514,7 @@ index 0a440db..a6cd715 100644
    color: var(--color-button-font);
    opacity: 1;
    cursor: pointer;
-@@ -336,5 +348,25 @@ export default {
+@@ -336,5 +361,25 @@ export default {
      opacity: 0.6;
    }
  }
@@ -1455,7 +1561,7 @@ index a6631c0..7a7f1b1 100644
          div(:class="$style.info")
            img(v-if="musicInfo.pic" :class="$style.img" :src="musicInfo.pic")
 diff --git a/src/renderer/components/layout/Toolbar/ControlBtns.vue b/src/renderer/components/layout/Toolbar/ControlBtns.vue
-index fe5dbfe..9c32602 100644
+index fe5dbfe..6ad01d6 100644
 --- a/src/renderer/components/layout/Toolbar/ControlBtns.vue
 +++ b/src/renderer/components/layout/Toolbar/ControlBtns.vue
 @@ -1,59 +1,15 @@
@@ -1473,7 +1579,7 @@ index fe5dbfe..9c32602 100644
 -    </button>
 +  <div v-show="!isFullscreen" :class="$style.control">
 +    <button type="button" :class="[$style.dot, $style.min]" :aria-label="$t('min')" ignore-tip :title="$t('min')" @click="minWindow" />
-+    <button type="button" :class="[$style.dot, $style.max]" aria-label="最大化" ignore-tip title="最大化" @click="maxWindow" />
++    <button type="button" :class="[$style.dot, $style.max]" aria-label="最大化 / 还原" ignore-tip title="最大化 / 还原" @click="maxWindow" />
 +    <button type="button" :class="[$style.dot, $style.close]" :aria-label="$t('close')" ignore-tip :title="$t('close')" @click="closeWindow" />
    </div>
  </template>
@@ -1587,16 +1693,16 @@ index fe5dbfe..9c32602 100644
  
  </style>
 diff --git a/src/renderer/components/layout/Toolbar/index.vue b/src/renderer/components/layout/Toolbar/index.vue
-index b9a9e04..81873a5 100644
+index b9a9e04..938aecb 100644
 --- a/src/renderer/components/layout/Toolbar/index.vue
 +++ b/src/renderer/components/layout/Toolbar/index.vue
-@@ -1,17 +1,43 @@
+@@ -1,17 +1,49 @@
  <template>
 -  <div :class="[$style.toolbar, { [$style.fullscreen]: isFullscreen }, appSetting['common.controlBtnPosition'] == 'left' ? $style.controlBtnLeft : $style.controlBtnRight]">
 -    <SearchInput />
 -    <div v-if="appSetting['common.controlBtnPosition'] == 'left'" :class="$style.logo">L X</div>
 -    <ControlBtns v-else />
-+  <div :class="$style.toolbar">
++  <div :class="$style.toolbar" @dblclick="handleToggleMax">
 +    <div :class="$style.arrows">
 +      <button :class="$style.arrow" type="button" aria-label="后退" @click="router.back()">
 +        <svg version="1.1" xmlns="http://www.w3.org/2000/svg" xlink="http://www.w3.org/1999/xlink" viewBox="0 0 451.847 451.847" space="preserve">
@@ -1632,15 +1738,21 @@ index b9a9e04..81873a5 100644
 -import { isFullscreen } from '@renderer/store'
 -import { appSetting } from '@renderer/store/setting'
 +import { useRouter } from '@common/utils/vueRouter'
++import { maxWindow } from '@renderer/utils/ipc'
  import ControlBtns from './ControlBtns.vue'
  import SearchInput from './SearchInput.vue'
  
 +const router = useRouter()
 +
++const handleToggleMax = (event) => {
++  if (event.target.closest?.('button, input, textarea, a, [data-no-drag]')) return
++  maxWindow()
++}
++
  </script>
  
  
-@@ -19,41 +45,78 @@ import SearchInput from './SearchInput.vue'
+@@ -19,41 +51,78 @@ import SearchInput from './SearchInput.vue'
  @import '@renderer/assets/styles/layout.less';
  
  .toolbar {
@@ -1676,9 +1788,9 @@ index b9a9e04..81873a5 100644
 +  width: 28px;
 +  height: 28px;
 +  border-radius: 50%;
-+  border: 1px solid rgba(20, 35, 31, .08);
-+  background: rgba(255, 255, 255, .5);
-+  color: #5f726b;
++  border: 1px solid rgba(255, 255, 255, .08);
++  background: rgba(255, 255, 255, .05);
++  color: rgba(226, 232, 240, .62);
 +  display: grid;
 +  place-items: center;
 +  cursor: pointer;
@@ -1689,7 +1801,7 @@ index b9a9e04..81873a5 100644
 -      display: none;
 -    }
 +  &:hover {
-+    background: #fff;
++    background: rgba(255, 255, 255, .1);
 +    color: var(--color-primary);
    }
 -  &.controlBtnRight {
@@ -1729,20 +1841,60 @@ index b9a9e04..81873a5 100644
 +  border: 0;
 +  border-radius: 8px;
 +  background: transparent;
-+  color: #5f726b;
++  color: rgba(226, 232, 240, .55);
 +  display: grid;
 +  place-items: center;
 +  cursor: pointer;
 +  padding: 0;
 +
 +  &:hover {
-+    background: rgba(255, 255, 255, .55);
++    background: rgba(255, 255, 255, .08);
 +    color: var(--color-primary);
 +  }
 +  svg {
 +    width: 15px;
 +    height: 15px;
 +    fill: currentColor;
++  }
+ }
+ 
+ </style>
+diff --git a/src/renderer/components/layout/View.vue b/src/renderer/components/layout/View.vue
+index 9eb44a6..d363156 100644
+--- a/src/renderer/components/layout/View.vue
++++ b/src/renderer/components/layout/View.vue
+@@ -1,9 +1,9 @@
+ <template>
+   <div :class="$style.view">
+     <router-view v-slot="{ Component }">
+-      <!-- <transition enter-active-class="animated-fast fadeIn" leave-active-class="animated-fast fadeOut"> -->
+-      <component :is="Component" class="view-container" />
+-      <!-- </transition> -->
++      <transition name="ceru-page" mode="out-in">
++        <component :is="Component" class="view-container" />
++      </transition>
+     </router-view>
+   </div>
+ </template>
+@@ -23,6 +23,22 @@
+   }
+   // background: #fff;
+   // overflow: hidden;
++
++  :global(.ceru-page-enter-active),
++  :global(.ceru-page-leave-active) {
++    transition:
++      opacity .18s cubic-bezier(.22, .61, .36, 1),
++      transform .18s cubic-bezier(.22, .61, .36, 1);
++    will-change: opacity, transform;
++  }
++  :global(.ceru-page-enter-from) {
++    opacity: 0;
++    transform: translateY(6px);
++  }
++  :global(.ceru-page-leave-to) {
++    opacity: 0;
++    transform: translateY(-4px);
 +  }
  }
  
@@ -1769,6 +1921,30 @@ index 2cef384..3dd9979 100644
    height: @height-toolbar * 0.52;
    -webkit-app-region: no-drag;
  }
+diff --git a/src/renderer/core/player/action.ts b/src/renderer/core/player/action.ts
+index 88995d0..7217c85 100644
+--- a/src/renderer/core/player/action.ts
++++ b/src/renderer/core/player/action.ts
+@@ -19,6 +19,8 @@ import { requestMsg } from '@renderer/utils/message'
+ import { getRandom } from '@renderer/utils/index'
+ import { addListMusics, removeListMusics } from '@renderer/store/list/action'
+ import { loveList } from '@renderer/store/list/state'
++import { addRecentMusic } from '@renderer/store/list/recent'
++import { LIST_IDS } from '@common/constants'
+ import { addDislikeInfo } from '@renderer/core/dislikeList'
+ // import { checkMusicFileAvailable } from '@renderer/utils/music'
+ 
+@@ -198,6 +200,10 @@ const handlePlay = () => {
+ 
+   if (!musicInfo) return
+ 
++  if (playMusicInfo.listId != LIST_IDS.RECENT) {
++    addRecentMusic('progress' in musicInfo ? musicInfo.metadata.musicInfo : musicInfo)
++  }
++
+   setStop()
+   window.app_event.pause()
+ 
 diff --git a/src/renderer/core/useApp/index.ts b/src/renderer/core/useApp/index.ts
 index 7953614..a52bb9d 100644
 --- a/src/renderer/core/useApp/index.ts
@@ -1813,6 +1989,123 @@ index 585c834..f5136cc 100644
  export const themeInfo: LX.ThemeInfo = {
    themes: [],
    userThemes: [],
+diff --git a/src/renderer/store/list/action.ts b/src/renderer/store/list/action.ts
+index a2f6f99..c59dc23 100644
+--- a/src/renderer/store/list/action.ts
++++ b/src/renderer/store/list/action.ts
+@@ -11,6 +11,7 @@ import {
+ } from '@renderer/store/list/listManage'
+ import { toRaw } from '@common/utils/vueTools'
+ import { LIST_IDS } from '@common/constants'
++import { recentList } from './recent'
+ 
+ export const registerAction = (onListChanged: (listIds: string[]) => void) => {
+   return registerListAction(appSetting, onListChanged)
+@@ -23,6 +24,7 @@ export const registerAction = (onListChanged: (listIds: string[]) => void) => {
+  */
+ export const getListMusicsFromCache = (listId: string | null): LX.Music.MusicInfo[] => {
+   if (!listId) return []
++  if (listId == LIST_IDS.RECENT) return recentList
+   if (allMusicList.has(listId)) return allMusicList.get(listId) as LX.Music.MusicInfo[]
+   return []
+ }
+diff --git a/src/renderer/store/list/listManage/rendererListManage.ts b/src/renderer/store/list/listManage/rendererListManage.ts
+index d0542b8..da8c1b5 100644
+--- a/src/renderer/store/list/listManage/rendererListManage.ts
++++ b/src/renderer/store/list/listManage/rendererListManage.ts
+@@ -18,6 +18,8 @@ import {
+   listMusicClear,
+ } from './action'
+ import { allMusicList } from './state'
++import { LIST_IDS } from '@common/constants'
++import { recentList, removeRecentMusic } from '../recent'
+ 
+ /**
+  * 获取用户列表
+@@ -68,6 +70,7 @@ export const updateUserListPosition = async(data: LX.List.ListActionUpdatePositi
+  */
+ export const getListMusics = async(listId: string | null): Promise<LX.Music.MusicInfo[]> => {
+   if (!listId) return []
++  if (listId == LIST_IDS.RECENT) return [...recentList]
+   if (allMusicList.has(listId)) return allMusicList.get(listId)!
+   const list = await rendererInvoke<string, LX.Music.MusicInfo[]>(PLAYER_EVENT_NAME.list_music_get, listId)
+   return setMusicList(listId, list)
+@@ -94,6 +97,10 @@ export const moveListMusics = async(data: LX.List.ListActionMusicMove) => {
+  * @param data
+  */
+ export const removeListMusics = async(data: LX.List.ListActionMusicRemove) => {
++  if (data.listId == LIST_IDS.RECENT) {
++    removeRecentMusic(data.ids)
++    return
++  }
+   await rendererInvoke<LX.List.ListActionMusicRemove>(PLAYER_EVENT_NAME.list_music_remove, data)
+ }
+ 
+diff --git a/src/renderer/store/list/recent.ts b/src/renderer/store/list/recent.ts
+new file mode 100644
+index 0000000..2906128
+--- /dev/null
++++ b/src/renderer/store/list/recent.ts
+@@ -0,0 +1,59 @@
++import { reactive } from '@common/utils/vueTools'
++
++const STORAGE_KEY = 'ceru.recent_play_list'
++const MAX_COUNT = 200
++
++const loadRecentList = (): LX.Music.MusicInfo[] => {
++  try {
++    const raw = localStorage.getItem(STORAGE_KEY)
++    if (!raw) return []
++    const list = JSON.parse(raw)
++    return Array.isArray(list) ? list : []
++  } catch {
++    return []
++  }
++}
++
++export const recentList = reactive<LX.Music.MusicInfo[]>(loadRecentList())
++
++const trackKey = (musicInfo: LX.Music.MusicInfo) => `${musicInfo.source}_${musicInfo.id}`
++
++let saveTimer: ReturnType<typeof setTimeout> | null = null
++const saveRecentList = () => {
++  if (saveTimer) return
++  saveTimer = setTimeout(() => {
++    saveTimer = null
++    try {
++      localStorage.setItem(STORAGE_KEY, JSON.stringify(recentList))
++    } catch {}
++  }, 300)
++}
++
++export const addRecentMusic = (musicInfo: LX.Music.MusicInfo) => {
++  if (!musicInfo?.id || !musicInfo.source) return
++  const key = trackKey(musicInfo)
++  const index = recentList.findIndex(item => trackKey(item) == key)
++  if (index > -1) {
++    if (index == 0) return
++    recentList.splice(index, 1)
++  }
++  recentList.unshift({ ...musicInfo })
++  if (recentList.length > MAX_COUNT) recentList.splice(MAX_COUNT)
++  saveRecentList()
++}
++
++export const removeRecentMusic = (ids: string[]) => {
++  const targets = new Set(ids)
++  let removed = false
++  for (let i = recentList.length - 1; i >= 0; i--) {
++    if (!targets.has(recentList[i].id)) continue
++    recentList.splice(i, 1)
++    removed = true
++  }
++  if (removed) saveRecentList()
++}
++
++export const clearRecentMusic = () => {
++  recentList.splice(0, recentList.length)
++  saveRecentList()
++}
 diff --git a/src/renderer/store/utils.ts b/src/renderer/store/utils.ts
 index 7a66853..4b00bd5 100644
 --- a/src/renderer/store/utils.ts
@@ -1826,6 +2119,68 @@ index 7a66853..4b00bd5 100644
        theme = themeInfo.themes.find(theme => theme.id == themeId)!
      }
      window.setTheme(buildThemeColors(theme, dataPath))
+diff --git a/src/renderer/views/List/MusicList/useListInfo.js b/src/renderer/views/List/MusicList/useListInfo.js
+index 1d11497..1079c5c 100644
+--- a/src/renderer/views/List/MusicList/useListInfo.js
++++ b/src/renderer/views/List/MusicList/useListInfo.js
+@@ -1,7 +1,9 @@
+ import { ref, watch, computed, onBeforeUnmount } from '@common/utils/vueTools'
+ import { playMusicInfo, playInfo } from '@renderer/store/player/state'
+ import { getListMusics } from '@renderer/store/list/action'
++import { recentList } from '@renderer/store/list/recent'
+ import { appSetting } from '@renderer/store/setting'
++import { LIST_IDS } from '@common/constants'
+ 
+ 
+ export default ({ props, onLoadedList }) => {
+@@ -24,6 +26,10 @@ export default ({ props, onLoadedList }) => {
+     immediate: true,
+   })
+ 
++  watch(recentList, () => {
++    if (props.listId == LIST_IDS.RECENT) list.value = [...recentList]
++  }, { deep: true })
++
+   const playerInfo = computed(() => ({
+     isPlayList: playMusicInfo.listId == props.listId,
+     playIndex: playInfo.playIndex,
+diff --git a/src/renderer/views/List/MyList/index.vue b/src/renderer/views/List/MyList/index.vue
+index d69f98d..81634e5 100644
+--- a/src/renderer/views/List/MyList/index.vue
++++ b/src/renderer/views/List/MyList/index.vue
+@@ -34,6 +34,7 @@
+         </span>
+       </li>
+       <li
++        v-if="!isRecent"
+         class="default-list" :class="[$style.listsItem, {[$style.active]: loveList.id == listId}, {[$style.clicked]: rightClickItemIndex == -1}, {[$style.fetching]: fetchingListStatus[loveList.id]}]"
+         :aria-label="$t(loveList.name)" :aria-selected="loveList.id == listId"
+         @contextmenu="handleListsItemRigthClick($event, -1)" @click="handleListToggle(loveList.id)"
+@@ -89,7 +90,7 @@ import ListUpdateModal from './components/ListUpdateModal.vue'
+ import { defaultList, loveList, userLists, fetchingListStatus } from '@renderer/store/list/state'
+ import { removeUserList } from '@renderer/store/list/action'
+ 
+-import { ref, watch } from '@common/utils/vueTools'
++import { ref, watch, computed } from '@common/utils/vueTools'
+ import { useRouter } from '@common/utils/vueRouter'
+ import { LIST_IDS } from '@common/constants'
+ 
+@@ -129,6 +130,7 @@ export default {
+ 
+     const dom_lists_list = ref(null)
+     const rightClickItemIndex = ref(-10)
++    const isRecent = computed(() => props.listId == LIST_IDS.RECENT)
+ 
+     const { handleImportList, handleExportList } = useShare()
+     const { isShowListUpdateModal, handleUpdateSourceList } = useListUpdate()
+@@ -222,6 +224,7 @@ export default {
+ 
+     return {
+       rightClickItemIndex,
++      isRecent,
+       defaultList,
+       loveList,
+       userLists,
 diff --git a/src/renderer/views/songList/Detail/index.vue b/src/renderer/views/songList/Detail/index.vue
 index 5ed1431..427233e 100644
 --- a/src/renderer/views/songList/Detail/index.vue
@@ -1954,7 +2309,7 @@ index 5ed1431..427233e 100644
    }
  }
 diff --git a/src/renderer/views/songList/List/components/SongList.vue b/src/renderer/views/songList/List/components/SongList.vue
-index 0295baa..4ac893c 100644
+index 0295baa..5f54ac2 100644
 --- a/src/renderer/views/songList/List/components/SongList.vue
 +++ b/src/renderer/views/songList/List/components/SongList.vue
 @@ -2,24 +2,19 @@
@@ -1962,7 +2317,7 @@ index 0295baa..4ac893c 100644
      <div v-show="!props.listInfo.noItemLabel" ref="dom_list_ref" :class="$style.listContent" class="scroll">
        <ul>
 -        <li v-for="item in props.listInfo.list" :key="item.id" :class="$style.item" @click="toDetail(item)">
-+        <li v-for="item in props.listInfo.list" :key="item.id" :class="$style.item" :title="item.author" @click="toDetail(item)">
++        <li v-for="(item, index) in props.listInfo.list" :key="item.id" :class="$style.item" :style="{ '--card-hue': (Number(index) * 47) % 360 }" :title="item.author" @click="toDetail(item)">
            <div :class="$style.image">
              <img :class="$style.img" loading="lazy" decoding="async" :src="item.img">
            </div>
@@ -1987,7 +2342,7 @@ index 0295baa..4ac893c 100644
        </ul>
        <div :class="$style.pagination">
          <material-pagination :count="props.listInfo.total" :limit="props.listInfo.limit" :page="props.listInfo.page" @btn-click="togglePage" />
-@@ -106,97 +101,119 @@ defineExpose({
+@@ -106,97 +101,148 @@ defineExpose({
    flex-flow: column nowrap;
    font-size: 14px;
    box-sizing: border-box;
@@ -1999,14 +2354,15 @@ index 0295baa..4ac893c 100644
 -    flex-flow: row wrap;
 -    justify-content: space-between;
 +    display: grid;
-+    grid-template-columns: repeat(4, minmax(0, 1fr));
-+    gap: 20px;
++    grid-template-columns: repeat(5, minmax(0, 1fr));
++    gap: 16px;
 +    align-items: start;
    }
  }
  .item {
 -  max-width: 360px;
 -  width: 32%;
++  position: relative;
 +  min-width: 0;
    box-sizing: border-box;
    display: flex;
@@ -2015,21 +2371,36 @@ index 0295baa..4ac893c 100644
 -  margin-bottom: 20px;
 +  flex-flow: column nowrap;
 +  overflow: hidden;
-+  border-radius: 14px;
-+  background: #fff;
-+  border: 1px solid rgba(20, 35, 31, .05);
-+  box-shadow: 0 6px 18px rgba(40, 90, 70, .07);
++  border-radius: 16px;
++  background: linear-gradient(180deg, rgba(255, 255, 255, .055), rgba(255, 255, 255, .025));
++  border: 1px solid rgba(255, 255, 255, .07);
++  box-shadow: 0 12px 26px rgba(0, 0, 0, .28);
    cursor: pointer;
 -  transition: opacity @transition-normal;
-+  transition: transform .22s ease, box-shadow .22s ease;
++  transition: transform .22s ease, box-shadow .22s ease, border-color .22s ease;
++
++  &::after {
++    content: "";
++    position: absolute;
++    inset: 0;
++    pointer-events: none;
++    background: radial-gradient(120% 70% at 50% 0%, hsla(var(--card-hue, 160), 85%, 60%, .22), transparent 62%);
++    opacity: 0;
++    transition: opacity .22s ease;
++  }
 +
    &:hover {
 -    opacity: .7;
-+    transform: translateY(-3px);
-+    box-shadow: 0 16px 32px rgba(40, 90, 70, .14);
++    transform: translateY(-4px);
++    border-color: hsla(var(--card-hue, 160), 80%, 60%, .35);
++    box-shadow: 0 20px 42px rgba(0, 0, 0, .42);
++
++    &::after {
++      opacity: 1;
++    }
 +
 +    .img {
-+      transform: scale(1.04);
++      transform: scale(1.05);
 +    }
 +    .desc h4 {
 +      color: var(--color-primary);
@@ -2049,7 +2420,7 @@ index 0295baa..4ac893c 100644
    aspect-ratio: 1 / 1;
 -
 -  box-shadow: 0 0 2px 0 rgba(0,0,0,.2);
-+  background: rgba(22, 184, 155, .06);
++  background: rgba(255, 255, 255, .04);
  }
  .img {
 +  display: block;
@@ -2057,6 +2428,15 @@ index 0295baa..4ac893c 100644
    height: 100%;
    object-fit: cover;
 +  transition: transform .35s ease;
++  animation: ceru-cover-in .32s ease both;
++}
++@keyframes ceru-cover-in {
++  from {
++    opacity: 0;
++  }
++  to {
++    opacity: 1;
++  }
  }
  
  .desc {
@@ -2133,17 +2513,21 @@ index 0295baa..4ac893c 100644
 +  margin-left: auto;
 +  padding: 3px 8px;
 +  border-radius: 99px;
-+  background: rgba(22, 184, 155, .08);
-+  color: var(--color-primary);
++  background: hsla(var(--card-hue, 160), 85%, 60%, .14);
++  color: hsl(var(--card-hue, 160), 85%, 74%);
 +  font-size: 11px;
 +}
-+@media (max-width: 1180px) {
++@media (max-width: 1500px) {
 +  .listContent ul {
-+    grid-template-columns: repeat(3, minmax(0, 1fr));
-+    gap: 16px;
++    grid-template-columns: repeat(4, minmax(0, 1fr));
 +  }
 +}
-+@media (max-width: 860px) {
++@media (max-width: 1000px) {
++  .listContent ul {
++    grid-template-columns: repeat(3, minmax(0, 1fr));
++  }
++}
++@media (max-width: 780px) {
 +  .listContent ul {
 +    grid-template-columns: repeat(2, minmax(0, 1fr));
 +  }
@@ -2157,7 +2541,7 @@ index 0295baa..4ac893c 100644
  }
  .noitem {
    position: absolute;
-@@ -208,7 +225,6 @@ defineExpose({
+@@ -208,7 +254,6 @@ defineExpose({
    flex-flow: column nowrap;
    justify-content: center;
    align-items: center;
@@ -2166,10 +2550,10 @@ index 0295baa..4ac893c 100644
    p {
      font-size: 24px;
 diff --git a/src/renderer/views/songList/List/components/TagList.vue b/src/renderer/views/songList/List/components/TagList.vue
-index 20c8f6b..250ee5c 100644
+index 20c8f6b..50526ce 100644
 --- a/src/renderer/views/songList/List/components/TagList.vue
 +++ b/src/renderer/views/songList/List/components/TagList.vue
-@@ -140,9 +140,11 @@ onBeforeUnmount(() => {
+@@ -140,15 +140,17 @@ onBeforeUnmount(() => {
  }
  
  .label {
@@ -2178,51 +2562,65 @@ index 20c8f6b..250ee5c 100644
 -  transition: color @transition-normal;
 +  padding: 6px 12px;
 +  border-radius: 99px;
-+  background: rgba(255, 255, 255, .6);
-+  border: 1px solid rgba(20, 35, 31, .07);
++  background: rgba(255, 255, 255, .06);
++  border: 1px solid rgba(255, 255, 255, .09);
 +  transition: background-color @transition-normal, color @transition-normal;
    // border-top: 2px solid @color-tab-border-bottom;
    // border-left: 2px solid @color-tab-border-bottom;
    box-sizing: border-box;
+   text-align: center;
+   // border-top-left-radius: 3px;
+-  color: var(--color-font);
++  color: rgba(226, 232, 240, .8);
+   cursor: pointer;
+ 
+   display: flex;
 diff --git a/src/renderer/views/songList/List/index.vue b/src/renderer/views/songList/List/index.vue
-index 3a3663e..1b0a976 100644
+index 3a3663e..9cbe6c7 100644
 --- a/src/renderer/views/songList/List/index.vue
 +++ b/src/renderer/views/songList/List/index.vue
-@@ -1,34 +1,33 @@
+@@ -1,14 +1,20 @@
  <template>
    <div :class="$style.container">
 -    <div :class="$style.header">
 -      <div :class="$style.left">
 -        <tag-list :source="source" :tag-id="tagId" :sort-id="sortId" />
 -        <sort-tab :source="source" :tag-id="tagId" :sort-id="sortId" />
--      </div>
++    <header :class="$style.hero">
++      <div :class="$style.heroText">
++        <h1 :class="$style.title">发现音乐</h1>
++        <p :class="$style.subtitle">探索最新最热的音乐内容</p>
+       </div>
 -      <base-btn :class="$style.btn" outline min @click="visibleOpenSongListModal = true">{{ $t('songlist__import_input_show_btn') }}</base-btn>
 -      <base-selection :model-value="source" :class="$style.select" :list="sourceList" item-key="id" item-name="name" @update:model-value="handleToggleSource" />
-+    <header :class="$style.hero">
-+      <h1 :class="$style.title">发现音乐</h1>
-+      <p :class="$style.subtitle">探索最新最热的音乐内容</p>
++      <button type="button" :class="$style.importBtn" @click="visibleOpenSongListModal = true">导入歌单</button>
 +    </header>
-+    <div :class="$style.sectionHead">
-+      <h2>热门歌单Top36</h2>
++    <div :class="$style.filters">
++      <tag-list :source="source" :tag-id="tagId" :sort-id="sortId" />
++      <sort-tab :source="source" :tag-id="tagId" :sort-id="sortId" />
      </div>
 -    <list-view :source="source" :tag-id="tagId" :sort-id="sortId" :page="page" />
--    <open-list-modal v-model="visibleOpenSongListModal" :source-list="sourceList" />
++    <div :class="$style.sectionHead">
++      <h2>热门歌单Top36</h2>
++    </div>
 +    <list-view :class="$style.listWrap" :source="source" :tag-id="tagId" :sort-id="sortId" :page="page" />
+     <open-list-modal v-model="visibleOpenSongListModal" :source-list="sourceList" />
    </div>
  </template>
- 
+@@ -16,19 +22,24 @@
  <script lang="ts">
--import { computed, ref } from '@common/utils/vueTools'
-+import { ref } from '@common/utils/vueTools'
+ import { computed, ref } from '@common/utils/vueTools'
  import { getSongListSetting, setSongListSetting } from '@renderer/utils/data'
--import TagList from './components/TagList.vue'
--import SortTab from './components/SortTab.vue'
++import ListView from './ListView.vue'
++import OpenListModal from './components/OpenListModal.vue'
+ import TagList from './components/TagList.vue'
+ import SortTab from './components/SortTab.vue'
 -import OpenListModal from './components/OpenListModal.vue'
- import ListView from './ListView.vue'
+-import ListView from './ListView.vue'
 -import { sources, listInfo, isVisibleListDetail } from '@renderer/store/songList/state'
--import { sourceNames } from '@renderer/store'
++import { listInfo, isVisibleListDetail, sortList, sources } from '@renderer/store/songList/state'
+ import { sourceNames } from '@renderer/store'
 -import { useRoute, useRouter } from '@common/utils/vueRouter'
-+import { listInfo, isVisibleListDetail, sortList } from '@renderer/store/songList/state'
 +
 +const getDefaultSortId = (source: LX.OnlineSource) => sortList[source]?.[0]?.id ?? ''
  
@@ -2239,7 +2637,7 @@ index 3a3663e..1b0a976 100644
  
  interface Query {
    source?: string
-@@ -60,6 +59,9 @@ const verifyQueryParams = async function(this: any, to: { query: Query, path: st
+@@ -60,6 +71,9 @@ const verifyQueryParams = async function(this: any, to: { query: Query, path: st
        _page = '1'
      }
  
@@ -2249,7 +2647,7 @@ index 3a3663e..1b0a976 100644
      next({
        path: to.path,
        query: { ...to.query, source: _source, tagId: _tagId, sortId: _sortId, page: _page },
-@@ -69,48 +71,24 @@ const verifyQueryParams = async function(this: any, to: { query: Query, path: st
+@@ -69,48 +83,32 @@ const verifyQueryParams = async function(this: any, to: { query: Query, path: st
    next()
    source.value = _source as LX.OnlineSource
    tagId.value = _tagId ?? ''
@@ -2266,12 +2664,14 @@ index 3a3663e..1b0a976 100644
 -    TagList,
 -    SortTab,
      ListView,
--    OpenListModal,
+     OpenListModal,
++    TagList,
++    SortTab,
    },
    beforeRouteEnter: verifyQueryParams,
    beforeRouteUpdate: verifyQueryParams,
    setup() {
--    const visibleOpenSongListModal = ref(false)
+     const visibleOpenSongListModal = ref(false)
 -
 -    const sourceList = computed(() => {
 -      return sources.map(s => ({ id: s, name: sourceNames.value[s] }))
@@ -2288,7 +2688,8 @@ index 3a3663e..1b0a976 100644
 -        },
 -      })
 -    }
--
++    const sourceList = computed(() => sources.map(s => ({ id: s, name: sourceNames.value[s] })))
+ 
      return {
        source,
        tagId,
@@ -2296,11 +2697,12 @@ index 3a3663e..1b0a976 100644
        page,
 -      sourceList,
 -      handleToggleSource,
--      visibleOpenSongListModal,
+       visibleOpenSongListModal,
++      sourceList,
      }
    },
  }
-@@ -124,91 +102,41 @@ export default {
+@@ -124,91 +122,93 @@ export default {
    display: flex;
    flex-flow: column nowrap;
    position: relative;
@@ -2310,44 +2712,86 @@ index 3a3663e..1b0a976 100644
 +.hero {
    flex: none;
 -  width: 100%;
--  display: flex;
++  position: relative;
+   display: flex;
 -  flex-flow: row nowrap;
 -  // padding-right: 5px;
 -  // box-sizing: border-box;
 -  padding-bottom: 5px;
--}
++  align-items: flex-end;
++  justify-content: space-between;
++  gap: 16px;
++  padding: 30px 6px 0;
++
++  &::before {
++    content: "";
++    position: absolute;
++    left: -40px;
++    top: -60px;
++    width: 460px;
++    height: 220px;
++    background: radial-gradient(closest-side, rgba(52, 211, 153, .18), rgba(52, 211, 153, 0));
++    pointer-events: none;
++  }
+ }
 -.left {
 -  flex: auto;
 -  display: flex;
 -  flex-flow: row nowrap;
-+  padding: 26px 6px 0;
++.heroText {
++  position: relative;
++  min-width: 0;
  }
 -
 -.btn {
-+.title {
-+  margin: 0;
-+  font-size: 32px;
-+  line-height: 1.15;
-+  letter-spacing: -.045em;
-+  font-weight: 700;
-   color: var(--color-font);
+-  color: var(--color-font);
 -  transition: color @transition-fast;
 -  background: none !important;
--  &:hover {
++.importBtn {
++  position: relative;
++  flex: none;
++  margin-bottom: 4px;
++  padding: 9px 18px;
++  border-radius: 999px;
++  border: none;
++  background: var(--color-primary);
++  color: #04140e;
++  font-size: 13px;
++  font-weight: 700;
++  cursor: pointer;
++  box-shadow: 0 10px 24px rgba(16, 185, 129, .32);
++  transition: transform .18s ease, box-shadow .18s ease;
+   &:hover {
 -    color: var(--color-primary-font-hover);
--  }
++    transform: translateY(-1px);
++    box-shadow: 0 14px 30px rgba(16, 185, 129, .42);
++  }
++  &:active {
++    transform: translateY(0);
+   }
  }
 -
 -
 -.select {
 -  font-size: 12px;
 -  width: auto;
++.title {
++  margin: 0;
++  font-size: 38px;
++  line-height: 1.1;
++  letter-spacing: -.05em;
++  font-weight: 800;
++  background: linear-gradient(180deg, #ffffff 0%, #a9b8b2 100%);
++  -webkit-background-clip: text;
++  background-clip: text;
++  color: transparent;
++}
 +.subtitle {
 +  margin: 8px 0 0;
 +  font-size: 14px;
 +  color: var(--color-font-label);
 +}
-+.sectionHead {
++.filters {
    flex: none;
 -  padding: 0 5px;
 -
@@ -2403,6 +2847,13 @@ index 3a3663e..1b0a976 100644
 -        }
 -      }
 -    }
++  display: flex;
++  align-items: center;
++  gap: 10px;
++  padding: 18px 6px 0;
++}
++.sectionHead {
++  flex: none;
 +  display: flex;
 +  align-items: baseline;
 +  justify-content: space-between;

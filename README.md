@@ -2,27 +2,37 @@
 
 基于 [lyswhut/lx-music-desktop](https://github.com/lyswhut/lx-music-desktop) **v2.12.6** 与 [lyswhut/lx-music-mobile](https://github.com/lyswhut/lx-music-mobile) **v1.9.1** 的非官方 UI 改版。
 
-**当前版本：`v2.12.6-ceru.11`（青瓷改版 rev.11，移动端 `v1.9.1-ceru8`）**
+**当前版本：`v2.12.6-ceru.12`（青瓷改版 rev.12，桌面 + 移动端「青瓷夜色」）**
 
 ![主界面](screenshots/主界面.png)
 
 ## 下载
 
-**Release：** https://github.com/baipiao5555/lx-music-ceru-jade/releases/tag/v2.12.6-ceru.11
+**Release：** https://github.com/baipiao5555/lx-music-ceru-jade/releases/tag/v2.12.6-ceru.12
 
 | 平台 | 文件 | 说明 |
 | --- | --- | --- |
-| Windows x64 | `lx-music-desktop-v2.12.6-x64-Setup.exe` | NSIS 安装包，116 MB，未做商业签名（与 ceru.9 相同） |
-| Android arm64 | `lx-music-mobile-v1.9.1-ceru8-universal.apk` | 28 MB，推荐，含澜音 v1 布局 + 歌单导入 |
-| Android arm64 | `lx-music-mobile-v1.9.1-ceru8-arm64.apk` | 14 MB，体积更小，含澜音 v1 布局 + 歌单导入 |
+| Windows x64 | `lx-music-desktop-v2.12.6-x64-Setup.exe` | NSIS 安装包，116 MB，未做商业签名 |
+| Android arm64 | `lx-music-mobile-v1.9.1-ceru9-universal.apk` | 28 MB，推荐，暗色 UI + 歌单导入 |
+| Android arm64 | `lx-music-mobile-v1.9.1-ceru9-arm64.apk` | 14 MB，体积更小，暗色 UI + 歌单导入 |
 
 SHA-256：
 
-- Windows：`3d016a1ce9cae4866797e2be12839a2e6fc722cba69dc14142bed7443db8aa20`
-- Android universal：`7499c99ec925a6fedd268b681310df37f6607b54503f0a81238ed4a7701f9030`
-- Android arm64：`b1389882654d9fd2df14919167a33a056d29201bec20a15cff85f7a142732bcd`
+- Windows：`0c778c0a8fc6cd48f9a9b0d3e9694d87ad48d18593c7a2f7602f609de998a58a`
+- Android universal：`6a10192f50542c7cc3d51a518ad3eb10fe3fcc66d9cd106ccdd0eeb5cc53f1bd`
+- Android arm64：`8003f5bfb612f2a831618f3864a44ad698c0876e657cd790d97b7b83842c5b87`
 
 ## 版本记录
+
+### rev.12（`v2.12.6-ceru.12` + 移动端 `v1.9.1-ceru9`）
+
+- 桌面端整体改为「青瓷夜色」暗色 UI：深色背景、绿色高亮、顶部渐变光晕。
+- 侧栏由 240px 文字导航改为 76px 图标窄栏，选中项用绿色胶囊 + 左侧光条。
+- 发现页重做：大标题渐变、来源/排序胶囊、四列彩色卡片网格（每张卡片按序索引生成不同色晕）。
+- 顶部搜索改为深色圆角搜索框；播放条改为深色分栏，绿色圆形播放键。
+- 播放详情页改为深色渐变 + 玻璃歌词面板。
+- 移动端同步切换为暗色主题（青瓷夜色），底部导航选中项加绿色胶囊高亮，页面背景统一为深色。
+- 构建标记更新为 `Ceru 构建 9 · 青瓷夜色 UI`。
 
 ### rev.11（`v2.12.6-ceru.11` + 移动端 `v1.9.1-ceru8`）
 
@@ -166,8 +176,8 @@ Mimosa 的 Git 安全门禁在提交前扫描到上游源码中的 12 个既有�
 
 ## 补丁文件
 
-- `patches/0001-feat-ui-ceru-jade.patch`：桌面端青瓷 UI，基于官方 v2.12.6。
-- `patches/0002-feat-ui-ceru-mobile.patch`：移动端青瓷主题 + 澜音 v1 布局 + 歌单导入，基于官方 v1.9.1。
+- `patches/0001-feat-ui-ceru-jade.patch`：桌面端青瓷夜色 UI（暗色主题 + 图标窄栏 + 彩色卡片），基于官方 v2.12.6。
+- `patches/0002-feat-ui-ceru-mobile.patch`：移动端青瓷夜色主题 + 澜音 v1 布局 + 歌单导入，基于官方 v1.9.1。
 
 ## 应用补丁
 
