@@ -2,27 +2,35 @@
 
 基于 [lyswhut/lx-music-desktop](https://github.com/lyswhut/lx-music-desktop) **v2.12.6** 与 [lyswhut/lx-music-mobile](https://github.com/lyswhut/lx-music-mobile) **v1.9.1** 的非官方 UI 改版。
 
-**当前版本：`v2.12.6-ceru.10`（青瓷改版 rev.10，移动端 `v1.9.1-ceru7`）**
+**当前版本：`v2.12.6-ceru.11`（青瓷改版 rev.11，移动端 `v1.9.1-ceru8`）**
 
 ![主界面](screenshots/主界面.png)
 
 ## 下载
 
-**Release：** https://github.com/baipiao5555/lx-music-ceru-jade/releases/tag/v2.12.6-ceru.10
+**Release：** https://github.com/baipiao5555/lx-music-ceru-jade/releases/tag/v2.12.6-ceru.11
 
 | 平台 | 文件 | 说明 |
 | --- | --- | --- |
 | Windows x64 | `lx-music-desktop-v2.12.6-x64-Setup.exe` | NSIS 安装包，116 MB，未做商业签名（与 ceru.9 相同） |
-| Android arm64 | `lx-music-mobile-v1.9.1-ceru7-universal.apk` | 28 MB，推荐，含澜音 v1 布局 + 歌单导入 |
-| Android arm64 | `lx-music-mobile-v1.9.1-ceru7-arm64.apk` | 14 MB，体积更小，含澜音 v1 布局 + 歌单导入 |
+| Android arm64 | `lx-music-mobile-v1.9.1-ceru8-universal.apk` | 28 MB，推荐，含澜音 v1 布局 + 歌单导入 |
+| Android arm64 | `lx-music-mobile-v1.9.1-ceru8-arm64.apk` | 14 MB，体积更小，含澜音 v1 布局 + 歌单导入 |
 
 SHA-256：
 
 - Windows：`3d016a1ce9cae4866797e2be12839a2e6fc722cba69dc14142bed7443db8aa20`
-- Android universal：`614ada44d8cf3ec1a07b1b8b647d2c1616427505446d0a58e98d73274828a3c3`
-- Android arm64：`b8898ebdc5f9283c7733127ccd76410d41ef98c2972e1a98eb77418201e54cc3`
+- Android universal：`7499c99ec925a6fedd268b681310df37f6607b54503f0a81238ed4a7701f9030`
+- Android arm64：`b1389882654d9fd2df14919167a33a056d29201bec20a15cff85f7a142732bcd`
 
 ## 版本记录
+
+### rev.11（`v2.12.6-ceru.11` + 移动端 `v1.9.1-ceru8`）
+
+- 修复歌单导入弹窗的文字看不清：未选中的平台标签、取消按钮、顶部「导入」胶囊原来是绿底绿字。
+- 未选中平台与取消按钮改为浅色底 + 深色文字 + 边框；顶部胶囊改为浅底深绿字。
+- 「示例」链接文字加深，便于辨认。
+- 构建标记更新为 `Ceru 构建 8 · 已内置歌单导入`。
+- 桌面端安装包与 ceru.9 相同，未重新打包。
 
 ### rev.10（`v2.12.6-ceru.10` + 移动端 `v1.9.1-ceru7`）
 
