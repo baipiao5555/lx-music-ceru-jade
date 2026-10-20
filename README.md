@@ -2,13 +2,13 @@
 
 基于 [lyswhut/lx-music-desktop](https://github.com/lyswhut/lx-music-desktop) **v2.12.6** 与 [lyswhut/lx-music-mobile](https://github.com/lyswhut/lx-music-mobile) **v1.9.1** 的非官方 UI 改版。
 
-**当前版本：`v2.12.6-ceru.8`（青瓷改版 rev.8）**
+**当前版本：`v2.12.6-ceru.9`（青瓷改版 rev.9）**
 
 ![主界面](screenshots/主界面.png)
 
 ## 下载
 
-**Release：** https://github.com/baipiao5555/lx-music-ceru-jade/releases/tag/v2.12.6-ceru.8
+**Release：** https://github.com/baipiao5555/lx-music-ceru-jade/releases/tag/v2.12.6-ceru.9
 
 | 平台 | 文件 | 说明 |
 | --- | --- | --- |
@@ -18,11 +18,21 @@
 
 SHA-256：
 
-- Windows：`ad7f1beb246be097bb3e2ec9a04629afd4a001d77746b2b8b406897d4b9d2e62`
+- Windows：`2b8876063e46687d679685ab09dec33fd1667ac531bf9ab3be03a887926fb3f9`
 - Android universal：`4e3fb72a45c6503a945efe3f75fd0b689e0ab84e37fedb8724c90bf38fbf1b16`
 - Android arm64：`1695b1fef12bdfbdc038ec9b4501d5b66a45d02cbc31090da671e500fe283b3e`
 
 ## 版本记录
+
+### rev.9（`v2.12.6-ceru.9`）
+
+- 侧栏移除「Ceru Music / 青瓷 · CERU JADE」品牌文字，只保留图标。
+- 侧栏新增「收藏」，放在「本地」上方。
+- 「最近」改为真实播放历史：最新在前，最多 200 首，本地持久化。
+- 「发现」页恢复「导入歌单」，支持粘贴完整分享文案。
+- 修复播放栏封面尺寸失控遮挡页面的问题。
+- 修复窗口只有最大化、无法还原和拖动的问题。
+- 提供 NSIS 安装程序，安装后自动创建桌面和开始菜单快捷方式。
 
 ### rev.8（`v2.12.6-ceru.8` + 移动端 `v1.9.1-ceru5`）
 
