@@ -12,7 +12,7 @@
 
 | 平台 | 文件 | 说明 |
 | --- | --- | --- |
-| Windows x64 | `LX-Music-青瓷-v2.12.6-ceru14-x64-Setup.exe` | NSIS 安装包，116 MB，未做商业签名 |
+| Windows x64 | `lx-music-desktop-v2.12.6-x64-Setup.exe` | NSIS 安装包，116 MB，未做商业签名 |
 | Android arm64 | `lx-music-mobile-v1.9.1-ceru10-universal.apk` | 28 MB，推荐，暗色 UI + 歌单导入 |
 | Android arm64 | `lx-music-mobile-v1.9.1-ceru10-arm64.apk` | 14 MB，体积更小，暗色 UI + 歌单导入 |
 
