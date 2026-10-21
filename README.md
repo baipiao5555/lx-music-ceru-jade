@@ -2,27 +2,42 @@
 
 基于 [lyswhut/lx-music-desktop](https://github.com/lyswhut/lx-music-desktop) **v2.12.6** 与 [lyswhut/lx-music-mobile](https://github.com/lyswhut/lx-music-mobile) **v1.9.1** 的非官方 UI 改版。
 
-**当前版本：`v2.12.6-ceru.12`（青瓷改版 rev.12，桌面 + 移动端「青瓷夜色」）**
+**当前版本：`v2.12.6-ceru.14`（青瓷改版 rev.14，导入歌单来源自动识别）**
 
 ![主界面](screenshots/主界面.png)
 
 ## 下载
 
-**Release：** https://github.com/baipiao5555/lx-music-ceru-jade/releases/tag/v2.12.6-ceru.12
+**Release：** https://github.com/baipiao5555/lx-music-ceru-jade/releases/tag/v2.12.6-ceru.14
 
 | 平台 | 文件 | 说明 |
 | --- | --- | --- |
-| Windows x64 | `lx-music-desktop-v2.12.6-x64-Setup.exe` | NSIS 安装包，116 MB，未做商业签名 |
-| Android arm64 | `lx-music-mobile-v1.9.1-ceru9-universal.apk` | 28 MB，推荐，暗色 UI + 歌单导入 |
-| Android arm64 | `lx-music-mobile-v1.9.1-ceru9-arm64.apk` | 14 MB，体积更小，暗色 UI + 歌单导入 |
+| Windows x64 | `LX-Music-青瓷-v2.12.6-ceru14-x64-Setup.exe` | NSIS 安装包，116 MB，未做商业签名 |
+| Android arm64 | `lx-music-mobile-v1.9.1-ceru10-universal.apk` | 28 MB，推荐，暗色 UI + 歌单导入 |
+| Android arm64 | `lx-music-mobile-v1.9.1-ceru10-arm64.apk` | 14 MB，体积更小，暗色 UI + 歌单导入 |
 
 SHA-256：
 
-- Windows：`0c778c0a8fc6cd48f9a9b0d3e9694d87ad48d18593c7a2f7602f609de998a58a`
-- Android universal：`53dd747945e51c8e4d46e05273c749cae87eb7bae807e13054dbf3e4b8736170`
-- Android arm64：`8a0ec9e068a3fed0e497fd569ae8fc8eebce5b8599939f0fc3f4419d43252451`
+- Windows：`c2ec92bb26015873510636dea96f3ba55b6b2722b938b2825aa78dfe556c1a99`
+- Android universal：`14438b29f14235192ee7bb425ec27c7781c9817e0c6d0ed7683787ed407fb64e`
+- Android arm64：`0175231f80448097321f2651faffbbdd3a82ebf435d0a4429e8450cbb738695c`
 
 ## 版本记录
+
+### rev.14（`v2.12.6-ceru.14` + 移动端 `v1.9.1-ceru10`）
+
+- 修复「导入歌单」在手机端和桌面端都失败的主要场景：粘贴平台链接时自动切换到对应来源，不再用默认来源去解析别家歌单。
+- 桌面端导入弹窗改用真实平台名（酷我音乐、酷狗音乐、QQ 音乐、网易云音乐、咪咕音乐），不再显示「小蜗 / 小枸 / 小秋」这类别名，避免选错来源。
+- 分享文案里的链接会被自动提取并识别平台；酷狗数字 ID、`pllist/info/<id>` 链接会转成 SDK 能识别的 `id_<id>` 形式。
+- 歌单加载失败时给出明确提示：可能是已删除、未公开，或「我喜欢」这类个人收藏；个人收藏请用「分享 → 复制链接」的完整链接重新导入，或先转存为公开歌单。
+- 桌面端安装包与移动端 APK 均已重新打包。
+
+### rev.13（`v2.12.6-ceru.13` + 移动端 `v1.9.1-ceru9`）
+
+- 修复桌面端切页后内容空白、点什么都没反应：详情页离开时没有清理 `isVisibleListDetail`，点「发现」会被列表页守卫弹回详情页；现在在 `beforeRouteLeave` 里清掉。
+- 移除会卡住的页面切换过渡（`transition mode="out-in"`），改为按路由路径重建视图，避免旧页面残留或新页面不挂载。
+- 修复「导入歌单」：分享文案会自动提取歌单 ID，酷狗数字 ID 自动转成 SDK 能识别的 `id_<id>` 形式；导入弹窗在发现页右上角，未删除。
+- 桌面端安装包重新打包；移动端 APK 与 ceru.12 相同。
 
 ### rev.12（`v2.12.6-ceru.12` + 移动端 `v1.9.1-ceru9`）
 

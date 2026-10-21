@@ -383,10 +383,18 @@ index 5c30e05..9b92409 100644
  ]
 \ No newline at end of file
 diff --git a/src/lang/en-us.json b/src/lang/en-us.json
-index bf9484a..b37298c 100644
+index bf9484a..3c65053 100644
 --- a/src/lang/en-us.json
 +++ b/src/lang/en-us.json
-@@ -699,6 +699,7 @@
+@@ -93,6 +93,7 @@
+   "list__import_part_confirm": "The imported list ({importName}) has the same ID as the local list ({localName}). Do you want to overwrite the local list?",
+   "list__import_part_desc": "Choose list file",
+   "list__load_failed": "Ah, the loading failed 😭",
++  "songlist__load_failed_tip": "The playlist may have been deleted, made private, or be a personal collection such as \"Liked Songs\". Use Share → Copy link in the app and import it again.",
+   "list__loading": "List loading...⏳",
+   "list__move_to": "Move to ...",
+   "list__movedown": "Move down",
+@@ -699,6 +700,7 @@
    "theme_edit_modal__select_bg_file": "Choose a background image",
    "theme_edit_modal__title_add": "Add Theme",
    "theme_edit_modal__title_edit": "Edit Theme",
@@ -395,10 +403,18 @@ index bf9484a..b37298c 100644
    "theme_grey": "Grey",
    "theme_happy_new_year": "New Year",
 diff --git a/src/lang/ko-kr.json b/src/lang/ko-kr.json
-index eb6b6ae..85e8826 100644
+index eb6b6ae..17f7a1b 100644
 --- a/src/lang/ko-kr.json
 +++ b/src/lang/ko-kr.json
-@@ -699,6 +699,7 @@
+@@ -93,6 +93,7 @@
+   "list__import_part_confirm": "가져온 목록({importName})의 ID가 로컬 목록({localName})과 동일합니다. 로컬 목록을 덮어쓰시겠습니까?",
+   "list__import_part_desc": "목록 파일을 선택하세요",
+   "list__load_failed": "이런, 불러오기에 실패했습니다 😭",
++  "songlist__load_failed_tip": "재생목록이 삭제되었거나 비공개이거나 '좋아요' 같은 개인 컬렉션일 수 있습니다. 앱에서 '공유 → 링크 복사'한 뒤 다시 가져오세요.",
+   "list__loading": "목록을 불러오는 중...⏳",
+   "list__move_to": "이동할 위치...",
+   "list__movedown": "아래로 이동",
+@@ -699,6 +700,7 @@
    "theme_edit_modal__select_bg_file": "배경 이미지를 선택하세요",
    "theme_edit_modal__title_add": "테마 추가",
    "theme_edit_modal__title_edit": "테마 편집",
@@ -407,10 +423,18 @@ index eb6b6ae..85e8826 100644
    "theme_grey": "그레이",
    "theme_happy_new_year": "새해",
 diff --git a/src/lang/zh-cn.json b/src/lang/zh-cn.json
-index cc98c60..d37f4c5 100644
+index cc98c60..b013909 100644
 --- a/src/lang/zh-cn.json
 +++ b/src/lang/zh-cn.json
-@@ -699,6 +699,7 @@
+@@ -93,6 +93,7 @@
+   "list__import_part_confirm": "导入的列表「{importName}」与本地列表「{localName}」的 ID 相同，是否覆盖本地列表？",
+   "list__import_part_desc": "选择列表文件",
+   "list__load_failed": "啊，加载失败了😭",
++  "songlist__load_failed_tip": "歌单可能已删除、未公开，或是「我喜欢」这类个人收藏。请在平台里点「分享 → 复制链接」后重新导入。",
+   "list__loading": "列表加载中...⏳",
+   "list__move_to": "移动到...",
+   "list__movedown": "下移",
+@@ -699,6 +700,7 @@
    "theme_edit_modal__select_bg_file": "选择背景图片",
    "theme_edit_modal__title_add": "添加主题",
    "theme_edit_modal__title_edit": "编辑主题",
@@ -419,10 +443,18 @@ index cc98c60..d37f4c5 100644
    "theme_grey": "灰常美丽",
    "theme_happy_new_year": "新年快乐",
 diff --git a/src/lang/zh-tw.json b/src/lang/zh-tw.json
-index 7fdbcd9..2adb11b 100644
+index 7fdbcd9..c88055b 100644
 --- a/src/lang/zh-tw.json
 +++ b/src/lang/zh-tw.json
-@@ -699,6 +699,7 @@
+@@ -93,6 +93,7 @@
+   "list__import_part_confirm": "匯入的清單「{importName}」與本機清單「{localName}」的 ID 相同，是否覆寫本機清單？",
+   "list__import_part_desc": "選取清單檔案",
+   "list__load_failed": "啊，載入失敗了😭",
++  "songlist__load_failed_tip": "歌單可能已刪除、未公開，或是「我喜歡」這類個人收藏。請在平台裡點「分享 → 複製連結」後重新匯入。",
+   "list__loading": "清單載入中...⏳",
+   "list__move_to": "移動到...",
+   "list__movedown": "下移",
+@@ -699,6 +700,7 @@
    "theme_edit_modal__select_bg_file": "選取背景圖片",
    "theme_edit_modal__title_add": "新增主題",
    "theme_edit_modal__title_edit": "編輯主題",
@@ -622,256 +654,6 @@ index 99ac2b9..d4bc120 100644
  }
  
  .view-container {
-diff --git a/src/renderer/assets/styles/ceru.less b/src/renderer/assets/styles/ceru.less
-new file mode 100644
-index 0000000..17013de
---- /dev/null
-+++ b/src/renderer/assets/styles/ceru.less
-@@ -0,0 +1,244 @@
-+@import './layout.less';
-+
-+/* 青瓷夜色：深色卡片外壳（Alger 风格参考） */
-+html,
-+body {
-+  background: #0b0d10;
-+}
-+
-+#root {
-+  background: transparent !important;
-+}
-+
-+#container {
-+  background:
-+    radial-gradient(900px 420px at 6% -12%, rgba(16, 185, 129, .20), rgba(16, 185, 129, 0) 62%),
-+    radial-gradient(820px 400px at 102% -6%, rgba(59, 130, 246, .15), rgba(59, 130, 246, 0) 58%),
-+    #0b0d10 !important;
-+  padding: 0 !important;
-+}
-+
-+#left {
-+  width: 76px !important;
-+  padding: 0 0 10px !important;
-+  box-sizing: border-box !important;
-+  background: rgba(13, 16, 20, .92) !important;
-+  border-right: 1px solid rgba(255, 255, 255, .06);
-+}
-+
-+#right {
-+  margin: 0 !important;
-+  border-radius: 0 !important;
-+  background: transparent !important;
-+  backdrop-filter: none !important;
-+  border: none !important;
-+  box-shadow: none !important;
-+  overflow: hidden !important;
-+}
-+
-+#toolbar {
-+  height: 64px !important;
-+  padding: 0 14px 0 22px !important;
-+  background: transparent !important;
-+  border-bottom: none !important;
-+}
-+
-+#toolbar input {
-+  width: 100% !important;
-+  height: 38px !important;
-+  border-radius: 12px !important;
-+  background: rgba(255, 255, 255, .06) !important;
-+  border: 1px solid rgba(255, 255, 255, .08) !important;
-+  padding: 0 14px !important;
-+  font-size: 12px !important;
-+  color: #e2e8f0 !important;
-+  box-shadow: none !important;
-+}
-+
-+#toolbar input::placeholder {
-+  color: rgba(226, 232, 240, .42) !important;
-+}
-+
-+#toolbar input ~ button {
-+  background: transparent !important;
-+  border: 0 !important;
-+  color: rgba(226, 232, 240, .55) !important;
-+  box-shadow: none !important;
-+}
-+
-+#toolbar input ~ button:hover {
-+  color: var(--color-primary) !important;
-+}
-+
-+#view {
-+  padding: 0 26px 0 !important;
-+  background: transparent !important;
-+}
-+
-+/* 贴底播放条 */
-+#player {
-+  margin: 0 !important;
-+  height: 76px !important;
-+  border-radius: 0 !important;
-+  background: rgba(12, 15, 19, .94) !important;
-+  border: none !important;
-+  border-top: 1px solid rgba(255, 255, 255, .07) !important;
-+  box-shadow: 0 -10px 30px rgba(0, 0, 0, .35) !important;
-+  backdrop-filter: blur(18px) !important;
-+}
-+
-+#player::before {
-+  display: none !important;
-+}
-+
-+#player img {
-+  border-radius: 12px !important;
-+  box-shadow: 0 8px 20px rgba(0, 0, 0, .4) !important;
-+}
-+
-+#player [aria-label="播放"],
-+#player [aria-label="暂停"] {
-+  width: 36px !important;
-+  height: 36px !important;
-+  border-radius: 50% !important;
-+  background: linear-gradient(140deg, #6ee7b7, #10b981) !important;
-+  color: #052e22 !important;
-+  padding: 8px !important;
-+  box-shadow: 0 8px 20px rgba(16, 185, 129, .38) !important;
-+}
-+
-+/* 顶部内容里的来源 / 类型 tab 统一成胶囊 */
-+#view ul[role="tablist"] {
-+  gap: 8px !important;
-+  align-items: center !important;
-+}
-+
-+#view li[role="tab"] {
-+  border-radius: 99px !important;
-+  padding: 0 12px !important;
-+  height: 30px !important;
-+  background: rgba(255, 255, 255, .05) !important;
-+  border: 1px solid rgba(255, 255, 255, .08) !important;
-+}
-+
-+#view li[role="tab"][aria-selected="true"] {
-+  background: var(--color-primary) !important;
-+  color: #04140e !important;
-+  border-color: transparent !important;
-+  font-weight: 600 !important;
-+}
-+
-+#view li[role="tab"] span {
-+  font-size: 12px !important;
-+}
-+
-+/* 侧栏导航兜底样式（组件内也会同步改） */
-+#left a[role="tab"] {
-+  color: rgba(226, 232, 240, .55) !important;
-+}
-+
-+#left a[aria-selected="true"] {
-+  color: var(--color-primary) !important;
-+  background: rgba(52, 211, 153, .16) !important;
-+  box-shadow: inset 0 0 0 1px rgba(52, 211, 153, .35) !important;
-+}
-+
-+/* 播放详情页：深色渐变 + 玻璃歌词 */
-+.ceru-play-detail {
-+  background:
-+    radial-gradient(80% 70% at 0% 0%, rgba(16, 185, 129, .22) 0%, rgba(16, 185, 129, 0) 55%),
-+    radial-gradient(70% 60% at 100% 0%, rgba(244, 114, 182, .16) 0%, rgba(244, 114, 182, 0) 52%),
-+    radial-gradient(80% 70% at 50% 110%, rgba(99, 102, 241, .20) 0%, rgba(99, 102, 241, 0) 62%),
-+    linear-gradient(135deg, #0c1014 0%, #10161c 55%, #0c1014 100%) !important;
-+  border-radius: 18px !important;
-+}
-+
-+.ceru-play-detail .bg {
-+  display: none !important;
-+}
-+
-+.ceru-play-left {
-+  padding: 44px 20px 12px !important;
-+}
-+
-+.ceru-play-left .info {
-+  position: relative;
-+  align-items: center;
-+  max-width: 340px;
-+  overflow: visible !important;
-+}
-+
-+.ceru-play-left .info::before {
-+  content: "";
-+  position: absolute;
-+  z-index: 0;
-+  width: 320px;
-+  height: 320px;
-+  border-radius: 50%;
-+  top: -35px;
-+  left: 50%;
-+  transform: translateX(-50%);
-+  background: repeating-radial-gradient(circle at 50% 50%, #0b0b0b 0 2px, #1a1a1a 2px 4px);
-+  box-shadow: 0 30px 60px rgba(0, 0, 0, .5), inset 0 0 0 1px rgba(255, 255, 255, .08);
-+}
-+
-+.ceru-play-left .info::after {
-+  content: "";
-+  position: absolute;
-+  z-index: 2;
-+  width: 120px;
-+  height: 6px;
-+  border-radius: 99px;
-+  top: 8px;
-+  left: 58%;
-+  transform-origin: right center;
-+  transform: rotate(-28deg);
-+  background: linear-gradient(90deg, #cfcfcf, #f6f6f6);
-+  box-shadow: 0 4px 10px rgba(0, 0, 0, .25);
-+}
-+
-+.ceru-play-left .img {
-+  position: relative;
-+  z-index: 1;
-+  width: 250px !important;
-+  height: 250px !important;
-+  max-width: none !important;
-+  max-height: none !important;
-+  min-width: 0 !important;
-+  object-fit: cover;
-+  border-radius: 50% !important;
-+  opacity: 1 !important;
-+  box-shadow: 0 24px 60px rgba(0, 0, 0, .55) !important;
-+}
-+
-+.ceru-play-left .description {
-+  position: relative;
-+  z-index: 1;
-+  max-width: 340px;
-+  margin-top: 46px;
-+  text-align: center;
-+  padding-bottom: 8px;
-+}
-+
-+.ceru-play-left .description p {
-+  font-size: 12px !important;
-+  line-height: 1.6;
-+  color: rgba(226, 232, 240, .6);
-+}
-+
-+.ceru-play-left .description p:first-child {
-+  font-size: 16px !important;
-+  font-weight: 600;
-+  color: #f1f5f9;
-+}
-+
-+.ceru-play-detail .right {
-+  background: rgba(255, 255, 255, .04) !important;
-+  border: 1px solid rgba(255, 255, 255, .08);
-+  border-radius: 20px;
-+  margin: 12px 6px 12px 0;
-+  padding: 18px 16px;
-+  backdrop-filter: blur(20px);
-+  box-shadow: 0 12px 30px rgba(0, 0, 0, .35);
-+  overflow: hidden;
-+}
 diff --git a/src/renderer/assets/styles/index.less b/src/renderer/assets/styles/index.less
 index 1e15d45..c3b4e36 100644
 --- a/src/renderer/assets/styles/index.less
@@ -1860,23 +1642,21 @@ index b9a9e04..938aecb 100644
  
  </style>
 diff --git a/src/renderer/components/layout/View.vue b/src/renderer/components/layout/View.vue
-index 9eb44a6..d363156 100644
+index 9eb44a6..5b7c5b3 100644
 --- a/src/renderer/components/layout/View.vue
 +++ b/src/renderer/components/layout/View.vue
-@@ -1,9 +1,9 @@
+@@ -1,9 +1,7 @@
  <template>
    <div :class="$style.view">
      <router-view v-slot="{ Component }">
 -      <!-- <transition enter-active-class="animated-fast fadeIn" leave-active-class="animated-fast fadeOut"> -->
 -      <component :is="Component" class="view-container" />
 -      <!-- </transition> -->
-+      <transition name="ceru-page" mode="out-in">
-+        <component :is="Component" class="view-container" />
-+      </transition>
++      <component :is="Component" :key="$route.fullPath" class="view-container" />
      </router-view>
    </div>
  </template>
-@@ -23,6 +23,22 @@
+@@ -23,6 +21,22 @@
    }
    // background: #fff;
    // overflow: hidden;
@@ -2041,71 +1821,6 @@ index d0542b8..da8c1b5 100644
    await rendererInvoke<LX.List.ListActionMusicRemove>(PLAYER_EVENT_NAME.list_music_remove, data)
  }
  
-diff --git a/src/renderer/store/list/recent.ts b/src/renderer/store/list/recent.ts
-new file mode 100644
-index 0000000..2906128
---- /dev/null
-+++ b/src/renderer/store/list/recent.ts
-@@ -0,0 +1,59 @@
-+import { reactive } from '@common/utils/vueTools'
-+
-+const STORAGE_KEY = 'ceru.recent_play_list'
-+const MAX_COUNT = 200
-+
-+const loadRecentList = (): LX.Music.MusicInfo[] => {
-+  try {
-+    const raw = localStorage.getItem(STORAGE_KEY)
-+    if (!raw) return []
-+    const list = JSON.parse(raw)
-+    return Array.isArray(list) ? list : []
-+  } catch {
-+    return []
-+  }
-+}
-+
-+export const recentList = reactive<LX.Music.MusicInfo[]>(loadRecentList())
-+
-+const trackKey = (musicInfo: LX.Music.MusicInfo) => `${musicInfo.source}_${musicInfo.id}`
-+
-+let saveTimer: ReturnType<typeof setTimeout> | null = null
-+const saveRecentList = () => {
-+  if (saveTimer) return
-+  saveTimer = setTimeout(() => {
-+    saveTimer = null
-+    try {
-+      localStorage.setItem(STORAGE_KEY, JSON.stringify(recentList))
-+    } catch {}
-+  }, 300)
-+}
-+
-+export const addRecentMusic = (musicInfo: LX.Music.MusicInfo) => {
-+  if (!musicInfo?.id || !musicInfo.source) return
-+  const key = trackKey(musicInfo)
-+  const index = recentList.findIndex(item => trackKey(item) == key)
-+  if (index > -1) {
-+    if (index == 0) return
-+    recentList.splice(index, 1)
-+  }
-+  recentList.unshift({ ...musicInfo })
-+  if (recentList.length > MAX_COUNT) recentList.splice(MAX_COUNT)
-+  saveRecentList()
-+}
-+
-+export const removeRecentMusic = (ids: string[]) => {
-+  const targets = new Set(ids)
-+  let removed = false
-+  for (let i = recentList.length - 1; i >= 0; i--) {
-+    if (!targets.has(recentList[i].id)) continue
-+    recentList.splice(i, 1)
-+    removed = true
-+  }
-+  if (removed) saveRecentList()
-+}
-+
-+export const clearRecentMusic = () => {
-+  recentList.splice(0, recentList.length)
-+  saveRecentList()
-+}
 diff --git a/src/renderer/store/utils.ts b/src/renderer/store/utils.ts
 index 7a66853..4b00bd5 100644
 --- a/src/renderer/store/utils.ts
@@ -2182,7 +1897,7 @@ index d69f98d..81634e5 100644
        loveList,
        userLists,
 diff --git a/src/renderer/views/songList/Detail/index.vue b/src/renderer/views/songList/Detail/index.vue
-index 5ed1431..427233e 100644
+index 5ed1431..a8a89d2 100644
 --- a/src/renderer/views/songList/Detail/index.vue
 +++ b/src/renderer/views/songList/Detail/index.vue
 @@ -7,6 +7,7 @@
@@ -2208,7 +1923,29 @@ index 5ed1431..427233e 100644
        </div>
      </div>
      <div :class="$style.list">
-@@ -175,20 +177,24 @@ export default {
+@@ -38,6 +40,9 @@
+         @toggle-page="togglePage"
+       />
+     </div>
++    <p v-if="listDetailInfo.noItemLabel === $t('list__load_failed')" :class="$style.failedTip">
++      {{ $t('songlist__load_failed_tip') }}
++    </p>
+   </div>
+ </template>
+ 
+@@ -106,6 +111,11 @@ const verifyQueryParams = async function(this: any, to: { query: Query, path: st
+ export default {
+   beforeRouteEnter: verifyQueryParams,
+   beforeRouteUpdate: verifyQueryParams,
++  beforeRouteLeave(_to: any, _from: any, next: () => void) {
++    // 离开详情页时要清掉标记，否则点「发现」会被列表页守卫弹回详情页
++    setVisibleListDetail(false)
++    next()
++  },
+   setup() {
+     const router = useRouter()
+ 
+@@ -175,20 +185,24 @@ export default {
    flex: none;
    display: flex;
    flex-flow: row nowrap;
@@ -2239,7 +1976,7 @@ index 5ed1431..427233e 100644
  }
  .playNum {
    position: absolute;
-@@ -205,36 +211,57 @@ export default {
+@@ -205,36 +219,57 @@ export default {
  
  .songListHeaderMiddle {
    flex: auto;
@@ -2308,6 +2045,103 @@ index 5ed1431..427233e 100644
      }
    }
  }
+@@ -246,5 +281,15 @@ export default {
+   flex: auto;
+   height: 100%;
+ }
++
++.failedTip {
++  flex: none;
++  margin: 0;
++  padding: 14px 18px 18px;
++  font-size: 12px;
++  line-height: 1.7;
++  color: var(--color-font-label);
++  text-align: center;
++}
+ </style>
+ 
+diff --git a/src/renderer/views/songList/List/components/OpenListModal.vue b/src/renderer/views/songList/List/components/OpenListModal.vue
+index 11b5d99..caedd41 100644
+--- a/src/renderer/views/songList/List/components/OpenListModal.vue
++++ b/src/renderer/views/songList/List/components/OpenListModal.vue
+@@ -56,20 +56,73 @@ const route = useRoute()
+ const text = ref('')
+ const source = ref('')
+ 
++const ID_RULES = {
++  wy: [/[?&#]id=(\d+)/i, /playlist\/(\d+)/i],
++  tx: [/[?&](?:disstid|id)=(\d+)/i, /playlist\/(\d+)/i],
++  kg: [/pllist\/info\/(\d+)/i, /special\/single\/(\d+)/i, /[?&](?:specialid|specialId)=(\d+)/i],
++  kw: [/playlist_detail\/(\d+)/i, /[?&]pid=(\d+)/i, /playlist\/(\d+)/i],
++  mg: [/[?&](?:playlistId|id)=(\d+)/i, /playlist\/(\d+)/i],
++}
++
++// 各平台分享链接的域名特征，粘贴链接时自动切到对应来源。
++// 否则默认来源是酷我，粘贴酷狗/QQ 链接会去错平台查同号歌单或直接加载失败。
++const SOURCE_HOSTS = [
++  ['wy', /(?:music\.163\.com|163cn\.tv|y\.music\.163\.com)/i],
++  ['tx', /(?:y\.qq\.com|i\.y\.qq\.com|c\.y\.qq\.com|i\.y\.qq\.com\/n2\/m\/share)/i],
++  ['kg', /(?:kugou\.com|kglink\.cn)/i],
++  ['kw', /(?:kuwo\.cn)/i],
++  ['mg', /(?:migu\.cn)/i],
++]
++
++const detectSource = raw => {
++  const value = raw.trim()
++  if (!value) return null
++  for (const [sourceId, rule] of SOURCE_HOSTS) {
++    if (rule.test(value)) return sourceId
++  }
++  return null
++}
++
++// 分享文案里可能混着平台名、@ 等内容，这里只取出歌单 ID；短链则原样交给 SDK 跟随跳转
++const normalizePlaylistInput = (sourceId, raw) => {
++  const value = raw.trim()
++  if (!value) return ''
++  if (/^\d+$/.test(value)) return sourceId == 'kg' ? `id_${value}` : value
++  for (const rule of ID_RULES[sourceId] ?? []) {
++    const matched = value.match(rule)
++    if (matched) return sourceId == 'kg' ? `id_${matched[1]}` : (matched[1] ?? matched[0])
++  }
++  // 没有可识别的参数时，优先把完整链接交给 SDK 跟随短链跳转；
++  // 直接从文本里抓数字会把短链里的随机数字误当成歌单 ID。
++  const link = value.match(/https?:\/\/[^\s，。；、）)】\]"']+/i)
++  if (link) return link[0]
++  const digits = value.match(/\d{6,}/)
++  if (digits) return sourceId == 'kg' ? `id_${digits[0]}` : digits[0]
++  return value
++}
++
+ watch(() => props.modelValue, (visible) => {
+   if (!visible) return
+   source.value = openSongListInputInfo.source || route.query.source
+   // text.value = openSongListInputInfo.text
+ })
+ 
++watch(text, value => {
++  const detected = detectSource(value)
++  if (detected && detected != source.value) source.value = detected
++})
++
+ const handleSubmit = () => {
+   if (!text.value.length) return
+-  setOpenSongListInputInfo(text.value, source.value)
++  const effectiveSource = detectSource(text.value) ?? source.value
++  source.value = effectiveSource
++  const targetId = normalizePlaylistInput(effectiveSource, text.value)
++  setOpenSongListInputInfo(text.value, effectiveSource)
+   void router.push({
+     path: '/songList/detail',
+     query: {
+-      source: source.value,
+-      id: text.value,
++      source: effectiveSource,
++      id: targetId,
+       refresh: 'true',
+     },
+   })
 diff --git a/src/renderer/views/songList/List/components/SongList.vue b/src/renderer/views/songList/List/components/SongList.vue
 index 0295baa..5f54ac2 100644
 --- a/src/renderer/views/songList/List/components/SongList.vue
@@ -2576,7 +2410,7 @@ index 20c8f6b..50526ce 100644
  
    display: flex;
 diff --git a/src/renderer/views/songList/List/index.vue b/src/renderer/views/songList/List/index.vue
-index 3a3663e..9cbe6c7 100644
+index 3a3663e..555dd26 100644
 --- a/src/renderer/views/songList/List/index.vue
 +++ b/src/renderer/views/songList/List/index.vue
 @@ -1,14 +1,20 @@
@@ -2647,7 +2481,7 @@ index 3a3663e..9cbe6c7 100644
      next({
        path: to.path,
        query: { ...to.query, source: _source, tagId: _tagId, sortId: _sortId, page: _page },
-@@ -69,48 +83,32 @@ const verifyQueryParams = async function(this: any, to: { query: Query, path: st
+@@ -69,48 +83,40 @@ const verifyQueryParams = async function(this: any, to: { query: Query, path: st
    next()
    source.value = _source as LX.OnlineSource
    tagId.value = _tagId ?? ''
@@ -2687,8 +2521,15 @@ index 3a3663e..9cbe6c7 100644
 -          tagId: '',
 -        },
 -      })
--    }
-+    const sourceList = computed(() => sources.map(s => ({ id: s, name: sourceNames.value[s] })))
++    // 导入弹窗里用真实平台名，避免「小枸音乐」这类别名让人选错来源
++    const importSourceNames: Record<string, string> = {
++      kw: '酷我音乐',
++      kg: '酷狗音乐',
++      tx: 'QQ 音乐',
++      wy: '网易云音乐',
++      mg: '咪咕音乐',
+     }
++    const sourceList = computed(() => sources.map(s => ({ id: s, name: importSourceNames[s] ?? sourceNames.value[s] })))
  
      return {
        source,
@@ -2702,7 +2543,7 @@ index 3a3663e..9cbe6c7 100644
      }
    },
  }
-@@ -124,91 +122,93 @@ export default {
+@@ -124,91 +130,93 @@ export default {
    display: flex;
    flex-flow: column nowrap;
    position: relative;
@@ -2871,3 +2712,318 @@ index 3a3663e..9cbe6c7 100644
 +}
  
  </style>
+diff --git a/src/renderer/assets/styles/ceru.less b/src/renderer/assets/styles/ceru.less
+new file mode 100644
+index 0000000..17013de
+--- /dev/null
++++ b/src/renderer/assets/styles/ceru.less
+@@ -0,0 +1,244 @@
++@import './layout.less';
++
++/* 青瓷夜色：深色卡片外壳（Alger 风格参考） */
++html,
++body {
++  background: #0b0d10;
++}
++
++#root {
++  background: transparent !important;
++}
++
++#container {
++  background:
++    radial-gradient(900px 420px at 6% -12%, rgba(16, 185, 129, .20), rgba(16, 185, 129, 0) 62%),
++    radial-gradient(820px 400px at 102% -6%, rgba(59, 130, 246, .15), rgba(59, 130, 246, 0) 58%),
++    #0b0d10 !important;
++  padding: 0 !important;
++}
++
++#left {
++  width: 76px !important;
++  padding: 0 0 10px !important;
++  box-sizing: border-box !important;
++  background: rgba(13, 16, 20, .92) !important;
++  border-right: 1px solid rgba(255, 255, 255, .06);
++}
++
++#right {
++  margin: 0 !important;
++  border-radius: 0 !important;
++  background: transparent !important;
++  backdrop-filter: none !important;
++  border: none !important;
++  box-shadow: none !important;
++  overflow: hidden !important;
++}
++
++#toolbar {
++  height: 64px !important;
++  padding: 0 14px 0 22px !important;
++  background: transparent !important;
++  border-bottom: none !important;
++}
++
++#toolbar input {
++  width: 100% !important;
++  height: 38px !important;
++  border-radius: 12px !important;
++  background: rgba(255, 255, 255, .06) !important;
++  border: 1px solid rgba(255, 255, 255, .08) !important;
++  padding: 0 14px !important;
++  font-size: 12px !important;
++  color: #e2e8f0 !important;
++  box-shadow: none !important;
++}
++
++#toolbar input::placeholder {
++  color: rgba(226, 232, 240, .42) !important;
++}
++
++#toolbar input ~ button {
++  background: transparent !important;
++  border: 0 !important;
++  color: rgba(226, 232, 240, .55) !important;
++  box-shadow: none !important;
++}
++
++#toolbar input ~ button:hover {
++  color: var(--color-primary) !important;
++}
++
++#view {
++  padding: 0 26px 0 !important;
++  background: transparent !important;
++}
++
++/* 贴底播放条 */
++#player {
++  margin: 0 !important;
++  height: 76px !important;
++  border-radius: 0 !important;
++  background: rgba(12, 15, 19, .94) !important;
++  border: none !important;
++  border-top: 1px solid rgba(255, 255, 255, .07) !important;
++  box-shadow: 0 -10px 30px rgba(0, 0, 0, .35) !important;
++  backdrop-filter: blur(18px) !important;
++}
++
++#player::before {
++  display: none !important;
++}
++
++#player img {
++  border-radius: 12px !important;
++  box-shadow: 0 8px 20px rgba(0, 0, 0, .4) !important;
++}
++
++#player [aria-label="播放"],
++#player [aria-label="暂停"] {
++  width: 36px !important;
++  height: 36px !important;
++  border-radius: 50% !important;
++  background: linear-gradient(140deg, #6ee7b7, #10b981) !important;
++  color: #052e22 !important;
++  padding: 8px !important;
++  box-shadow: 0 8px 20px rgba(16, 185, 129, .38) !important;
++}
++
++/* 顶部内容里的来源 / 类型 tab 统一成胶囊 */
++#view ul[role="tablist"] {
++  gap: 8px !important;
++  align-items: center !important;
++}
++
++#view li[role="tab"] {
++  border-radius: 99px !important;
++  padding: 0 12px !important;
++  height: 30px !important;
++  background: rgba(255, 255, 255, .05) !important;
++  border: 1px solid rgba(255, 255, 255, .08) !important;
++}
++
++#view li[role="tab"][aria-selected="true"] {
++  background: var(--color-primary) !important;
++  color: #04140e !important;
++  border-color: transparent !important;
++  font-weight: 600 !important;
++}
++
++#view li[role="tab"] span {
++  font-size: 12px !important;
++}
++
++/* 侧栏导航兜底样式（组件内也会同步改） */
++#left a[role="tab"] {
++  color: rgba(226, 232, 240, .55) !important;
++}
++
++#left a[aria-selected="true"] {
++  color: var(--color-primary) !important;
++  background: rgba(52, 211, 153, .16) !important;
++  box-shadow: inset 0 0 0 1px rgba(52, 211, 153, .35) !important;
++}
++
++/* 播放详情页：深色渐变 + 玻璃歌词 */
++.ceru-play-detail {
++  background:
++    radial-gradient(80% 70% at 0% 0%, rgba(16, 185, 129, .22) 0%, rgba(16, 185, 129, 0) 55%),
++    radial-gradient(70% 60% at 100% 0%, rgba(244, 114, 182, .16) 0%, rgba(244, 114, 182, 0) 52%),
++    radial-gradient(80% 70% at 50% 110%, rgba(99, 102, 241, .20) 0%, rgba(99, 102, 241, 0) 62%),
++    linear-gradient(135deg, #0c1014 0%, #10161c 55%, #0c1014 100%) !important;
++  border-radius: 18px !important;
++}
++
++.ceru-play-detail .bg {
++  display: none !important;
++}
++
++.ceru-play-left {
++  padding: 44px 20px 12px !important;
++}
++
++.ceru-play-left .info {
++  position: relative;
++  align-items: center;
++  max-width: 340px;
++  overflow: visible !important;
++}
++
++.ceru-play-left .info::before {
++  content: "";
++  position: absolute;
++  z-index: 0;
++  width: 320px;
++  height: 320px;
++  border-radius: 50%;
++  top: -35px;
++  left: 50%;
++  transform: translateX(-50%);
++  background: repeating-radial-gradient(circle at 50% 50%, #0b0b0b 0 2px, #1a1a1a 2px 4px);
++  box-shadow: 0 30px 60px rgba(0, 0, 0, .5), inset 0 0 0 1px rgba(255, 255, 255, .08);
++}
++
++.ceru-play-left .info::after {
++  content: "";
++  position: absolute;
++  z-index: 2;
++  width: 120px;
++  height: 6px;
++  border-radius: 99px;
++  top: 8px;
++  left: 58%;
++  transform-origin: right center;
++  transform: rotate(-28deg);
++  background: linear-gradient(90deg, #cfcfcf, #f6f6f6);
++  box-shadow: 0 4px 10px rgba(0, 0, 0, .25);
++}
++
++.ceru-play-left .img {
++  position: relative;
++  z-index: 1;
++  width: 250px !important;
++  height: 250px !important;
++  max-width: none !important;
++  max-height: none !important;
++  min-width: 0 !important;
++  object-fit: cover;
++  border-radius: 50% !important;
++  opacity: 1 !important;
++  box-shadow: 0 24px 60px rgba(0, 0, 0, .55) !important;
++}
++
++.ceru-play-left .description {
++  position: relative;
++  z-index: 1;
++  max-width: 340px;
++  margin-top: 46px;
++  text-align: center;
++  padding-bottom: 8px;
++}
++
++.ceru-play-left .description p {
++  font-size: 12px !important;
++  line-height: 1.6;
++  color: rgba(226, 232, 240, .6);
++}
++
++.ceru-play-left .description p:first-child {
++  font-size: 16px !important;
++  font-weight: 600;
++  color: #f1f5f9;
++}
++
++.ceru-play-detail .right {
++  background: rgba(255, 255, 255, .04) !important;
++  border: 1px solid rgba(255, 255, 255, .08);
++  border-radius: 20px;
++  margin: 12px 6px 12px 0;
++  padding: 18px 16px;
++  backdrop-filter: blur(20px);
++  box-shadow: 0 12px 30px rgba(0, 0, 0, .35);
++  overflow: hidden;
++}
+diff --git a/src/renderer/store/list/recent.ts b/src/renderer/store/list/recent.ts
+new file mode 100644
+index 0000000..2906128
+--- /dev/null
++++ b/src/renderer/store/list/recent.ts
+@@ -0,0 +1,59 @@
++import { reactive } from '@common/utils/vueTools'
++
++const STORAGE_KEY = 'ceru.recent_play_list'
++const MAX_COUNT = 200
++
++const loadRecentList = (): LX.Music.MusicInfo[] => {
++  try {
++    const raw = localStorage.getItem(STORAGE_KEY)
++    if (!raw) return []
++    const list = JSON.parse(raw)
++    return Array.isArray(list) ? list : []
++  } catch {
++    return []
++  }
++}
++
++export const recentList = reactive<LX.Music.MusicInfo[]>(loadRecentList())
++
++const trackKey = (musicInfo: LX.Music.MusicInfo) => `${musicInfo.source}_${musicInfo.id}`
++
++let saveTimer: ReturnType<typeof setTimeout> | null = null
++const saveRecentList = () => {
++  if (saveTimer) return
++  saveTimer = setTimeout(() => {
++    saveTimer = null
++    try {
++      localStorage.setItem(STORAGE_KEY, JSON.stringify(recentList))
++    } catch {}
++  }, 300)
++}
++
++export const addRecentMusic = (musicInfo: LX.Music.MusicInfo) => {
++  if (!musicInfo?.id || !musicInfo.source) return
++  const key = trackKey(musicInfo)
++  const index = recentList.findIndex(item => trackKey(item) == key)
++  if (index > -1) {
++    if (index == 0) return
++    recentList.splice(index, 1)
++  }
++  recentList.unshift({ ...musicInfo })
++  if (recentList.length > MAX_COUNT) recentList.splice(MAX_COUNT)
++  saveRecentList()
++}
++
++export const removeRecentMusic = (ids: string[]) => {
++  const targets = new Set(ids)
++  let removed = false
++  for (let i = recentList.length - 1; i >= 0; i--) {
++    if (!targets.has(recentList[i].id)) continue
++    recentList.splice(i, 1)
++    removed = true
++  }
++  if (removed) saveRecentList()
++}
++
++export const clearRecentMusic = () => {
++  recentList.splice(0, recentList.length)
++  saveRecentList()
++}
